@@ -1,0 +1,68 @@
+---
+layout: docs
+title: Gasless Transactions
+description: Execute transactions on Ephemeral Rollups with zero fees.
+section: features
+---
+
+# Gasless Transactions
+
+Ephemeral Rollups on MagicBlock public nodes have a base transaction fee of **zero**. Your users can interact with your application without holding SOL for gas.
+
+## How It Works
+
+On Solana, every transaction requires a fee (typically 0.000005 SOL). On an Ephemeral Rollup, the ER validator absorbs transaction costs. The only fees are:
+
+| Fee Type | Amount | When |
+|----------|--------|------|
+| Transaction | **0 SOL** | Every transaction on ER |
+| Session | 0.0003 SOL | On undelegation |
+| Commit | 0.0001 SOL | Each state commit to base layer |
+
+Session and commit fees are paid by the delegator (your server or backend), not the end user.
+
+## Enable Gasless
+
+**CLI**:
+
+```bash
+mb-console project configure my-game --gasless
+```
+
+**Web**: Project Settings → Features → toggle "Gasless" on.
+
+**MCP**: Use `configure_er` with `gasless: true`.
+
+Gasless is enabled by default on public ER nodes. The configuration flag in the Console is for tracking and visibility purposes.
+
+## Cost Estimation
+
+The Console tracks estimated costs for your project:
+
+```bash
+mb-console costs --project my-game
+```
+
+Output:
+
+```
+Project: my-game
+Period: last 24h
+
+  Transactions:     12,450  ×  0 SOL  =  0 SOL
+  Commits:              8  ×  0.0001  =  0.0008 SOL
+  Sessions:             2  ×  0.0003  =  0.0006 SOL
+  ─────────────────────────────────────────────
+  Total:                                 0.0014 SOL
+```
+
+**Web**: Project → Monitoring → "Costs" tab.
+
+## Dedicated Nodes
+
+For high-throughput applications, MagicBlock offers dedicated ER nodes with a minimal fee of **0.0000005 SOL** per transaction.
+
+## Next Steps
+
+- [Privacy Mode](/docs/features/privacy) — confidential transactions
+- [ER Lifecycle](/docs/er-lifecycle) — how delegation and commits work
