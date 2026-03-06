@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "main": "./dist/index.js",
+  "bin": {
+    "magicblock-console-mcp": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -12,7 +15,8 @@
   },
   "dependencies": {
     "@magicblock-console/core": "*",
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
