@@ -13,7 +13,7 @@ MagicBlock Console provides three ways to manage Ephemeral Rollups on Solana: a 
 
 ### Web Dashboard
 
-No installation needed. Connect your Solana wallet at [console.magicblock.gg](/) and start managing your ERs.
+No installation needed. Run `npm run dev -w packages/web` and open the dashboard to start managing your ERs.
 
 ### CLI
 
@@ -44,7 +44,7 @@ Add MagicBlock Console to your MCP client configuration:
 
 ## Quick Start
 
-### 1. Connect Your Wallet
+### 1. Authentication
 
 **Web**: Open the dashboard — the web interface runs in simulated mode by default. Wallet adapter integration is planned for production.
 

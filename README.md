@@ -1,5 +1,7 @@
 # MagicBlock Console
 
+> **Solana Blitz 2026** hackathon submission (March 6–8, 2026)
+
 First unified developer console for MagicBlock Ephemeral Rollups on Solana.
 
 ## What is MagicBlock Console?
@@ -128,6 +130,30 @@ npm run dev -w packages/cli
 npm run build -w packages/core
 ```
 
+## Hackathon
+
+**Event:** [Solana Blitz](https://www.colosseum.org/) by MagicBlock — March 6–8, 2026
+
+**Track:** Ephemeral Rollups / Infrastructure tooling
+
+**What this demonstrates:**
+
+- Complete developer workflow for MagicBlock Ephemeral Rollups — from project creation to monitoring
+- Three interfaces (Web, CLI, MCP) sharing a single core SDK
+- Real Solana integration: delegation, commits, undelegation via `@magicblock-labs/ephemeral-rollups-sdk`
+- Simulated mode for instant demo without a Solana keypair
+- Full feature coverage: gasless transactions, privacy (TEE), VRF, cranks, oracle, multi-region
+
+**Try it:**
+
+```bash
+git clone https://github.com/shipooor/magicBlockConsole.git
+cd magicBlockConsole && npm install && npm run build
+npm run dev -w packages/web
+# Open http://localhost:5173 → landing page
+# Open http://localhost:5173/dashboard → interactive dashboard
+```
+
 ## License
 
-MIT
+MIT — see [LICENSE](./LICENSE)

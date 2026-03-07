@@ -45,7 +45,7 @@ const webClient = createClient({
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `network` | `'devnet' \| 'mainnet'` | No | Network. Default: `devnet` |
-| `storage` | `Storage` | Yes | Storage backend (`FileStorage`, `MemoryStorage`, or `BrowserStorage`) |
+| `storage` | `Storage` | No | Storage backend (`FileStorage`, `MemoryStorage`, or `BrowserStorage`). Default: `MemoryStorage` |
 
 Call `client.connectWithKeypair(path)` to enable real blockchain operations. Without it, the SDK runs in simulated mode.
 
@@ -83,7 +83,7 @@ const projects = await client.projects.list();
 const project = await client.projects.get('my-game');
 ```
 
-**Returns:** `Project | null`
+**Returns:** `Project` — throws if the project does not exist.
 
 ### `client.projects.configure`
 
@@ -119,8 +119,8 @@ interface DelegationResult {
   signature: string;
   validator: string;
   delegatedAt: Date;
-  simulated: boolean;
   slot?: number;
+  simulated: boolean;
 }
 ```
 

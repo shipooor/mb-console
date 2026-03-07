@@ -18,11 +18,9 @@ export * from './config.js';
 export { MemoryStorage, FileStorage, BrowserStorage } from './storage.js';
 export type { Storage } from './storage.js';
 
-export {
-  createKeypairSigner,
-  createBlockchainConnection,
-  createReadOnlyConnection,
-} from './connection.js';
+// Connection factories are NOT re-exported as values to avoid pulling
+// Node.js-only dependencies (@solana/web3.js, MagicBlock SDK) into browser
+// bundles.  Use ConsoleClient.connectWithKeypair() / connectReadOnly() instead.
 export type {
   BlockchainConnection,
   SolanaSignerAdapter,

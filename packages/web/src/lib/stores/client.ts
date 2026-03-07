@@ -7,9 +7,10 @@ const client = createClient({
 	storage: new BrowserStorage(),
 });
 
-// Enable read-only blockchain queries (status, diff) via Solana RPC.
-// Write operations (delegate, undelegate, commit) remain simulated
-// until a wallet adapter is integrated.
-client.connectReadOnly();
+// Web dashboard runs in simulated mode.
+// connectReadOnly() is not called here because the MagicBlock SDK
+// and @solana/web3.js Connection classes use Node.js APIs that are
+// not available in the browser. Real blockchain queries will be
+// enabled when a browser-compatible wallet adapter is integrated.
 
 export const consoleClient = writable<ConsoleClient>(client);

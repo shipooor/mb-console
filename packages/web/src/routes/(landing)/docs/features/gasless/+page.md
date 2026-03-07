@@ -45,15 +45,14 @@ mb-console monitor costs --project my-game
 
 Output:
 
-```
-Project: my-game
-Period: last 24h
-
-  Transactions:     12,450  ×  0 SOL  =  0 SOL
-  Commits:              8  ×  0.0001  =  0.0008 SOL
-  Sessions:             2  ×  0.0003  =  0.0006 SOL
-  ─────────────────────────────────────────────
-  Total:                                 0.0014 SOL
+```json
+{
+  "transactions": { "count": 12450, "cost": 0 },
+  "commits": { "count": 8, "cost": 0.0008 },
+  "sessions": { "count": 2, "cost": 0.0006 },
+  "total": 0.0014,
+  "period": "30d"
+}
 ```
 
 **Web**: Project → Monitoring → "Costs" tab.

@@ -66,7 +66,7 @@ crank_3  1000ms     500          500        completed
 ## Stop a Crank
 
 ```bash
-mb-console crank stop <CRANK_ID> --project my-game
+mb-console crank stop <CRANK_ID>
 ```
 
 ## How It Works

@@ -296,7 +296,7 @@ async function main() {
       await client.connectWithKeypair(keypairPath);
     } catch (err) {
       console.error(
-        `Warning: could not load keypair from MB_KEYPAIR_PATH="${keypairPath}": ${
+        `Warning: could not load keypair from MB_KEYPAIR_PATH: ${
           err instanceof Error ? err.message : String(err)
         }. Running in simulated mode.`,
       );

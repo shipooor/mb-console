@@ -34,11 +34,6 @@ import { createCranksNamespace } from './cranks.js';
 import { createOracleNamespace } from './oracle.js';
 import { createMonitorNamespace } from './monitor.js';
 import type { BlockchainConnection } from './connection.js';
-import {
-  createKeypairSigner,
-  createBlockchainConnection,
-  createReadOnlyConnection,
-} from './connection.js';
 
 // ---------------------------------------------------------------------------
 // Namespace Interfaces (stubs — implementations in later tasks)
@@ -145,8 +140,12 @@ export class ConsoleClient {
    * Connect to Solana using a local keypair file.
    * Enables real on-chain transactions for ER operations.
    * Typically used by CLI and MCP server.
+   *
+   * Connection module is loaded dynamically to avoid pulling Node.js-only
+   * dependencies (@solana/web3.js, MagicBlock SDK) into browser bundles.
    */
   async connectWithKeypair(keypairPath: string): Promise<void> {
+    const { createKeypairSigner, createBlockchainConnection } = await import('./connection.js');
     const signer = await createKeypairSigner(keypairPath);
     this._connection = createBlockchainConnection(this.network, signer);
   }
@@ -154,9 +153,12 @@ export class ConsoleClient {
   /**
    * Connect in read-only mode (no signer).
    * Enables querying real on-chain data (status, diff) without
-   * the ability to send transactions. Used by the web dashboard.
+   * the ability to send transactions.
+   *
+   * Note: requires Node.js environment (uses @solana/web3.js Connection).
    */
-  connectReadOnly(): void {
+  async connectReadOnly(): Promise<void> {
+    const { createReadOnlyConnection } = await import('./connection.js');
     this._connection = createReadOnlyConnection(this.network);
   }
 

@@ -31,7 +31,7 @@ Add to your MCP client configuration:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `MB_KEYPAIR_PATH` | Yes | Path to Solana keypair JSON file |
+| `MB_KEYPAIR_PATH` | No | Path to Solana keypair JSON file. If not set, runs in simulated mode |
 | `MB_NETWORK` | No | Network: `devnet` (default), `mainnet` |
 
 ## Tools
