@@ -1,6 +1,13 @@
 import type { Command } from 'commander';
 import type { ConsoleClient } from '@magicblock-console/core';
+import { assertPubkey } from '@magicblock-console/core';
 import { printSuccess, printError } from '../utils/output.js';
+
+function validateAmount(value: number, label: string): void {
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`${label} must be a positive finite number`);
+  }
+}
 
 export function registerPrivacyCommands(program: Command, client: ConsoleClient): void {
   const privacy = program
@@ -16,6 +23,7 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
     .requiredOption('--project <name>', 'Project name')
     .action(async (opts: { token: string; amount: number; project: string }) => {
       try {
+        validateAmount(opts.amount, 'Deposit amount');
         const signature = await client.privacy.deposit({
           project: opts.project,
           token: opts.token,
@@ -37,6 +45,8 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
     .requiredOption('--project <name>', 'Project name')
     .action(async (opts: { token: string; amount: number; to: string; project: string }) => {
       try {
+        validateAmount(opts.amount, 'Transfer amount');
+        assertPubkey(opts.to, 'recipient');
         const signature = await client.privacy.transfer({
           project: opts.project,
           token: opts.token,
@@ -58,6 +68,7 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
     .requiredOption('--project <name>', 'Project name')
     .action(async (opts: { token: string; amount: number; project: string }) => {
       try {
+        validateAmount(opts.amount, 'Withdraw amount');
         const signature = await client.privacy.withdraw({
           project: opts.project,
           token: opts.token,

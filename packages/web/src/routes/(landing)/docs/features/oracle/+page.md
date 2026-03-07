@@ -77,7 +77,7 @@ Oracle Program ID: `PriCems5tHihc6UDXDjzjeawomAwBduWMGAi8ZUjppd`
 Price feed requests are tracked in project monitoring:
 
 ```bash
-mb-console monitor --project my-game
+mb-console monitor status --project my-game
 ```
 
 The Oracle tab shows:

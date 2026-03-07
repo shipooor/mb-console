@@ -1,6 +1,6 @@
 <script>
-	/** @type {{ title?: string, description?: string, section?: string, children?: import('svelte').Snippet }} */
-	let { title = '', description = '', section = '', children } = $props();
+	/** @type {{ title?: string, description?: string, children?: import('svelte').Snippet }} */
+	let { title = '', description = '', children } = $props();
 </script>
 
 <svelte:head>

@@ -46,15 +46,15 @@ Add MagicBlock Console to your MCP client configuration:
 
 ### 1. Connect Your Wallet
 
-**Web**: Click "Connect Wallet" and approve the connection in Phantom, Solflare, or any Solana wallet.
+**Web**: Open the dashboard — the web interface runs in simulated mode by default. Wallet adapter integration is planned for production.
 
-**CLI**:
+**CLI**: Set your Solana keypair path:
 
 ```bash
-mb-console login
+export MB_KEYPAIR_PATH=~/.config/solana/id.json
 ```
 
-This opens a browser window for wallet authentication. Once approved, your session is stored locally at `~/.mb-console/config.json`.
+If no keypair is found, the CLI runs in simulated mode with realistic mock data.
 
 **MCP**: Configure your keypair path in the MCP server settings:
 
@@ -121,10 +121,10 @@ The account is now running on the ER. Transactions execute with near-instant fin
 ### 5. Monitor
 
 ```bash
-mb-console monitor --project my-game
+mb-console monitor status --project my-game
 ```
 
-This opens a live terminal dashboard showing:
+This shows a project status overview including:
 - ER status and uptime
 - Delegated accounts
 - Transaction throughput

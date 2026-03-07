@@ -22,13 +22,21 @@ npm install @magicblock-console/core
 Create a Console client instance.
 
 ```typescript
-import { createClient } from '@magicblock-console/core';
+import { createClient, FileStorage, MemoryStorage, BrowserStorage } from '@magicblock-console/core';
 
+// CLI / Node.js
 const client = createClient({
   network: 'devnet',
-  keypairPath: '~/.config/solana/id.json',
-  // or
-  wallet: walletAdapter, // Solana wallet adapter instance
+  storage: new FileStorage(),
+});
+
+// Connect with a Solana keypair for real blockchain operations
+await client.connectWithKeypair('~/.config/solana/id.json');
+
+// Web (browser)
+const webClient = createClient({
+  network: 'devnet',
+  storage: new BrowserStorage(),
 });
 ```
 
@@ -37,10 +45,9 @@ const client = createClient({
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `network` | `'devnet' \| 'mainnet'` | No | Network. Default: `devnet` |
-| `keypairPath` | `string` | Conditional | Path to keypair file (CLI/MCP) |
-| `wallet` | `WalletAdapter` | Conditional | Wallet adapter (Web) |
+| `storage` | `Storage` | Yes | Storage backend (`FileStorage`, `MemoryStorage`, or `BrowserStorage`) |
 
-Either `keypairPath` or `wallet` must be provided.
+Call `client.connectWithKeypair(path)` to enable real blockchain operations. Without it, the SDK runs in simulated mode.
 
 ## Projects
 
@@ -112,6 +119,8 @@ interface DelegationResult {
   signature: string;
   validator: string;
   delegatedAt: Date;
+  simulated: boolean;
+  slot?: number;
 }
 ```
 
@@ -158,12 +167,12 @@ const result = await client.er.undelegate({
 });
 ```
 
-### `client.er.list`
+### `client.er.accounts`
 
 List delegated accounts in a project.
 
 ```typescript
-const accounts = await client.er.list('my-game');
+const accounts = await client.er.accounts('my-game');
 ```
 
 **Returns:** `DelegatedAccount[]`
@@ -282,7 +291,7 @@ const cranks = await client.cranks.list('my-game');
 ### `client.cranks.stop`
 
 ```typescript
-await client.cranks.stop('crank_id', 'my-game');
+await client.cranks.stop('crank_id');
 ```
 
 ## Oracle
@@ -350,7 +359,7 @@ interface CostBreakdown {
 ### `client.monitor.logs`
 
 ```typescript
-const logs = await client.monitor.logs('my-game', { limit: 50 });
+const logs = await client.monitor.logs('my-game', 50);
 ```
 
 **Returns:** `LogEntry[]`

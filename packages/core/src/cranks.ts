@@ -6,6 +6,7 @@ import type {
   CrankCreateOptions,
 } from './types.js';
 import type { CranksNamespace } from './client.js';
+import { generateBase58 } from './utils.js';
 
 // ---------------------------------------------------------------------------
 // Key helpers
@@ -81,7 +82,7 @@ export function createCranksNamespace(
         throw new Error('intervalMs must be greater than 0');
       }
 
-      const id = `crank_${Date.now().toString(36)}`;
+      const id = `crank_${Date.now().toString(36)}_${generateBase58(6)}`;
 
       const crank: Crank = {
         id,

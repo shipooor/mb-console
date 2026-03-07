@@ -92,7 +92,7 @@ Crank executions on ER are **gasless** (zero transaction fee per execution). You
 ## Monitoring
 
 ```bash
-mb-console monitor --project my-game
+mb-console monitor status --project my-game
 ```
 
 The Cranks tab shows:

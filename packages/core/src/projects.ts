@@ -34,6 +34,18 @@ function deserialize(json: string): Project {
 // Factory
 // ---------------------------------------------------------------------------
 
+// Valid project name: alphanumeric, hyphens, underscores, 1-64 characters
+const PROJECT_NAME_RE = /^[a-zA-Z0-9_-]{1,64}$/;
+
+function validateProjectName(name: string): void {
+  if (!PROJECT_NAME_RE.test(name)) {
+    throw new Error(
+      `Invalid project name "${name}". ` +
+      'Use 1-64 characters: letters, numbers, hyphens, underscores.',
+    );
+  }
+}
+
 /**
  * Create a fully-functional `ProjectsNamespace` backed by the given Storage.
  *
@@ -42,6 +54,7 @@ function deserialize(json: string): Project {
 export function createProjectsNamespace(storage: Storage): ProjectsNamespace {
   return {
     async create(options: CreateProjectOptions): Promise<Project> {
+      validateProjectName(options.name);
       const existing = await storage.get(projectKey(options.name));
       if (existing) {
         throw new Error(`Project "${options.name}" already exists`);

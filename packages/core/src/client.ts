@@ -33,6 +33,12 @@ import { createPrivacyNamespace } from './privacy.js';
 import { createCranksNamespace } from './cranks.js';
 import { createOracleNamespace } from './oracle.js';
 import { createMonitorNamespace } from './monitor.js';
+import type { BlockchainConnection } from './connection.js';
+import {
+  createKeypairSigner,
+  createBlockchainConnection,
+  createReadOnlyConnection,
+} from './connection.js';
 
 // ---------------------------------------------------------------------------
 // Namespace Interfaces (stubs — implementations in later tasks)
@@ -111,6 +117,8 @@ export class ConsoleClient {
   readonly oracle: OracleNamespace;
   readonly monitor: MonitorNamespace;
 
+  private _connection?: BlockchainConnection;
+
   constructor(options: ClientOptions = {}, namespaces: NamespaceOverrides = {}) {
     this.network = options.network ?? 'devnet';
     this.storage = options.storage ?? new MemoryStorage();
@@ -124,12 +132,42 @@ export class ConsoleClient {
         const p = await this.projects.get(project);
         return p.region;
       },
+      () => this._connection,
     );
     this.vrf = namespaces.vrf ?? createVrfNamespace(this.storage, this.network);
     this.privacy = namespaces.privacy ?? createPrivacyNamespace(this.storage, this.network);
     this.cranks = namespaces.cranks ?? createCranksNamespace(this.storage, this.network);
     this.oracle = namespaces.oracle ?? createOracleNamespace(this.storage, this.network);
     this.monitor = namespaces.monitor ?? createMonitorNamespace(this.storage, this.network);
+  }
+
+  /**
+   * Connect to Solana using a local keypair file.
+   * Enables real on-chain transactions for ER operations.
+   * Typically used by CLI and MCP server.
+   */
+  async connectWithKeypair(keypairPath: string): Promise<void> {
+    const signer = await createKeypairSigner(keypairPath);
+    this._connection = createBlockchainConnection(this.network, signer);
+  }
+
+  /**
+   * Connect in read-only mode (no signer).
+   * Enables querying real on-chain data (status, diff) without
+   * the ability to send transactions. Used by the web dashboard.
+   */
+  connectReadOnly(): void {
+    this._connection = createReadOnlyConnection(this.network);
+  }
+
+  /** Returns true if a blockchain connection is active. */
+  get isConnected(): boolean {
+    return this._connection !== undefined;
+  }
+
+  /** Returns true if the connection has a signer (can send transactions). */
+  get canSign(): boolean {
+    return this._connection?.signer !== undefined;
   }
 }
 
@@ -140,25 +178,4 @@ export class ConsoleClient {
 /** Create a new ConsoleClient instance. */
 export function createClient(options: ClientOptions = {}, namespaces: NamespaceOverrides = {}): ConsoleClient {
   return new ConsoleClient(options, namespaces);
-}
-
-// ---------------------------------------------------------------------------
-// Stub Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Create a proxy object whose every property access returns a function
- * that throws a "not implemented" error. This lets consumers discover
- * the namespace shape at compile time while failing loudly at runtime
- * until the real implementation is wired in.
- */
-function createStubNamespace<T extends object>(name: string): T {
-  return new Proxy<T>({} as T, {
-    get(_target, prop) {
-      if (typeof prop === 'symbol') return undefined;
-      return () => {
-        throw new Error(`${name}.${String(prop)}() is not implemented yet`);
-      };
-    },
-  });
 }

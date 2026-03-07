@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/styles/dashboard.css';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
@@ -154,127 +155,9 @@
 </div>
 
 <style>
-	.page {
-		max-width: 900px;
-	}
-
-	.page-header {
-		margin-bottom: 1.5rem;
-	}
-
-	.page-title {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--color-heading, #0f0f23);
-		margin: 0;
-	}
-
-	.alert {
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-	}
-
-	.alert-error {
-		background: #fef2f2;
-		color: #dc2626;
-		border: 1px solid #fecaca;
-	}
-
-	.loading-state,
-	.empty-state {
-		text-align: center;
-		padding: 2rem 1rem;
-		color: var(--color-text-muted, #64748b);
-		font-size: 0.875rem;
-	}
-
-	.empty-text {
-		color: var(--color-text-muted, #64748b);
-	}
-
-	.controls-row {
-		display: flex;
-		align-items: flex-end;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
-	}
-
+	/* Page-specific: VRF result display */
 	.form-group {
 		margin-bottom: 0;
-	}
-
-	.form-label {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
-		margin-bottom: 0.375rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-
-	.form-input {
-		padding: 0.5rem 0.75rem;
-		font-size: 0.875rem;
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 6px;
-		background: var(--color-bg, #f8fafc);
-		color: var(--color-text, #1a1a2e);
-		outline: none;
-	}
-
-	.form-input:focus {
-		border-color: var(--color-primary, #8b5cf6);
-		box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
-	}
-
-	.select-narrow {
-		min-width: 180px;
-	}
-
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		border-radius: 6px;
-		border: none;
-		cursor: pointer;
-		transition: background 0.15s;
-		white-space: nowrap;
-	}
-
-	.btn:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.btn-primary {
-		background: var(--color-primary, #8b5cf6);
-		color: #ffffff;
-	}
-
-	.btn-primary:hover:not(:disabled) {
-		background: var(--color-primary-hover, #7c3aed);
-	}
-
-	.card {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 8px;
-		padding: 1.25rem;
-		margin-bottom: 1rem;
-	}
-
-	.card-title {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
-		margin: 0 0 1rem;
 	}
 
 	.result-grid {
@@ -302,44 +185,7 @@
 		color: var(--color-text, #1a1a2e);
 	}
 
-	.mono {
-		font-family: 'JetBrains Mono', 'Fira Code', monospace;
-		font-size: 0.8125rem;
-	}
-
 	.wrap {
 		word-break: break-all;
-	}
-
-	/* Table */
-	.table-wrap {
-		overflow-x: auto;
-	}
-
-	.data-table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.data-table th {
-		text-align: left;
-		padding: 0.5rem 0.75rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		color: var(--color-text-muted, #64748b);
-		border-bottom: 1px solid var(--color-border, #e2e8f0);
-	}
-
-	.data-table td {
-		padding: 0.5rem 0.75rem;
-		font-size: 0.8125rem;
-		color: var(--color-text, #1a1a2e);
-		border-bottom: 1px solid var(--color-border, #f1f5f9);
-	}
-
-	.data-table tbody tr:last-child td {
-		border-bottom: none;
 	}
 </style>

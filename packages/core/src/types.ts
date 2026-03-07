@@ -32,6 +32,9 @@ export interface DelegationResult {
   signature: string;
   validator: string;
   delegatedAt: Date;
+  slot?: number;
+  /** True when the result was simulated (no real blockchain transaction). */
+  simulated: boolean;
 }
 
 export interface DelegationStatus {
@@ -44,6 +47,8 @@ export interface DelegationStatus {
 export interface CommitResult {
   signature: string;
   slot: number;
+  /** True when the result was simulated (no real blockchain transaction). */
+  simulated: boolean;
 }
 
 export interface DelegatedAccount {
@@ -57,6 +62,9 @@ export interface StateDiff {
   baseLayerData: string;
   erData: string;
   isDifferent: boolean;
+  baseLayerLamports?: number;
+  erLamports?: number;
+  owner?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -123,24 +131,11 @@ export interface LogEntry {
 }
 
 // ---------------------------------------------------------------------------
-// Signer
-// ---------------------------------------------------------------------------
-
-/** Abstraction for transaction signing (wallet adapter or keypair). */
-export interface Signer {
-  publicKey: string;
-  signTransaction(tx: Uint8Array): Promise<Uint8Array>;
-  signAllTransactions?(txs: Uint8Array[]): Promise<Uint8Array[]>;
-}
-
-// ---------------------------------------------------------------------------
 // Client Options
 // ---------------------------------------------------------------------------
 
 export interface ClientOptions {
   network?: Network;
-  keypairPath?: string;
-  wallet?: Signer; // Wallet adapter (browser) or keypair wrapper
   storage?: import('./storage.js').Storage;
 }
 
@@ -162,6 +157,8 @@ export interface ConfigureProjectOptions {
 export interface DelegateOptions {
   account: string;
   project: string;
+  /** Owner program of the delegated account (required for real blockchain ops). */
+  ownerProgram?: string;
 }
 
 export interface CommitOptions {
@@ -172,6 +169,8 @@ export interface CommitOptions {
 export interface UndelegateOptions {
   account: string;
   project: string;
+  /** Owner program of the delegated account (required for real blockchain ops). */
+  ownerProgram?: string;
 }
 
 export interface PrivacyDepositOptions {

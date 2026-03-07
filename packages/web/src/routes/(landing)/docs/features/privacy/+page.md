@@ -86,7 +86,7 @@ The Console handles this automatically. On CLI, the auth token is cached in your
 ## Monitoring
 
 ```bash
-mb-console monitor --project my-game
+mb-console monitor status --project my-game
 ```
 
 The privacy tab shows:

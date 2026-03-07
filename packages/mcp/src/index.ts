@@ -1,11 +1,21 @@
 #!/usr/bin/env node
-// @ts-nocheck — zod v4 + MCP SDK generics cause OOM during type-check
+// @ts-nocheck
+// Type-checking disabled: MCP SDK server.tool() generics combined with Zod
+// schemas trigger TypeScript OOM (>4 GB) during inference. This is a known
+// issue with deep generic chains in @modelcontextprotocol/sdk + zod.
+// Runtime behavior is unaffected — Zod validates all inputs at runtime.
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { createClient, MemoryStorage, VERSION } from '@magicblock-console/core';
 import type { Network } from '@magicblock-console/core';
+
+// Reusable Zod schema for Solana public key validation
+const solanaAddress = z.string().regex(
+  /^[1-9A-HJ-NP-Za-km-z]{32,44}$/,
+  'Invalid Solana public key (expected base58, 32-44 characters)',
+);
 
 // ---------------------------------------------------------------------------
 // JSON Serializer
@@ -37,11 +47,18 @@ function fail(err: unknown) {
 // Client Setup
 // ---------------------------------------------------------------------------
 
+const rawNetwork = process.env['MB_NETWORK'] ?? 'devnet';
+if (rawNetwork !== 'devnet' && rawNetwork !== 'mainnet') {
+  console.error(`Invalid MB_NETWORK: "${rawNetwork}". Must be "devnet" or "mainnet".`);
+  process.exit(1);
+}
+
 const client = createClient({
-  network: (process.env['MB_NETWORK'] as Network) ?? 'devnet',
-  keypairPath: process.env['MB_KEYPAIR_PATH'],
+  network: rawNetwork as Network,
   storage: new MemoryStorage(),
 });
+
+// Keypair connection is deferred to main() to avoid race conditions
 
 // ---------------------------------------------------------------------------
 // MCP Server
@@ -126,10 +143,10 @@ server.tool(
 server.tool(
   'delegate_account',
   'Delegate a Solana account to an Ephemeral Rollup for high-speed execution',
-  { account: z.string(), project: z.string() },
-  async ({ account, project }) => {
+  { account: solanaAddress, project: z.string(), ownerProgram: solanaAddress.optional() },
+  async ({ account, project, ownerProgram }) => {
     try {
-      return ok(await client.er.delegate({ account, project }));
+      return ok(await client.er.delegate({ account, project, ownerProgram }));
     } catch (err) { return fail(err); }
   },
 );
@@ -137,10 +154,10 @@ server.tool(
 server.tool(
   'undelegate_account',
   'Undelegate a Solana account from an Ephemeral Rollup, returning it to the base layer',
-  { account: z.string(), project: z.string() },
-  async ({ account, project }) => {
+  { account: solanaAddress, project: z.string(), ownerProgram: solanaAddress.optional() },
+  async ({ account, project, ownerProgram }) => {
     try {
-      return ok(await client.er.undelegate({ account, project }));
+      return ok(await client.er.undelegate({ account, project, ownerProgram }));
     } catch (err) { return fail(err); }
   },
 );
@@ -148,7 +165,7 @@ server.tool(
 server.tool(
   'commit_account',
   'Commit the current ER state of a delegated account back to the Solana base layer',
-  { account: z.string(), project: z.string() },
+  { account: solanaAddress, project: z.string() },
   async ({ account, project }) => {
     try {
       return ok(await client.er.commit({ account, project }));
@@ -159,7 +176,7 @@ server.tool(
 server.tool(
   'get_delegation_status',
   'Check whether a Solana account is currently delegated to an Ephemeral Rollup',
-  { account: z.string() },
+  { account: solanaAddress },
   async ({ account }) => {
     try {
       return ok(await client.er.status(account));
@@ -174,6 +191,17 @@ server.tool(
   async ({ project }) => {
     try {
       return ok(await client.er.accounts(project));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'get_state_diff',
+  'Compare the base layer and Ephemeral Rollup state of a delegated account to see what changed',
+  { account: solanaAddress },
+  async ({ account }) => {
+    try {
+      return ok(await client.er.diff(account));
     } catch (err) { return fail(err); }
   },
 );
@@ -261,6 +289,20 @@ server.tool(
 // ---------------------------------------------------------------------------
 
 async function main() {
+  // Connect with keypair if available for real blockchain operations
+  const keypairPath = process.env['MB_KEYPAIR_PATH'];
+  if (keypairPath) {
+    try {
+      await client.connectWithKeypair(keypairPath);
+    } catch (err) {
+      console.error(
+        `Warning: could not load keypair from MB_KEYPAIR_PATH="${keypairPath}": ${
+          err instanceof Error ? err.message : String(err)
+        }. Running in simulated mode.`,
+      );
+    }
+  }
+
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

@@ -1,5 +1,6 @@
 import type { Command } from 'commander';
 import type { ConsoleClient } from '@magicblock-console/core';
+import { assertPubkey } from '@magicblock-console/core';
 import { printJson, printSuccess, printError, printTable } from '../utils/output.js';
 
 export function registerErCommands(program: Command, client: ConsoleClient): void {
@@ -12,11 +13,15 @@ export function registerErCommands(program: Command, client: ConsoleClient): voi
     .command('delegate <account>')
     .description('Delegate an account to an Ephemeral Rollup')
     .requiredOption('--project <name>', 'Project name')
-    .action(async (account: string, opts: { project: string }) => {
+    .option('--owner-program <pubkey>', 'Owner program of the account (required for real blockchain)')
+    .action(async (account: string, opts: { project: string; ownerProgram?: string }) => {
       try {
+        assertPubkey(account, 'account');
+        if (opts.ownerProgram) assertPubkey(opts.ownerProgram, 'owner program');
         const result = await client.er.delegate({
           account,
           project: opts.project,
+          ownerProgram: opts.ownerProgram,
         });
         printSuccess(`Account ${account} delegated`);
         printJson(result);
@@ -30,11 +35,15 @@ export function registerErCommands(program: Command, client: ConsoleClient): voi
     .command('undelegate <account>')
     .description('Undelegate an account from an Ephemeral Rollup')
     .requiredOption('--project <name>', 'Project name')
-    .action(async (account: string, opts: { project: string }) => {
+    .option('--owner-program <pubkey>', 'Owner program of the account')
+    .action(async (account: string, opts: { project: string; ownerProgram?: string }) => {
       try {
+        assertPubkey(account, 'account');
+        if (opts.ownerProgram) assertPubkey(opts.ownerProgram, 'owner program');
         const result = await client.er.undelegate({
           account,
           project: opts.project,
+          ownerProgram: opts.ownerProgram,
         });
         printSuccess(`Account ${account} undelegated`);
         printJson(result);
@@ -50,6 +59,7 @@ export function registerErCommands(program: Command, client: ConsoleClient): voi
     .requiredOption('--project <name>', 'Project name')
     .action(async (account: string, opts: { project: string }) => {
       try {
+        assertPubkey(account, 'account');
         const result = await client.er.commit({
           account,
           project: opts.project,
@@ -67,6 +77,7 @@ export function registerErCommands(program: Command, client: ConsoleClient): voi
     .description('Check delegation status of an account')
     .action(async (account: string) => {
       try {
+        assertPubkey(account, 'account');
         const result = await client.er.status(account);
         printJson(result);
       } catch (err) {
@@ -105,6 +116,7 @@ export function registerErCommands(program: Command, client: ConsoleClient): voi
     .description('Show state diff between base layer and ER')
     .action(async (account: string) => {
       try {
+        assertPubkey(account, 'account');
         const result = await client.er.diff(account);
         printJson(result);
       } catch (err) {

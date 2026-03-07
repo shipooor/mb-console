@@ -1,7 +1,9 @@
 <script lang="ts">
+	import '$lib/styles/dashboard.css';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
+	import { isValidPubkey } from '@magicblock-console/core';
 	import type { Project } from '@magicblock-console/core';
 
 	let projects = $state<Project[]>([]);
@@ -57,6 +59,11 @@
 			} else if (activeTab === 'transfer') {
 				if (!recipient.trim()) {
 					error = 'Recipient address is required';
+					submitting = false;
+					return;
+				}
+				if (!isValidPubkey(recipient.trim())) {
+					error = 'Invalid recipient address (expected base58, 32-44 characters)';
 					submitting = false;
 					return;
 				}
@@ -189,97 +196,17 @@
 </div>
 
 <style>
+	/* Page-specific: narrow layout */
 	.page {
 		max-width: 600px;
 	}
 
-	.page-header {
-		margin-bottom: 1.5rem;
-	}
-
-	.page-title {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--color-heading, #0f0f23);
-		margin: 0;
-	}
-
-	.alert {
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-	}
-
-	.alert-error {
-		background: #fef2f2;
-		color: #dc2626;
-		border: 1px solid #fecaca;
-	}
-
-	.alert-success {
-		background: #f0fdf4;
-		color: #16a34a;
-		border: 1px solid #bbf7d0;
-	}
-
-	.loading-state,
-	.empty-state {
-		text-align: center;
-		padding: 2rem 1rem;
-		color: var(--color-text-muted, #64748b);
-		font-size: 0.875rem;
-	}
-
-	.empty-text {
-		color: var(--color-text-muted, #64748b);
-	}
-
 	.controls-row {
-		margin-bottom: 1rem;
 		max-width: 300px;
-	}
-
-	.form-group {
-		margin-bottom: 1rem;
-	}
-
-	.form-label {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
-		margin-bottom: 0.375rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-
-	.form-input {
-		width: 100%;
-		padding: 0.5rem 0.75rem;
-		font-size: 0.875rem;
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 6px;
-		background: var(--color-bg, #f8fafc);
-		color: var(--color-text, #1a1a2e);
-		outline: none;
-		box-sizing: border-box;
-	}
-
-	.form-input:focus {
-		border-color: var(--color-primary, #8b5cf6);
-		box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
 	}
 
 	.select-narrow {
 		max-width: 300px;
-	}
-
-	.card {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 8px;
-		padding: 1.25rem;
 	}
 
 	.tabs {
@@ -317,31 +244,6 @@
 	}
 
 	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		border-radius: 6px;
-		border: none;
-		cursor: pointer;
-		transition: background 0.15s;
-		white-space: nowrap;
 		align-self: flex-start;
-	}
-
-	.btn:disabled {
-		opacity: 0.6;
-		cursor: not-allowed;
-	}
-
-	.btn-primary {
-		background: var(--color-primary, #8b5cf6);
-		color: #ffffff;
-	}
-
-	.btn-primary:hover:not(:disabled) {
-		background: var(--color-primary-hover, #7c3aed);
 	}
 </style>

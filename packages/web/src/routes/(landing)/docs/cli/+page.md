@@ -17,34 +17,20 @@ npm install -g @magicblock-console/cli
 
 ## Authentication
 
-### `mb-console login`
-
-Authenticate with your Solana wallet. Opens a browser window for wallet signature.
+The CLI authenticates via a Solana keypair file. Set the path through an environment variable:
 
 ```bash
-mb-console login
+export MB_KEYPAIR_PATH=~/.config/solana/id.json
 ```
 
-Options:
+If not set, the CLI looks for a keypair at `~/.config/solana/id.json` by default. If no keypair is found, the CLI runs in **simulated mode** — all operations return realistic mock data without touching the blockchain.
 
-| Flag | Description |
-|------|-------------|
-| `--keypair <path>` | Use a keypair file instead of browser auth |
+## Network
 
-### `mb-console logout`
-
-Clear the stored session.
+By default, the CLI connects to **devnet**. To change the network:
 
 ```bash
-mb-console logout
-```
-
-### `mb-console whoami`
-
-Display the connected wallet address and session info.
-
-```bash
-mb-console whoami
+export MB_NETWORK=devnet   # or mainnet
 ```
 
 ## Projects
@@ -90,12 +76,12 @@ mb-console project configure <name> [options]
 | `--no-cranks` | Disable cranks |
 | `--no-oracle` | Disable oracle |
 
-### `mb-console project config`
+### `mb-console project get`
 
 Display current project configuration.
 
 ```bash
-mb-console project config <name>
+mb-console project get <name>
 ```
 
 ### `mb-console project delete`
@@ -110,16 +96,16 @@ mb-console project delete <name>
 
 ### `mb-console er delegate`
 
-Delegate one or more accounts to an Ephemeral Rollup.
+Delegate an account to an Ephemeral Rollup.
 
 ```bash
-mb-console er delegate <address...> --project <name>
+mb-console er delegate <address> --project <name>
 ```
 
 | Flag | Description |
 |------|-------------|
 | `--project <name>` | Target project (required) |
-| `--validator <region>` | Override region for this delegation |
+| `--owner-program <pubkey>` | Owner program of the account (required for real blockchain operations) |
 
 ### `mb-console er status`
 
@@ -135,7 +121,6 @@ Commit ER state to the Solana base layer.
 
 ```bash
 mb-console er commit <address> --project <name>
-mb-console er commit --all --project <name>
 ```
 
 ### `mb-console er undelegate`
@@ -144,8 +129,12 @@ Undelegate an account — final commit + return to Solana.
 
 ```bash
 mb-console er undelegate <address> --project <name>
-mb-console er undelegate --all --project <name>
 ```
+
+| Flag | Description |
+|------|-------------|
+| `--project <name>` | Target project (required) |
+| `--owner-program <pubkey>` | Owner program of the account |
 
 ### `mb-console er diff`
 
@@ -231,7 +220,7 @@ mb-console crank list --project <name>
 Stop a running crank.
 
 ```bash
-mb-console crank stop <crank_id> --project <name>
+mb-console crank stop <crank_id>
 ```
 
 ### `mb-console oracle price`
@@ -244,29 +233,31 @@ mb-console oracle price --feed <pair> --project <name>
 
 ## Monitoring
 
-### `mb-console monitor`
+### `mb-console monitor status`
 
-Open a live terminal dashboard.
-
-```bash
-mb-console monitor --project <name>
-```
-
-### `mb-console logs`
-
-Stream ER events.
+Show project status overview.
 
 ```bash
-mb-console logs --project <name>
+mb-console monitor status --project <name>
 ```
 
-### `mb-console costs`
+### `mb-console monitor logs`
+
+Show project log entries.
+
+```bash
+mb-console monitor logs --project <name> [--limit <n>]
+```
+
+### `mb-console monitor costs`
 
 Display cost breakdown.
 
 ```bash
-mb-console costs --project <name>
+mb-console monitor costs --project <name> [--period <period>]
 ```
+
+Default period is `30d`. Options: `7d`, `30d`, `90d`.
 
 ## Configuration
 
@@ -274,9 +265,9 @@ Session and project data are stored in `~/.mb-console/`:
 
 ```
 ~/.mb-console/
-├── config.json       # Auth session
-└── projects/
-    └── <name>.json   # Project configuration
+├── <key1>.json
+├── <key2>.json
+└── ...
 ```
 
 ## Global Options
@@ -285,5 +276,3 @@ Session and project data are stored in `~/.mb-console/`:
 |------|-------------|
 | `--version` | Show version |
 | `--help` | Show help |
-| `--json` | Output in JSON format |
-| `--quiet` | Suppress non-essential output |

@@ -1,3 +1,9 @@
+import { PublicKey, Transaction } from '@solana/web3.js';
+import {
+  createDelegateInstruction,
+  createCommitInstruction,
+  createCommitAndUndelegateInstruction,
+} from '@magicblock-labs/ephemeral-rollups-sdk';
 import type { Storage } from './storage.js';
 import type {
   CommitOptions,
@@ -12,7 +18,9 @@ import type {
   UndelegateOptions,
 } from './types.js';
 import type { ErNamespace } from './client.js';
+import type { BlockchainConnection } from './connection.js';
 import { VALIDATORS, REGIONS } from './config.js';
+import { generateSignature } from './utils.js';
 
 // ---------------------------------------------------------------------------
 // Key helpers
@@ -44,46 +52,25 @@ interface DelegationRecord {
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Generate a realistic-looking base58 transaction signature.
- *
- * NOTE: This is a simulated signature for hackathon purposes.
- * Real implementation would use the MagicBlock Delegation Program
- * to produce an actual on-chain transaction signature.
- */
-function generateSignature(): string {
-  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  let sig = '';
-  for (let i = 0; i < 88; i++) {
-    sig += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return sig;
-}
-
-// ---------------------------------------------------------------------------
 // Factory
 // ---------------------------------------------------------------------------
 
 /**
  * Create a fully-functional `ErNamespace` backed by the given Storage.
  *
- * Delegation records are persisted under `delegation:<account>` keys.
- * A per-project account index is maintained under `account-index:<project>`.
+ * When a `getConnection` callback is provided and returns a valid
+ * `BlockchainConnection`, real on-chain transactions are built and sent
+ * via the MagicBlock SDK. Otherwise, operations fall back to simulated
+ * behavior with locally-generated signatures.
  *
- * The `resolveProjectRegion` callback is used to look up which region
- * (and therefore which validator) a project is deployed to. Typically
- * this delegates to `projects.get(name).region`.
- *
- * NOTE: All on-chain operations (delegate, undelegate, commit) are simulated.
- * The structure is ready for real Solana transaction logic to be plugged in.
+ * Storage metadata is maintained in both modes so that monitor/accounts
+ * remain consistent regardless of connection state.
  */
 export function createErNamespace(
   storage: Storage,
   network: Network,
   resolveProjectRegion: (project: string) => Promise<Region>,
+  getConnection?: () => BlockchainConnection | undefined,
 ): ErNamespace {
   // Helper: read the account index for a project
   async function getAccountIndex(project: string): Promise<string[]> {
@@ -117,6 +104,39 @@ export function createErNamespace(
     return record;
   }
 
+  // Helper: persist delegation metadata in storage
+  async function persistDelegation(
+    account: string,
+    project: string,
+    validator: string,
+    validatorPubkey: string,
+    now: Date,
+  ): Promise<void> {
+    const record: DelegationRecord = {
+      account,
+      project,
+      validator,
+      validatorPubkey,
+      delegatedAt: now.toISOString(),
+    };
+    await storage.set(delegationKey(account), JSON.stringify(record));
+
+    const index = await getAccountIndex(project);
+    if (!index.includes(account)) {
+      index.push(account);
+      await setAccountIndex(project, index);
+    }
+  }
+
+  // Helper: remove delegation metadata from storage
+  async function removeDelegation(account: string, project: string): Promise<void> {
+    await storage.delete(delegationKey(account));
+
+    const index = await getAccountIndex(project);
+    const filtered = index.filter((a) => a !== account);
+    await setAccountIndex(project, filtered);
+  }
+
   return {
     async delegate(options: DelegateOptions): Promise<DelegationResult> {
       // Prevent double-delegation
@@ -130,47 +150,134 @@ export function createErNamespace(
       const validatorPubkey = VALIDATORS[network][region];
       const validator = REGIONS[region][network].http;
 
+      const conn = getConnection?.();
+
+      // When a signer is available, ownerProgram is required for real delegation
+      if (conn?.signer && !options.ownerProgram) {
+        throw new Error(
+          'ownerProgram is required for real blockchain delegation. ' +
+          'Pass --owner-program <pubkey> or set ownerProgram in options.',
+        );
+      }
+
+      // Real blockchain path
+      if (conn?.signer && options.ownerProgram) {
+        try {
+          const accountPk = new PublicKey(options.account);
+          const ownerProgramPk = new PublicKey(options.ownerProgram);
+          const validatorPk = new PublicKey(validatorPubkey);
+
+          const ix = createDelegateInstruction(
+            {
+              payer: conn.signer.publicKey,
+              delegatedAccount: accountPk,
+              ownerProgram: ownerProgramPk,
+              validator: validatorPk,
+            },
+            { commitFrequencyMs: 30_000, validator: validatorPk },
+          );
+
+          const tx = new Transaction().add(ix);
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await conn.routerConnection.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await conn.routerConnection.sendRawTransaction(
+            signed.serialize(),
+          );
+
+          const now = new Date();
+          await persistDelegation(
+            options.account,
+            options.project,
+            validator,
+            validatorPubkey,
+            now,
+          );
+
+          return { signature, validator, delegatedAt: now, simulated: false };
+        } catch (err) {
+          // Fall through to simulated on network error
+          console.warn(
+            `[mb-console] Real delegation failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      // Simulated fallback
       const now = new Date();
-      const record: DelegationRecord = {
-        account: options.account,
-        project: options.project,
+      await persistDelegation(
+        options.account,
+        options.project,
         validator,
         validatorPubkey,
-        delegatedAt: now.toISOString(),
-      };
-
-      // Persist delegation record
-      await storage.set(delegationKey(options.account), JSON.stringify(record));
-
-      // Update project account index
-      const index = await getAccountIndex(options.project);
-      if (!index.includes(options.account)) {
-        index.push(options.account);
-        await setAccountIndex(options.project, index);
-      }
+        now,
+      );
 
       return {
         signature: generateSignature(),
         validator,
         delegatedAt: now,
+        simulated: true,
       };
     },
 
     async undelegate(options: UndelegateOptions): Promise<DelegationResult> {
       const record = await getDelegationRecord(options.account, options.project);
+      const conn = getConnection?.();
 
-      // Remove delegation record
-      await storage.delete(delegationKey(options.account));
+      // Real blockchain: commit + undelegate
+      if (conn?.signer) {
+        try {
+          const accountPk = new PublicKey(options.account);
 
-      // Remove from project account index
-      const index = await getAccountIndex(options.project);
-      const filtered = index.filter((a) => a !== options.account);
-      await setAccountIndex(options.project, filtered);
+          // Determine which ER connection to use for the commit+undelegate
+          const region = await resolveProjectRegion(options.project);
+          const erConn = conn.erConnections[region] ?? conn.routerConnection;
+
+          const ix = createCommitAndUndelegateInstruction(
+            conn.signer.publicKey,
+            [accountPk],
+          );
+
+          const tx = new Transaction().add(ix);
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await erConn.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await erConn.sendRawTransaction(signed.serialize());
+
+          await removeDelegation(options.account, options.project);
+
+          return {
+            signature,
+            validator: record.validator,
+            delegatedAt: new Date(record.delegatedAt),
+            simulated: false,
+          };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real undelegation failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      // Simulated fallback
+      await removeDelegation(options.account, options.project);
 
       return {
         signature: generateSignature(),
         validator: record.validator,
         delegatedAt: new Date(record.delegatedAt),
+        simulated: true,
       };
     },
 
@@ -178,14 +285,83 @@ export function createErNamespace(
       // Validate the account is delegated to this project
       await getDelegationRecord(options.account, options.project);
 
+      const conn = getConnection?.();
+
+      // Real blockchain: schedule commit on the ER
+      if (conn?.signer) {
+        try {
+          const accountPk = new PublicKey(options.account);
+          const region = await resolveProjectRegion(options.project);
+          const erConn = conn.erConnections[region] ?? conn.routerConnection;
+
+          const ix = createCommitInstruction(
+            conn.signer.publicKey,
+            [accountPk],
+          );
+
+          const tx = new Transaction().add(ix);
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await erConn.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await erConn.sendRawTransaction(signed.serialize());
+
+          const slot = (await erConn.getSlot()) ?? Math.floor(Date.now() / 400);
+
+          return { signature, slot, simulated: false };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real commit failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      // Simulated fallback
       return {
         signature: generateSignature(),
-        // Approximate Solana slot based on ~400ms slot time
         slot: Math.floor(Date.now() / 400),
+        simulated: true,
       };
     },
 
     async status(account: string): Promise<DelegationStatus> {
+      const conn = getConnection?.();
+
+      // Real blockchain: query Magic Router for delegation status
+      if (conn) {
+        try {
+          const result = await conn.routerConnection.getDelegationStatus(account);
+
+          if (result.isDelegated) {
+            // Enrich with local storage data if available
+            const data = await storage.get(delegationKey(account));
+            if (data) {
+              const record = JSON.parse(data) as DelegationRecord;
+              return {
+                isDelegated: true,
+                validator: record.validator,
+                validatorPubkey: record.validatorPubkey,
+                delegatedAt: new Date(record.delegatedAt),
+              };
+            }
+            return { isDelegated: true };
+          }
+
+          return { isDelegated: false };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real status check failed, using local storage: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      // Simulated fallback: check local storage
       const data = await storage.get(delegationKey(account));
       if (!data) {
         return { isDelegated: false };
@@ -220,12 +396,61 @@ export function createErNamespace(
     },
 
     async diff(account: string): Promise<StateDiff> {
-      // Validate the account is actually delegated
+      const conn = getConnection?.();
+
+      // Real blockchain: compare base layer vs ER account data
+      if (conn) {
+        try {
+          // Check local storage for delegation record to know which ER to query
+          const data = await storage.get(delegationKey(account));
+          const accountPk = new PublicKey(account);
+
+          const baseInfo = await conn.baseConnection.getAccountInfo(accountPk);
+          const baseData = baseInfo?.data
+            ? Buffer.from(baseInfo.data).toString('base64')
+            : '<not found>';
+
+          let erData = '<not delegated>';
+          let erLamports: number | undefined;
+
+          if (data) {
+            const record = JSON.parse(data) as DelegationRecord;
+            // Find the matching ER connection
+            const regionKey = Object.entries(REGIONS).find(
+              ([, config]) => config[network].http === record.validator,
+            )?.[0];
+            const erConn = regionKey
+              ? conn.erConnections[regionKey]
+              : conn.routerConnection;
+
+            const erInfo = await erConn.getAccountInfo(accountPk);
+            erData = erInfo?.data
+              ? Buffer.from(erInfo.data).toString('base64')
+              : '<not found on ER>';
+            erLamports = erInfo?.lamports;
+          }
+
+          return {
+            account,
+            baseLayerData: baseData,
+            erData,
+            isDifferent: baseData !== erData,
+            baseLayerLamports: baseInfo?.lamports,
+            erLamports,
+            owner: baseInfo?.owner?.toBase58(),
+          };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real diff failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      // Simulated fallback: validate delegation exists in local storage
       await getDelegationRecord(account);
 
-      // Simulated diff: in a real implementation this would compare
-      // on-chain base-layer state with ER state via RPC calls to both
-      // the Solana validator and the ephemeral validator.
       return {
         account,
         baseLayerData: '<base layer data>',

@@ -27,16 +27,15 @@
 				<span class="code-dot"></span>
 				<span class="code-title">Terminal</span>
 			</div>
-			<pre><code><span class="code-prompt">$</span> npx magicblock-console er:create \
-    --accounts TokenkegQ...EE5 \
-    --region eu-west \
-    --chain-id 42
+			<pre><code><span class="code-prompt">$</span> mb-console project create my-game --region eu
+<span class="code-success">Project "my-game" created (region: eu)</span>
 
-<span class="code-comment"># Ephemeral Rollup created</span>
-<span class="code-success">ID:</span>       er_7xKp2mNq
-<span class="code-success">Status:</span>   ACTIVE
-<span class="code-success">Chain:</span>    42
-<span class="code-success">Region:</span>   eu-west</code></pre>
+<span class="code-prompt">$</span> mb-console er delegate TokenkegQ...EE5 \
+    --project my-game
+
+<span class="code-comment"># Account delegated to Ephemeral Rollup</span>
+<span class="code-success">Validator:</span>  devnet-eu.magicblock.app
+<span class="code-success">Signature:</span>  4sGj...kP2m</code></pre>
 		</div>
 	</div>
 </section>
@@ -75,7 +74,7 @@
 				<h3>CLI</h3>
 				<p>Full-featured command-line tool for scripting, CI/CD integration, and rapid development workflows.</p>
 				<div class="interface-example">
-					<code>npx magicblock-console er:list</code>
+					<code>mb-console er list --project my-game</code>
 				</div>
 				<a href="/docs/cli" class="interface-link">CLI Reference</a>
 			</div>
@@ -201,7 +200,7 @@
               |           |       |            |
         +-----+----+ +---+---+ +-+----------+ |
         | Web App  | |  CLI  | | MCP Server | |
-        | SvelteKit| |  oclif| | stdio/SSE  | |
+        | SvelteKit| |Commander| | stdio/SSE  | |
         +----------+ +-------+ +------------+ </code></pre>
 			<div class="arch-labels">
 				<div class="arch-label">
@@ -215,7 +214,7 @@
 					<span class="arch-dot arch-dot-cli"></span>
 					<div>
 						<strong>CLI</strong>
-						<span>oclif-based command-line tool</span>
+						<span>Commander.js-based command-line tool</span>
 					</div>
 				</div>
 				<div class="arch-label">
@@ -249,22 +248,22 @@
 			<div class="step">
 				<div class="step-number">2</div>
 				<div class="step-content">
-					<h3>Configure</h3>
-					<pre><code><span class="code-prompt">$</span> magicblock-console config set \
-    --api-key YOUR_KEY \
-    --cluster devnet</code></pre>
+					<h3>Create Project</h3>
+					<pre><code><span class="code-prompt">$</span> mb-console project create my-game \
+    --region us
+
+<span class="code-success">Project "my-game" created (region: us)</span></code></pre>
 				</div>
 			</div>
 			<div class="step-connector"></div>
 			<div class="step">
 				<div class="step-number">3</div>
 				<div class="step-content">
-					<h3>Deploy</h3>
-					<pre><code><span class="code-prompt">$</span> magicblock-console er:create \
-    --accounts GameState111...xxx \
-    --region us-east
+					<h3>Delegate</h3>
+					<pre><code><span class="code-prompt">$</span> mb-console er delegate GameState111...xxx \
+    --project my-game
 
-<span class="code-success">Ephemeral Rollup created successfully.</span></code></pre>
+<span class="code-success">Account GameState111...xxx delegated</span></code></pre>
 				</div>
 			</div>
 		</div>

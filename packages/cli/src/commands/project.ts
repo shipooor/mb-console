@@ -14,6 +14,10 @@ export function registerProjectCommands(program: Command, client: ConsoleClient)
     .option('--region <region>', 'Region: us, eu, asia', 'us')
     .action(async (name: string, opts: { region: string }) => {
       try {
+        const validRegions = ['us', 'eu', 'asia'];
+        if (!validRegions.includes(opts.region)) {
+          throw new Error(`Invalid region "${opts.region}". Must be one of: ${validRegions.join(', ')}`);
+        }
         const result = await client.projects.create({
           name,
           region: opts.region as 'us' | 'eu' | 'asia',

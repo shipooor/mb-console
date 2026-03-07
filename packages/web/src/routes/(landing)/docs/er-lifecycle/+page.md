@@ -40,10 +40,10 @@ Delegation transfers ownership of a Solana account to the MagicBlock Delegation 
 **CLI**:
 
 ```bash
-mb-console er delegate <ACCOUNT_ADDRESS> \
-  --project my-game \
-  --validator us
+mb-console er delegate <ACCOUNT_ADDRESS> --project my-game
 ```
+
+The ER region is determined by the project configuration.
 
 **Web**: Project page → Accounts → "Delegate Account" → paste address → confirm.
 
@@ -147,18 +147,15 @@ This shows what data has changed on the ER since the last commit.
 
 **Web**: Project → Accounts → click account → "State Diff" tab.
 
-## Bulk Operations
+## Managing Multiple Accounts
 
-Delegate or undelegate multiple accounts at once:
+Delegate accounts one at a time and list all delegated accounts:
 
 ```bash
-mb-console er delegate \
-  <ACCOUNT_1> <ACCOUNT_2> <ACCOUNT_3> \
-  --project my-game
+mb-console er delegate <ACCOUNT_1> --project my-game
+mb-console er delegate <ACCOUNT_2> --project my-game
 
-mb-console er commit --all --project my-game
-
-mb-console er undelegate --all --project my-game
+mb-console er list --project my-game
 ```
 
 ## Error Handling

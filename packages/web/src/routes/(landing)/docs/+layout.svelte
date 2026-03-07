@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	let { children } = $props();
 
@@ -33,7 +33,7 @@
 		},
 	];
 
-	let currentPath = $derived($page.url.pathname);
+	let currentPath = $derived(page.url.pathname);
 
 	function isActive(href: string): boolean {
 		// Exact match or match with trailing slash

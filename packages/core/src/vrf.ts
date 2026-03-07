@@ -1,6 +1,7 @@
 import type { Storage } from './storage.js';
 import type { Network, Project, VrfRequestOptions, VrfResult } from './types.js';
 import type { VrfNamespace } from './client.js';
+import { generateBase58 } from './utils.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -22,20 +23,6 @@ async function requireVrfEnabled(storage: Storage, project: string): Promise<Pro
     );
   }
   return parsed;
-}
-
-/**
- * Generate a realistic-looking base58 transaction signature.
- *
- * NOTE: Simulated for hackathon demo purposes.
- */
-function generateProof(): string {
-  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  let proof = '';
-  for (let i = 0; i < 128; i++) {
-    proof += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return proof;
 }
 
 // ---------------------------------------------------------------------------
@@ -76,9 +63,9 @@ export function createVrfNamespace(
       const latencyMs = Math.round(performance.now() - start);
 
       return {
-        requestId: `vrf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`,
+        requestId: `vrf_${Date.now().toString(36)}_${generateBase58(8)}`,
         randomness,
-        proof: generateProof(),
+        proof: generateBase58(128),
         latencyMs,
       };
     },

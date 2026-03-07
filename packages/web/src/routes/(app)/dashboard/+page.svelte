@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/styles/dashboard.css';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
@@ -17,6 +18,7 @@
 	});
 	let loading = $state(true);
 	let error = $state<string | null>(null);
+	let pendingDelete = $state<string | null>(null);
 
 	const client = get(consoleClient);
 
@@ -72,10 +74,18 @@
 		}
 	}
 
-	async function deleteProject(name: string) {
-		if (!confirm(`Delete project "${name}"? This action cannot be undone.`)) {
-			return;
-		}
+	function confirmDelete(name: string) {
+		pendingDelete = name;
+	}
+
+	function cancelDelete() {
+		pendingDelete = null;
+	}
+
+	async function executeDelete() {
+		if (!pendingDelete) return;
+		const name = pendingDelete;
+		pendingDelete = null;
 		error = null;
 		try {
 			await client.projects.delete(name);
@@ -114,6 +124,16 @@
 
 	{#if error}
 		<div class="alert alert-error">{error}</div>
+	{/if}
+
+	{#if pendingDelete}
+		<div class="alert alert-confirm">
+			Delete project "{pendingDelete}"? This action cannot be undone.
+			<span class="confirm-actions">
+				<button class="btn btn-danger-text" onclick={executeDelete}>Delete</button>
+				<button class="btn btn-secondary btn-sm" onclick={cancelDelete}>Cancel</button>
+			</span>
+		</div>
 	{/if}
 
 	{#if showCreateForm}
@@ -198,7 +218,7 @@
 						<span class="project-date">Created {formatDate(project.createdAt)}</span>
 						<button
 							class="btn btn-danger-text"
-							onclick={() => deleteProject(project.name)}
+							onclick={() => confirmDelete(project.name)}
 						>
 							Delete
 						</button>
@@ -210,44 +230,38 @@
 </div>
 
 <style>
-	.page {
-		max-width: 900px;
+	/* Page-specific: override loading/empty padding */
+	.loading-state {
+		padding: 3rem 1rem;
 	}
 
-	.page-header {
-		display: flex;
+	.empty-state {
+		padding: 3rem 1rem;
+	}
+
+	.empty-icon {
+		display: inline-flex;
 		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 1.5rem;
-	}
-
-	.page-title {
-		font-size: 1.5rem;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		border-radius: 12px;
+		background: rgba(139, 92, 246, 0.1);
+		color: var(--color-primary, #8b5cf6);
+		font-size: 1.25rem;
 		font-weight: 700;
-		color: var(--color-heading, #0f0f23);
-		margin: 0;
-	}
-
-	/* Alert */
-	.alert {
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
 		margin-bottom: 1rem;
-		font-size: 0.875rem;
 	}
 
-	.alert-error {
-		background: #fef2f2;
-		color: #dc2626;
-		border: 1px solid #fecaca;
+	.empty-title {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: var(--color-heading, #0f0f23);
+		margin: 0 0 0.5rem;
 	}
 
-	/* Card */
-	.card {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 8px;
-		padding: 1.25rem;
+	.empty-text {
+		margin-bottom: 1.25rem;
 	}
 
 	/* Create form */
@@ -260,37 +274,6 @@
 		font-weight: 600;
 		color: var(--color-heading, #0f0f23);
 		margin: 0 0 1rem;
-	}
-
-	.form-group {
-		margin-bottom: 1rem;
-	}
-
-	.form-label {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
-		margin-bottom: 0.375rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-
-	.form-input {
-		width: 100%;
-		padding: 0.5rem 0.75rem;
-		font-size: 0.875rem;
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 6px;
-		background: var(--color-bg, #f8fafc);
-		color: var(--color-text, #1a1a2e);
-		outline: none;
-		box-sizing: border-box;
-	}
-
-	.form-input:focus {
-		border-color: var(--color-primary, #8b5cf6);
-		box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
 	}
 
 	.feature-checkboxes {
@@ -319,89 +302,21 @@
 		margin-top: 1.25rem;
 	}
 
-	/* Buttons */
-	.btn {
-		display: inline-flex;
+	/* Confirmation inline alert */
+	.alert-confirm {
+		background: #fffbeb;
+		color: #92400e;
+		border: 1px solid #fde68a;
+		display: flex;
 		align-items: center;
-		justify-content: center;
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		border-radius: 6px;
-		border: none;
-		cursor: pointer;
-		transition: background 0.15s, box-shadow 0.15s;
-		white-space: nowrap;
+		justify-content: space-between;
+		gap: 1rem;
 	}
 
-	.btn-primary {
-		background: var(--color-primary, #8b5cf6);
-		color: #ffffff;
-	}
-
-	.btn-primary:hover {
-		background: var(--color-primary-hover, #7c3aed);
-	}
-
-	.btn-secondary {
-		background: transparent;
-		color: var(--color-text-muted, #64748b);
-		border: 1px solid var(--color-border, #e2e8f0);
-	}
-
-	.btn-secondary:hover {
-		background: var(--color-bg, #f8fafc);
-	}
-
-	.btn-danger-text {
-		background: transparent;
-		color: #ef4444;
-		padding: 0.25rem 0.5rem;
-		font-size: 0.8125rem;
-	}
-
-	.btn-danger-text:hover {
-		background: #fef2f2;
-	}
-
-	/* Loading & Empty */
-	.loading-state {
-		text-align: center;
-		padding: 3rem 1rem;
-		color: var(--color-text-muted, #64748b);
-		font-size: 0.875rem;
-	}
-
-	.empty-state {
-		text-align: center;
-		padding: 3rem 1rem;
-	}
-
-	.empty-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 48px;
-		height: 48px;
-		border-radius: 12px;
-		background: rgba(139, 92, 246, 0.1);
-		color: var(--color-primary, #8b5cf6);
-		font-size: 1.25rem;
-		font-weight: 700;
-		margin-bottom: 1rem;
-	}
-
-	.empty-title {
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
-		margin: 0 0 0.5rem;
-	}
-
-	.empty-text {
-		color: var(--color-text-muted, #64748b);
-		font-size: 0.875rem;
-		margin-bottom: 1.25rem;
+	.confirm-actions {
+		display: flex;
+		gap: 0.5rem;
+		flex-shrink: 0;
 	}
 
 	/* Projects grid */
@@ -446,22 +361,6 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.375rem;
-	}
-
-	.feature-badge {
-		display: inline-flex;
-		align-items: center;
-		padding: 0.125rem 0.5rem;
-		border-radius: 9999px;
-		font-size: 0.6875rem;
-		font-weight: 600;
-		background: var(--color-bg, #f1f5f9);
-		color: var(--color-text-muted, #94a3b8);
-	}
-
-	.feature-badge.enabled {
-		background: rgba(139, 92, 246, 0.1);
-		color: var(--color-primary, #8b5cf6);
 	}
 
 	.project-footer {

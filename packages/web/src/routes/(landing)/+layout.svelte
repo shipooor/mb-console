@@ -28,7 +28,7 @@
 			<h4>Documentation</h4>
 			<a href="/docs/getting-started">Getting Started</a>
 			<a href="/docs/er-lifecycle">ER Lifecycle</a>
-			<a href="/docs/features">Features</a>
+			<a href="/docs/features/gasless">Features</a>
 		</div>
 		<div class="footer-section">
 			<h4>Interfaces</h4>

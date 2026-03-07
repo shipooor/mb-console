@@ -31,7 +31,7 @@ mb-console project configure my-game --gasless
 
 **Web**: Project Settings → Features → toggle "Gasless" on.
 
-**MCP**: Use `configure_er` with `gasless: true`.
+**MCP**: Use `configure_project` with `gasless: true`.
 
 Gasless is enabled by default on public ER nodes. The configuration flag in the Console is for tracking and visibility purposes.
 
@@ -40,7 +40,7 @@ Gasless is enabled by default on public ER nodes. The configuration flag in the 
 The Console tracks estimated costs for your project:
 
 ```bash
-mb-console costs --project my-game
+mb-console monitor costs --project my-game
 ```
 
 Output:

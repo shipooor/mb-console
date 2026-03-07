@@ -16,6 +16,11 @@
     "dev": "tsc --watch",
     "lint": "tsc --noEmit"
   },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "@magicblock-labs/ephemeral-rollups-sdk": "^0.8.5",
+    "bs58": "^6.0.0"
+  },
   "devDependencies": {
     "typescript": "^5.7.0"
   }

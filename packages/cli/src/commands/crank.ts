@@ -61,8 +61,7 @@ export function registerCrankCommands(program: Command, client: ConsoleClient): 
   crank
     .command('stop <id>')
     .description('Stop a running crank')
-    .requiredOption('--project <name>', 'Project name')
-    .action(async (id: string, _opts: { project: string }) => {
+    .action(async (id: string) => {
       try {
         const result = await client.cranks.stop(id);
         printSuccess(`Crank ${id} stopped`);

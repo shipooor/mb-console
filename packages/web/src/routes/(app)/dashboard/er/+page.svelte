@@ -1,7 +1,9 @@
 <script lang="ts">
+	import '$lib/styles/dashboard.css';
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
+	import { isValidPubkey } from '@magicblock-console/core';
 	import type { Project, DelegatedAccount, StateDiff } from '@magicblock-console/core';
 
 	let projects = $state<Project[]>([]);
@@ -10,6 +12,7 @@
 	let newAccount = $state('');
 	let loading = $state(true);
 	let error = $state<string | null>(null);
+	let success = $state<string | null>(null);
 	let diffResult = $state<StateDiff | null>(null);
 	let showDiff = $state(false);
 
@@ -50,6 +53,10 @@
 			error = 'Account address and project are required';
 			return;
 		}
+		if (!isValidPubkey(newAccount.trim())) {
+			error = 'Invalid Solana address (expected base58, 32-44 characters)';
+			return;
+		}
 		error = null;
 		try {
 			await client.er.delegate({
@@ -78,12 +85,13 @@
 
 	async function commitAccount(address: string) {
 		error = null;
+		success = null;
 		try {
 			const result = await client.er.commit({
 				account: address,
 				project: selectedProject,
 			});
-			alert(`Committed at slot ${result.slot}\nSignature: ${result.signature.slice(0, 20)}...`);
+			success = `Committed at slot ${result.slot}. Signature: ${result.signature.slice(0, 20)}...`;
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
 		}
@@ -129,6 +137,10 @@
 
 	{#if error}
 		<div class="alert alert-error">{error}</div>
+	{/if}
+
+	{#if success}
+		<div class="alert alert-success">{success}</div>
 	{/if}
 
 	{#if loading}
@@ -244,88 +256,17 @@
 </div>
 
 <style>
+	/* Page-specific: wider layout */
 	.page {
 		max-width: 960px;
 	}
 
-	.page-header {
-		margin-bottom: 1.5rem;
-	}
-
-	.page-title {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: var(--color-heading, #0f0f23);
-		margin: 0;
-	}
-
-	.alert {
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
-		margin-bottom: 1rem;
-		font-size: 0.875rem;
-	}
-
-	.alert-error {
-		background: #fef2f2;
-		color: #dc2626;
-		border: 1px solid #fecaca;
-	}
-
-	.loading-state,
-	.empty-state {
-		text-align: center;
-		padding: 2rem 1rem;
-		color: var(--color-text-muted, #64748b);
-		font-size: 0.875rem;
-	}
-
-	.empty-text {
-		color: var(--color-text-muted, #64748b);
-	}
-
 	.controls-row {
-		margin-bottom: 1rem;
 		max-width: 300px;
 	}
 
 	.form-group {
 		margin-bottom: 0;
-	}
-
-	.form-label {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
-		margin-bottom: 0.375rem;
-		text-transform: uppercase;
-		letter-spacing: 0.04em;
-	}
-
-	.form-input {
-		width: 100%;
-		padding: 0.5rem 0.75rem;
-		font-size: 0.875rem;
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 6px;
-		background: var(--color-bg, #f8fafc);
-		color: var(--color-text, #1a1a2e);
-		outline: none;
-		box-sizing: border-box;
-	}
-
-	.form-input:focus {
-		border-color: var(--color-primary, #8b5cf6);
-		box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
-	}
-
-	.card {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
-		border-radius: 8px;
-		padding: 1.25rem;
-		margin-bottom: 1rem;
 	}
 
 	.form-title {
@@ -348,34 +289,7 @@
 		flex: 1;
 	}
 
-	.btn {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
-		font-weight: 600;
-		border-radius: 6px;
-		border: none;
-		cursor: pointer;
-		transition: background 0.15s;
-		white-space: nowrap;
-	}
-
-	.btn-primary {
-		background: var(--color-primary, #8b5cf6);
-		color: #ffffff;
-	}
-
-	.btn-primary:hover {
-		background: var(--color-primary-hover, #7c3aed);
-	}
-
 	.btn-sm {
-		padding: 0.25rem 0.625rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		border-radius: 4px;
 		background: var(--color-bg, #f1f5f9);
 		color: var(--color-text, #1a1a2e);
 		border: 1px solid var(--color-border, #e2e8f0);
@@ -394,47 +308,24 @@
 		background: #fef2f2;
 	}
 
-	/* Table */
 	.table-wrap {
-		overflow-x: auto;
 		margin-bottom: 1rem;
 	}
 
 	.data-table {
-		width: 100%;
-		border-collapse: collapse;
 		background: var(--color-surface, #ffffff);
 		border: 1px solid var(--color-border, #e2e8f0);
 		border-radius: 8px;
 		overflow: hidden;
 	}
 
-	.data-table th {
-		text-align: left;
-		padding: 0.625rem 1rem;
-		font-size: 0.75rem;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		color: var(--color-text-muted, #64748b);
-		background: var(--color-bg, #f8fafc);
-		border-bottom: 1px solid var(--color-border, #e2e8f0);
-	}
-
+	.data-table th,
 	.data-table td {
 		padding: 0.625rem 1rem;
-		font-size: 0.8125rem;
-		color: var(--color-text, #1a1a2e);
-		border-bottom: 1px solid var(--color-border, #f1f5f9);
 	}
 
-	.data-table tbody tr:last-child td {
-		border-bottom: none;
-	}
-
-	.mono {
-		font-family: 'JetBrains Mono', 'Fira Code', monospace;
-		font-size: 0.8125rem;
+	.data-table th {
+		background: var(--color-bg, #f8fafc);
 	}
 
 	.action-btns {

@@ -40,7 +40,7 @@ Output:
 {
   "requestId": "7kP2...",
   "randomness": "a3f8c2e1...",
-  "slot": 281947253,
+  "proof": "3b7d9f...",
   "latencyMs": 94
 }
 ```
@@ -91,7 +91,7 @@ const [r1, r2, r3] = vrf.split(randomBytes, 3);
 VRF requests are tracked in the project monitoring:
 
 ```bash
-mb-console monitor --project my-game
+mb-console monitor status --project my-game
 ```
 
 The VRF tab shows:

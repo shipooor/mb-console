@@ -1,5 +1,7 @@
 # MagicBlock Console
 
+> **Note:** This is the original design specification. The implementation may differ in details (e.g., CLI command names, project structure). See [README.md](README.md) for current usage and the [docs](packages/web/src/routes/(landing)/docs/) for accurate API reference.
+
 ## Vision
 
 First unified developer interface for managing MagicBlock Ephemeral Rollups on Solana.
@@ -165,20 +167,21 @@ AI-agent interface for managing ERs from any MCP-compatible client.
 |------|-------------|
 | `create_project` | Create a new project with ER configuration |
 | `list_projects` | List all projects and their status |
-| `configure_er` | Configure Ephemeral Rollup features |
-| `get_er_status` | Get current ER status and health |
+| `get_project` | Get details of a specific project |
+| `configure_project` | Configure project features (gasless, privacy, vrf, cranks, oracle) |
+| `delete_project` | Delete a project |
 | `delegate_account` | Delegate account to ER |
-| `commit_state` | Commit ER state to base layer |
+| `commit_account` | Commit ER state to base layer |
 | `undelegate_account` | Undelegate and return to Solana |
+| `get_delegation_status` | Check account delegation status |
+| `list_delegated_accounts` | List all accounts delegated to a project |
+| `get_state_diff` | Compare base layer and ER state of an account |
 | `request_vrf` | Request verifiable randomness |
 | `create_crank` | Schedule automatic execution |
-| `deposit_private` | Deposit tokens to private vault |
-| `transfer_private` | Private token transfer |
-| `withdraw_private` | Withdraw from private vault |
 | `get_price_feed` | Get oracle price data |
-| `get_costs` | Get cost breakdown |
-| `get_logs` | Get recent ER events |
-| `get_delegation_status` | Check account delegation status |
+| `get_project_status` | Get operational status of a project |
+| `get_project_costs` | Get cost breakdown |
+| `get_project_logs` | Get recent ER events |
 
 **Example AI interaction:**
 
@@ -186,8 +189,8 @@ AI-agent interface for managing ERs from any MCP-compatible client.
 User: "Set up a new project for my game with gasless
        transactions and VRF in the EU region"
 
-Agent: [calls create_project]
-       [calls configure_er with gasless + vrf + region:eu]
+Agent: [calls create_project with name="my-game", region="eu"]
+       [calls configure_project with name="my-game", gasless=true, vrf=true]
 
        "Done. Project 'my-game' created with:
         - Region: EU (devnet-eu.magicblock.app)
@@ -233,7 +236,7 @@ Shared TypeScript library used by all three interfaces.
 |-------|-----------|
 | Core SDK | TypeScript, `@magicblock-labs/ephemeral-rollups-sdk`, `@solana/web3.js` |
 | Web UI | Svelte 5, SvelteKit 2, Vite, `@solana/web3.js`, CSS Variables |
-| CLI | Node.js, Commander.js, Ink (React for TUI) |
+| CLI | Node.js, Commander.js |
 | MCP Server | TypeScript, `@modelcontextprotocol/sdk` |
 | Storage | LocalStorage (web), `~/.mb-console/` (CLI), in-memory (MCP) |
 | Network | Solana Devnet + MagicBlock ER endpoints |
@@ -362,19 +365,20 @@ magicBlockConsole/
 |---------|-----|-----|-----|
 | Wallet connect | Browser adapter | Keypair file / browser callback | Keypair config |
 | Create project | Form UI | `project create` | `create_project` tool |
-| Configure ER | Toggle switches | Flags (`--gasless --vrf`) | Tool parameters |
-| Deploy ER | One-click button | `er create` | `configure_er` tool |
+| Configure ER | Toggle switches | Flags (`--gasless --vrf`) | `configure_project` tool |
+| Deploy ER | One-click button | `er create` | `configure_project` tool |
 | Delegate account | UI action | `er delegate` | `delegate_account` tool |
-| Commit state | Button | `er commit` | `commit_state` tool |
+| Commit state | Button | `er commit` | `commit_account` tool |
 | Undelegate | Button | `er undelegate` | `undelegate_account` tool |
 | VRF request | UI panel | `vrf request` | `request_vrf` tool |
-| Privacy deposit | Form | `privacy deposit` | `deposit_private` tool |
-| Privacy transfer | Form | `privacy transfer` | `transfer_private` tool |
 | Crank schedule | Config panel | `crank create` | `create_crank` tool |
 | Oracle feed | Live display | `oracle price` | `get_price_feed` tool |
-| Monitor | Real-time dashboard | TUI (`monitor`) | `get_er_status` tool |
-| Cost tracking | Charts | `costs` | `get_costs` tool |
-| Logs | Event stream | `logs` | `get_logs` tool |
+| Monitor | Real-time dashboard | TUI (`monitor`) | `get_project_status` tool |
+| Cost tracking | Charts | `costs` | `get_project_costs` tool |
+| Logs | Event stream | `logs` | `get_project_logs` tool |
+| List delegated accounts | UI panel | `er list` | `list_delegated_accounts` tool |
+| Check delegation status | UI status | `er status` | `get_delegation_status` tool |
+| View state diff | UI comparison | Via CLI | `get_state_diff` tool |
 
 ## Differentiators
 

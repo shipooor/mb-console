@@ -7,6 +7,7 @@ import type {
   PrivacyWithdrawOptions,
 } from './types.js';
 import type { PrivacyNamespace } from './client.js';
+import { generateSignature, assertPubkey } from './utils.js';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -28,20 +29,6 @@ async function requirePrivacyEnabled(storage: Storage, project: string): Promise
     );
   }
   return parsed;
-}
-
-/**
- * Generate a realistic-looking base58 transaction signature.
- *
- * NOTE: Simulated for hackathon demo purposes.
- */
-function generateSignature(): string {
-  const chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-  let sig = '';
-  for (let i = 0; i < 88; i++) {
-    sig += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return sig;
 }
 
 // ---------------------------------------------------------------------------
@@ -84,6 +71,7 @@ export function createPrivacyNamespace(
       if (!options.to) {
         throw new Error('Transfer recipient address is required');
       }
+      assertPubkey(options.to, 'recipient');
 
       return generateSignature();
     },

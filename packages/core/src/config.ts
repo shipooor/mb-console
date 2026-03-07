@@ -71,6 +71,11 @@ export interface ValidatorSet {
   tee: string;
 }
 
+/**
+ * ER validator pubkeys per network and region.
+ * NOTE: Mainnet keys currently mirror devnet — MagicBlock has not yet
+ * published separate mainnet validator identities.
+ */
 export const VALIDATORS: Record<Network, ValidatorSet> = {
   devnet: {
     us: 'MUS3hc9TCw4cGC12vHNoYcCGzJG1txjgQLZWVoeNHNd',

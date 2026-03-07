@@ -52,7 +52,7 @@
 			<h1 class="topbar-title">MagicBlock Console</h1>
 			<div class="wallet-status">
 				<span class="wallet-dot"></span>
-				<span class="wallet-text">Demo Wallet</span>
+				<span class="wallet-text">Simulated Mode</span>
 			</div>
 		</header>
 
@@ -218,7 +218,7 @@
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: #10b981;
+		background: #f59e0b;
 	}
 
 	.wallet-text {

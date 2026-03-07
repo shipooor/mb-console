@@ -18,6 +18,16 @@ export * from './config.js';
 export { MemoryStorage, FileStorage, BrowserStorage } from './storage.js';
 export type { Storage } from './storage.js';
 
+export {
+  createKeypairSigner,
+  createBlockchainConnection,
+  createReadOnlyConnection,
+} from './connection.js';
+export type {
+  BlockchainConnection,
+  SolanaSignerAdapter,
+} from './connection.js';
+
 export { createProjectsNamespace } from './projects.js';
 export { createErNamespace } from './er.js';
 export { createVrfNamespace, vrf } from './vrf.js';
@@ -25,3 +35,4 @@ export { createPrivacyNamespace } from './privacy.js';
 export { createCranksNamespace } from './cranks.js';
 export { createOracleNamespace } from './oracle.js';
 export { createMonitorNamespace, appendLog } from './monitor.js';
+export { generateSignature, generateBase58, isValidPubkey, assertPubkey } from './utils.js';
