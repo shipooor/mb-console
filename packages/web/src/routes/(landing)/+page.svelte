@@ -1,933 +1,1008 @@
 <svelte:head>
-	<title>MagicBlock Console -- Developer Console for Ephemeral Rollups</title>
+	<title>MagicBlock Console -- Stop managing ERs by hand</title>
 	<meta
 		name="description"
-		content="One console for all MagicBlock features. Manage Ephemeral Rollups through Web, CLI, or AI agents via MCP."
+		content="Developer console for Ephemeral Rollups on Solana. Web dashboard, CLI, and MCP server. One SDK, three interfaces."
 	/>
 </svelte:head>
 
-<!-- Hero -->
-<section class="hero">
-	<div class="hero-bg"></div>
-	<div class="hero-content">
-		<span class="hero-badge">Solana Blitz Hackathon 2026</span>
-		<h1>MagicBlock Console</h1>
-		<p class="hero-subtitle">
-			The unified developer console for managing
-			<strong>Ephemeral Rollups</strong> on Solana. One SDK, three interfaces -- Web, CLI, and MCP.
-		</p>
-		<div class="hero-actions">
-			<a href="/dashboard" class="btn btn-primary">Open Dashboard</a>
-			<a href="/docs/getting-started" class="btn btn-secondary">Read Docs</a>
+<div class="landing">
+
+	<!-- NAV -->
+	<nav class="nav">
+		<div class="nav-brand">
+			<span class="dot"></span>
+			MagicBlock Console
 		</div>
-		<div class="hero-code">
-			<div class="code-header">
-				<span class="code-dot"></span>
-				<span class="code-dot"></span>
-				<span class="code-dot"></span>
-				<span class="code-title">Terminal</span>
-			</div>
-			<pre><code><span class="code-prompt">$</span> mb-console project create my-game --region eu
-<span class="code-success">Project "my-game" created (region: eu)</span>
-
-<span class="code-prompt">$</span> mb-console er delegate TokenkegQ...EE5 \
-    --project my-game
-
-<span class="code-comment"># Account delegated to Ephemeral Rollup</span>
-<span class="code-success">Validator:</span>  devnet-eu.magicblock.app
-<span class="code-success">Signature:</span>  4sGj...kP2m</code></pre>
+		<div class="nav-links">
+			<a href="/docs">Docs</a>
+			<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
+			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener" class="nav-badge">npm</a>
 		</div>
-	</div>
-</section>
+	</nav>
 
-<!-- Three Interfaces -->
-<section class="section">
-	<div class="container">
-		<div class="section-header">
-			<h2>One SDK, Three Interfaces</h2>
-			<p>Choose the interface that fits your workflow. Same core engine, different access patterns.</p>
-		</div>
-		<div class="interfaces-grid">
-			<div class="interface-card">
-				<div class="interface-icon">
-					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-						<line x1="8" y1="21" x2="16" y2="21"/>
-						<line x1="12" y1="17" x2="12" y2="21"/>
-					</svg>
-				</div>
-				<h3>Web Dashboard</h3>
-				<p>Visual management interface with real-time monitoring, ER lifecycle controls, and session analytics.</p>
-				<div class="interface-example">
-					<code>localhost:5173/dashboard</code>
-				</div>
-				<a href="/dashboard" class="interface-link">Open Dashboard</a>
-			</div>
-
-			<div class="interface-card">
-				<div class="interface-icon">
-					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<polyline points="4 17 10 11 4 5"/>
-						<line x1="12" y1="19" x2="20" y2="19"/>
-					</svg>
-				</div>
-				<h3>CLI</h3>
-				<p>Full-featured command-line tool for scripting, CI/CD integration, and rapid development workflows.</p>
-				<div class="interface-example">
-					<code>mb-console er list --project my-game</code>
-				</div>
-				<a href="/docs/cli" class="interface-link">CLI Reference</a>
-			</div>
-
-			<div class="interface-card">
-				<div class="interface-icon">
-					<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M12 2L2 7l10 5 10-5-10-5z"/>
-						<path d="M2 17l10 5 10-5"/>
-						<path d="M2 12l10 5 10-5"/>
-					</svg>
-				</div>
-				<h3>MCP Server</h3>
-				<p>Model Context Protocol integration lets AI agents manage ERs through natural language via Claude, Cursor, and others.</p>
-				<div class="interface-example">
-					<code>"Create an ER for my game"</code>
-				</div>
-				<a href="/docs/mcp" class="interface-link">MCP Reference</a>
+	<!-- HERO -->
+	<section class="hero">
+		<div class="hero-text">
+			<h1>Stop managing ERs <span class="highlight">by hand.</span></h1>
+			<p class="sub">
+				One SDK. Three interfaces. <strong>Web dashboard</strong>, <strong>CLI</strong>, and <strong>MCP server</strong> for Ephemeral Rollups on Solana.
+				<br>Delegate, configure, monitor. Done.
+			</p>
+			<div class="hero-install">
+				<code>npm i -g @magicblock-console/cli</code>
+				<span class="or">or</span>
+				<a href="/dashboard" class="dashboard-link">open dashboard &rarr;</a>
 			</div>
 		</div>
-	</div>
-</section>
-
-<!-- Features Grid -->
-<section class="section section-alt">
-	<div class="container">
-		<div class="section-header">
-			<h2>Built-In Features</h2>
-			<p>Every MagicBlock feature accessible through a single, unified API.</p>
-		</div>
-		<div class="features-grid">
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-					</svg>
+		<div class="hero-terminal">
+			<div class="terminal">
+				<div class="terminal-bar">
+					<span class="terminal-dot r"></span>
+					<span class="terminal-dot y"></span>
+					<span class="terminal-dot g"></span>
+					<span class="terminal-title">mb-console</span>
 				</div>
-				<h3>Gasless Transactions</h3>
-				<p>Execute transactions without gas fees inside Ephemeral Rollups. Users interact seamlessly with no wallet popups.</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-						<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-					</svg>
-				</div>
-				<h3>Privacy</h3>
-				<p>Run computations in private Ephemeral Rollups. State is hidden until committed back to Solana mainnet.</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-						<polyline points="7.5 4.21 12 6.81 16.5 4.21"/>
-						<polyline points="7.5 19.79 7.5 14.6 3 12"/>
-						<polyline points="21 12 16.5 14.6 16.5 19.79"/>
-						<polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-						<line x1="12" y1="22.08" x2="12" y2="12"/>
-					</svg>
-				</div>
-				<h3>VRF (Verifiable Random)</h3>
-				<p>On-chain verifiable randomness for games, lotteries, and any logic requiring provably fair random values.</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<circle cx="12" cy="12" r="3"/>
-						<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-					</svg>
-				</div>
-				<h3>Automated Cranks</h3>
-				<p>Schedule periodic on-chain actions. Game ticks, settlement cycles, and maintenance tasks run automatically.</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<circle cx="12" cy="12" r="10"/>
-						<line x1="2" y1="12" x2="22" y2="12"/>
-						<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-					</svg>
-				</div>
-				<h3>Oracle Integration</h3>
-				<p>Feed external data into Ephemeral Rollups. Price feeds, weather data, sports scores -- any off-chain data source.</p>
-			</div>
-
-			<div class="feature-card">
-				<div class="feature-icon">
-					<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-					</svg>
-				</div>
-				<h3>Monitoring</h3>
-				<p>Real-time dashboards for ER health, transaction throughput, account state diffs, and session lifecycle events.</p>
-			</div>
-		</div>
-	</div>
-</section>
-
-<!-- Architecture -->
-<section class="section">
-	<div class="container">
-		<div class="section-header">
-			<h2>Architecture</h2>
-			<p>A shared Core SDK powers all three interfaces. Your choice of frontend, same capabilities underneath.</p>
-		</div>
-		<div class="arch-visual">
-			<div class="arch-row">
-				<div class="arch-box arch-api">
-					<span class="arch-box-icon">&#9670;</span>
-					<strong>MagicBlock API</strong>
-					<span>Ephemeral Rollups on Solana</span>
-				</div>
-			</div>
-			<div class="arch-connector">
-				<div class="arch-line"></div>
-			</div>
-			<div class="arch-row">
-				<div class="arch-box arch-core">
-					<span class="arch-box-icon">&#9635;</span>
-					<strong>Core SDK</strong>
-					<span>TypeScript &middot; ER lifecycle &middot; Features &middot; Monitoring</span>
-				</div>
-			</div>
-			<div class="arch-connector arch-connector-fan">
-				<div class="arch-line"></div>
-				<div class="arch-fan">
-					<div class="arch-fan-line arch-fan-left"></div>
-					<div class="arch-fan-line arch-fan-center"></div>
-					<div class="arch-fan-line arch-fan-right"></div>
-				</div>
-			</div>
-			<div class="arch-row arch-row-three">
-				<div class="arch-box arch-web">
-					<span class="arch-box-icon">&#9783;</span>
-					<strong>Web Dashboard</strong>
-					<span>SvelteKit &middot; Wallet Connect</span>
-				</div>
-				<div class="arch-box arch-cli">
-					<span class="arch-box-icon">&gt;_</span>
-					<strong>CLI</strong>
-					<span>Commander.js &middot; Terminal</span>
-				</div>
-				<div class="arch-box arch-mcp">
-					<span class="arch-box-icon">&#9881;</span>
-					<strong>MCP Server</strong>
-					<span>AI Agents &middot; stdio</span>
+				<div class="terminal-body">
+					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console project create</span> <span class="value">my-game</span> <span class="flag">--region</span> <span class="value">eu</span></span>
+					<span class="line"><span class="success">&#10004;</span><span class="output"> Project "my-game" created (eu)</span></span>
+					<span class="line"></span>
+					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console project configure</span> <span class="value">my-game</span> <span class="flag">--gasless --vrf --oracle</span></span>
+					<span class="line"><span class="output">  gasless: </span><span class="success">enabled</span></span>
+					<span class="line"><span class="output">  vrf:     </span><span class="success">enabled</span></span>
+					<span class="line"><span class="output">  oracle:  </span><span class="success">enabled</span></span>
+					<span class="line"></span>
+					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console er delegate</span> <span class="value">7xKX...9mPq</span> <span class="flag">--project</span> <span class="value">my-game</span></span>
+					<span class="line"><span class="success">&#10004;</span><span class="output"> Account 7xKX...9mPq delegated to ER</span></span>
+					<span class="line"><span class="output">  validator:  devnet-eu.magicblock.app</span></span>
+					<span class="line"><span class="output">  tx:         </span><span class="key">4sGjM...wKp2</span></span>
+					<span class="line"></span>
+					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console oracle price</span> <span class="flag">--feed</span> <span class="value">SOL/USD</span> <span class="flag">--project</span> <span class="value">my-game</span></span>
+					<span class="line"><span class="output">  feed:   SOL/USD</span></span>
+					<span class="line"><span class="output">  price:  </span><span class="num">$168.42</span></span>
+					<span class="line"><span class="output">  conf:   </span><span class="num">&#177;0.12</span></span>
+					<span class="line"><span class="output">  slot:   </span><span class="num">312847561</span></span>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
 
-<!-- Getting Started -->
-<section class="section section-alt">
-	<div class="container">
-		<div class="section-header">
-			<h2>Get Started in 3 Steps</h2>
-			<p>From zero to managing Ephemeral Rollups in under a minute.</p>
+	<!-- DIVIDER -->
+	<div class="divider"></div>
+
+	<!-- THREE WAYS IN -->
+	<section class="ways">
+		<div class="ways-header">
+			<h2>Three ways <span class="accent">in.</span></h2>
+			<p>Same core SDK underneath. Pick your interface.</p>
 		</div>
-		<div class="steps">
-			<div class="step">
-				<div class="step-number">1</div>
-				<div class="step-content">
-					<h3>Install</h3>
-					<pre><code><span class="code-prompt">$</span> npm install -g @magicblock-console/cli</code></pre>
+
+		<!-- CLI -->
+		<div class="way">
+			<div class="way-inner">
+				<div class="way-meta">
+					<span class="way-label cli">CLI</span>
+					<h3>Terminal-native</h3>
+					<p>For scripting, CI/CD, and developers who think faster in a terminal. Every feature is a command. Pipe it, script it, cron it.</p>
+				</div>
+				<div class="way-code">
+					<div class="terminal">
+						<div class="terminal-bar">
+							<span class="terminal-dot r"></span>
+							<span class="terminal-dot y"></span>
+							<span class="terminal-dot g"></span>
+							<span class="terminal-title">terminal</span>
+						</div>
+						<div class="terminal-body">
+							<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console vrf request</span> <span class="flag">--project</span> <span class="value">my-game</span></span>
+							<span class="line"><span class="success">&#10004;</span><span class="output"> VRF randomness requested</span></span>
+							<span class="line"><span class="output">  value:    </span><span class="num">0xae3f...c891</span></span>
+							<span class="line"><span class="output">  latency:  </span><span class="num">94ms</span></span>
+							<span class="line"></span>
+							<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console crank create</span> <span class="flag">--project</span> <span class="value">my-game</span> <span class="flag">--interval</span> <span class="value">5000</span> <span class="flag">--iterations</span> <span class="value">100</span></span>
+							<span class="line"><span class="success">&#10004;</span><span class="output"> Crank created</span></span>
+							<span class="line"><span class="output">  id:          </span><span class="key">crank_8f2a</span></span>
+							<span class="line"><span class="output">  interval:    </span><span class="num">5000ms</span></span>
+							<span class="line"><span class="output">  iterations:  </span><span class="num">100</span></span>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="step-connector"></div>
-			<div class="step">
-				<div class="step-number">2</div>
-				<div class="step-content">
-					<h3>Create Project</h3>
-					<pre><code><span class="code-prompt">$</span> mb-console project create my-game \
-    --region us
+		</div>
 
-<span class="code-success">Project "my-game" created (region: us)</span></code></pre>
+		<!-- WEB -->
+		<div class="way">
+			<div class="way-inner">
+				<div class="way-meta">
+					<span class="way-label web">Web Dashboard</span>
+					<h3>Visual control</h3>
+					<p>Connect your wallet, toggle features, monitor state. For when you want to see what's happening, not read JSON output.</p>
 				</div>
-			</div>
-			<div class="step-connector"></div>
-			<div class="step">
-				<div class="step-number">3</div>
-				<div class="step-content">
-					<h3>Delegate</h3>
-					<pre><code><span class="code-prompt">$</span> mb-console er delegate GameState111...xxx \
-    --project my-game
-
-<span class="code-success">Account GameState111...xxx delegated</span></code></pre>
+				<div class="way-code">
+					<div class="terminal" style="border-color: var(--accent2);">
+						<div class="terminal-bar">
+							<span class="terminal-dot r"></span>
+							<span class="terminal-dot y"></span>
+							<span class="terminal-dot g"></span>
+							<span class="terminal-title">mb-console.pages.dev/dashboard</span>
+						</div>
+						<div class="terminal-body">
+							<span class="line"><span class="output">  ER Lifecycle</span></span>
+							<span class="line"><span class="output">  ├── Delegate accounts with one click</span></span>
+							<span class="line"><span class="output">  ├── Configure gasless, VRF, privacy, cranks, oracle</span></span>
+							<span class="line"><span class="output">  ├── Real-time delegation status</span></span>
+							<span class="line"><span class="output">  └── Commit / undelegate controls</span></span>
+							<span class="line"></span>
+							<span class="line"><span class="output">  Monitor</span></span>
+							<span class="line"><span class="output">  ├── Live validator health</span></span>
+							<span class="line"><span class="output">  ├── Transaction throughput</span></span>
+							<span class="line"><span class="output">  └── Region latency (US / EU / Asia)</span></span>
+							<span class="line"></span>
+							<span class="line"><span class="key">  &rarr; </span><span class="output">No backend. SDK talks to MagicBlock directly.</span></span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
 
-<!-- CTA -->
-<section class="section section-cta">
-	<div class="container">
-		<h2>Ready to build?</h2>
-		<p>Open the dashboard or dive into the documentation to get started.</p>
-		<div class="cta-actions">
-			<a href="/dashboard" class="btn btn-primary btn-lg">Open Dashboard</a>
-			<a href="/docs/getting-started" class="btn btn-secondary btn-lg">Getting Started Guide</a>
+		<!-- MCP -->
+		<div class="way">
+			<div class="way-inner">
+				<div class="way-meta">
+					<span class="way-label mcp">MCP Server</span>
+					<h3>AI-agent native</h3>
+					<p>Drop this into Claude, Cursor, or any MCP client. Your AI manages infrastructure. Seriously.</p>
+				</div>
+				<div class="way-code">
+					<div class="terminal" style="border-color: #f59e0b;">
+						<div class="terminal-bar">
+							<span class="terminal-dot r"></span>
+							<span class="terminal-dot y"></span>
+							<span class="terminal-dot g"></span>
+							<span class="terminal-title">claude_desktop_config.json</span>
+						</div>
+						<div class="terminal-body">
+							<span class="line">&#123;</span>
+							<span class="line">  <span class="key">"mcpServers"</span>: &#123;</span>
+							<span class="line">    <span class="key">"magicblock-console"</span>: &#123;</span>
+							<span class="line">      <span class="key">"command"</span>: <span class="str">"npx"</span>,</span>
+							<span class="line">      <span class="key">"args"</span>: [<span class="str">"@magicblock-console/mcp"</span>],</span>
+							<span class="line">      <span class="key">"env"</span>: &#123;</span>
+							<span class="line">        <span class="key">"MB_KEYPAIR_PATH"</span>: <span class="str">"~/.config/solana/id.json"</span></span>
+							<span class="line">      &#125;</span>
+							<span class="line">    &#125;</span>
+							<span class="line">  &#125;</span>
+							<span class="line">&#125;</span>
+							<span class="line"></span>
+							<span class="line"><span class="comment">// 22 tools: create_project, delegate_account,</span></span>
+							<span class="line"><span class="comment">// request_vrf, get_price_feed, create_crank...</span></span>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
-</section>
+	</section>
+
+	<!-- DIVIDER -->
+	<div class="divider"></div>
+
+	<!-- FEATURES -->
+	<section class="features">
+		<div class="features-header">
+			<h2>What you get.</h2>
+			<p>Every MagicBlock ER feature. Managed, not coded.</p>
+		</div>
+		<div class="features-list">
+			<div class="feature-item">
+				<span class="feature-tag green">GASLESS</span>
+				<div class="feature-content">
+					<h4>Zero-fee transactions on ER</h4>
+					<p>Toggle per project. Users sign, they don't pay. ER validator subsidizes compute.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag blue">PRIVACY</span>
+				<div class="feature-content">
+					<h4>TEE-backed private execution</h4>
+					<p>Deposit, transfer, withdraw through MagicBlock's PER API. State hidden inside trusted hardware.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag amber">VRF</span>
+				<div class="feature-content">
+					<h4>Verifiable randomness in ~100ms</h4>
+					<p>On-chain VRF on the ER. Free. Sub-second. No oracle fees, no waiting for callbacks.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag green">CRANKS</span>
+				<div class="feature-content">
+					<h4>Scheduled auto-execution</h4>
+					<p>Set interval and iterations. The ER cranks your program automatically. No keeper bots needed.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag blue">ORACLE</span>
+				<div class="feature-content">
+					<h4>Pyth price feeds on ER</h4>
+					<p>SOL/USD, BTC/USD, ETH/USD available on-chain in the ephemeral rollup. Real prices, no bridge.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag amber">MONITOR</span>
+				<div class="feature-content">
+					<h4>Live validator health and status</h4>
+					<p>Region latency, slot height, transaction throughput. See your ER breathe in real time.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag green">DELEGATION</span>
+				<div class="feature-content">
+					<h4>Full lifecycle control</h4>
+					<p>Delegate, execute, commit, undelegate. Across three regions. One command or one click.</p>
+				</div>
+			</div>
+			<div class="feature-item">
+				<span class="feature-tag blue">ZERO BACKEND</span>
+				<div class="feature-content">
+					<h4>No server between you and Solana</h4>
+					<p>Core SDK talks directly to MagicBlock APIs and Solana RPC. Your keys, your connection, no middleman.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- ARCHITECTURE -->
+	<section class="arch">
+		<h2>Architecture.</h2>
+		<div class="arch-diagram"><span class="hl2">Web Dashboard</span>  ──┐
+                     │
+<span class="hl">CLI</span>              ──┼──  <span class="hl">@magicblock-console/core</span>  ──  <span class="hl3">MagicBlock ER</span>
+                     │          │                         <span class="hl3">Solana Devnet</span>
+<span class="hl3">MCP Server</span>       ──┘          │
+                          ┌─────┴─────┐
+                          │           │
+                     Projects    Features
+                     Storage     ├── Gasless
+                     Auth        ├── Privacy (TEE)
+                                 ├── VRF
+                                 ├── Cranks
+                                 ├── Oracle (Pyth)
+                                 └── Session Keys</div>
+	</section>
+
+	<!-- INSTALL -->
+	<section class="install">
+		<div class="install-inner">
+			<h2>Ready when you are.</h2>
+			<p class="tagline">Solana devnet. Works right now. No API keys, no signup.</p>
+			<div class="install-cmd">npm i -g @magicblock-console/cli</div>
+			<p class="install-after">
+				Then run <code class="inline-code">mb-console --help</code>
+				&nbsp;&middot;&nbsp;
+				<a href="/docs">Read the docs</a>
+				&nbsp;&middot;&nbsp;
+				<a href="/dashboard">Open dashboard</a>
+			</p>
+		</div>
+	</section>
+
+	<!-- FOOTER -->
+	<footer class="landing-footer">
+		<div class="footer-left">
+			<strong>MagicBlock Console</strong> &mdash; Built for Solana Blitz 2026
+		</div>
+		<div class="footer-links">
+			<a href="/docs">Docs</a>
+			<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
+			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener">npm</a>
+			<a href="/dashboard">Dashboard</a>
+		</div>
+	</footer>
+
+</div>
 
 <style>
-	/* ---- Hero ---- */
-	.hero {
-		position: relative;
-		padding: 5rem 2rem 4rem;
-		text-align: center;
-		overflow: hidden;
+	/* ==================== SCOPED VARIABLES ==================== */
+	.landing {
+		--bg: #0c1222;
+		--bg-raised: #111a2e;
+		--bg-surface: #162036;
+		--bg-alt: #0a0f1a;
+		--text: #e2e8f0;
+		--text-muted: #64748b;
+		--text-dim: #475569;
+		--accent: #14f195;
+		--accent-dim: rgba(20, 241, 149, 0.15);
+		--accent2: #00d4ff;
+		--accent2-dim: rgba(0, 212, 255, 0.1);
+		--border: #1e293b;
+		--border-accent: #14f195;
+		--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+		--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+		background: var(--bg);
+		color: var(--text);
+		font-family: var(--font-sans);
+		line-height: 1.6;
+		overflow-x: hidden;
 	}
 
-	.hero-bg {
-		position: absolute;
-		inset: 0;
-		background:
-			radial-gradient(ellipse 80% 60% at 50% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 70%),
-			linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 100%);
-		z-index: 0;
+	.landing a {
+		color: inherit;
+		text-decoration: none;
 	}
 
-	.hero-content {
-		position: relative;
-		z-index: 1;
-		max-width: 720px;
-		margin: 0 auto;
-	}
-
-	.hero-badge {
-		display: inline-block;
-		padding: 0.3rem 0.9rem;
-		background: rgba(139, 92, 246, 0.1);
-		color: var(--color-primary);
-		border: 1px solid rgba(139, 92, 246, 0.2);
-		border-radius: 100px;
-		font-size: 0.8rem;
-		font-weight: 600;
-		letter-spacing: 0.02em;
-		margin-bottom: 1.25rem;
-	}
-
-	.hero h1 {
-		font-size: 3rem;
-		font-weight: 700;
-		color: var(--color-heading);
-		letter-spacing: -0.03em;
-		line-height: 1.1;
-		margin-bottom: 1rem;
-	}
-
-	.hero-subtitle {
-		font-size: 1.15rem;
-		color: var(--color-text-muted);
-		line-height: 1.7;
-		max-width: 560px;
-		margin: 0 auto 2rem;
-	}
-
-	.hero-subtitle strong {
-		color: var(--color-heading);
-		font-weight: 600;
-	}
-
-	.hero-actions {
+	/* ==================== NAV ==================== */
+	.nav {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+		background: rgba(12, 18, 34, 0.85);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--border);
+		padding: 0 32px;
+		height: 56px;
 		display: flex;
-		gap: 0.75rem;
-		justify-content: center;
-		margin-bottom: 3rem;
+		align-items: center;
+		justify-content: space-between;
 	}
 
-	/* ---- Buttons ---- */
-	.btn {
-		display: inline-flex;
+	.nav-brand {
+		font-weight: 800;
+		font-size: 1rem;
+		letter-spacing: -0.02em;
+		display: flex;
 		align-items: center;
-		padding: 0.65rem 1.5rem;
-		border-radius: var(--radius-md);
+		gap: 8px;
+	}
+
+	.nav-brand .dot {
+		width: 8px;
+		height: 8px;
+		background: var(--accent);
+		border-radius: 2px;
+		display: inline-block;
+	}
+
+	.nav-links {
+		display: flex;
+		gap: 24px;
+		align-items: center;
+	}
+
+	.nav-links a {
+		font-size: 0.875rem;
+		font-weight: 500;
+		color: var(--text-muted);
+		transition: color 0.15s;
+	}
+
+	.nav-links a:hover {
+		color: var(--text);
+	}
+
+	.nav-links .nav-badge {
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--accent);
+		border: 1px solid rgba(20, 241, 149, 0.3);
+		padding: 2px 8px;
+		border-radius: 4px;
+		letter-spacing: 0.02em;
+	}
+
+	/* ==================== HERO ==================== */
+	.hero {
+		padding: 100px 32px 80px;
+		max-width: 1200px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 64px;
+		align-items: center;
+	}
+
+	.hero-text h1 {
+		font-size: 4.5rem;
+		font-weight: 900;
+		line-height: 1.05;
+		letter-spacing: -0.04em;
+		margin-bottom: 24px;
+	}
+
+	.hero-text h1 .highlight {
+		color: var(--accent);
+	}
+
+	.hero-text .sub {
+		font-size: 1.25rem;
+		color: var(--text-muted);
+		line-height: 1.5;
+		max-width: 440px;
+		margin-bottom: 40px;
+	}
+
+	.hero-text .sub strong {
+		color: var(--text);
+		font-weight: 600;
+	}
+
+	.hero-install {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.hero-install code {
+		font-family: var(--font-mono);
+		font-size: 1rem;
+		background: var(--bg-raised);
+		border: 2px solid var(--border-accent);
+		padding: 12px 20px;
+		border-radius: 6px;
+		color: var(--accent);
+		user-select: all;
+		cursor: pointer;
+		transition: background 0.15s;
+	}
+
+	.hero-install code:hover {
+		background: var(--accent-dim);
+	}
+
+	.hero-install .or {
+		color: var(--text-dim);
+		font-size: 0.875rem;
+	}
+
+	.hero-install .dashboard-link {
 		font-size: 0.9rem;
 		font-weight: 600;
-		transition: all 0.15s ease;
-		cursor: pointer;
-		border: none;
+		color: var(--accent2);
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.15s;
 	}
 
-	.btn-primary {
-		background: var(--color-primary);
-		color: #fff;
+	.hero-install .dashboard-link:hover {
+		border-bottom-color: var(--accent2);
 	}
 
-	.btn-primary:hover {
-		background: var(--color-primary-hover);
-	}
-
-	.btn-secondary {
-		background: var(--color-surface);
-		color: var(--color-heading);
-		border: 1px solid var(--color-border);
-	}
-
-	.btn-secondary:hover {
-		border-color: var(--color-primary);
-		color: var(--color-primary);
-	}
-
-	.btn-lg {
-		padding: 0.8rem 2rem;
-		font-size: 0.95rem;
-	}
-
-	/* ---- Hero Code Block ---- */
-	.hero-code {
-		max-width: 520px;
-		margin: 0 auto;
-		text-align: left;
-		border-radius: var(--radius-lg);
+	/* Terminal */
+	.terminal {
+		background: #0a0e18;
+		border: 2px solid var(--border-accent);
+		border-radius: 8px;
 		overflow: hidden;
-		box-shadow: var(--shadow-lg);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.7;
+		box-shadow: 0 0 60px rgba(20, 241, 149, 0.06);
 	}
 
-	.code-header {
+	.terminal-bar {
+		background: #111827;
+		padding: 10px 16px;
 		display: flex;
 		align-items: center;
-		gap: 6px;
-		padding: 0.6rem 1rem;
-		background: #1e293b;
+		gap: 8px;
+		border-bottom: 1px solid var(--border);
 	}
 
-	.code-dot {
+	.terminal-dot {
 		width: 10px;
 		height: 10px;
 		border-radius: 50%;
-		background: #475569;
 	}
 
-	.code-dot:first-child {
-		background: #ef4444;
-	}
+	.terminal-dot.r { background: #ef4444; }
+	.terminal-dot.y { background: #eab308; }
+	.terminal-dot.g { background: #22c55e; }
 
-	.code-dot:nth-child(2) {
-		background: #f59e0b;
-	}
-
-	.code-dot:nth-child(3) {
-		background: #10b981;
-	}
-
-	.code-title {
-		margin-left: auto;
+	.terminal-title {
+		margin-left: 8px;
+		color: var(--text-dim);
 		font-size: 0.75rem;
-		color: #64748b;
-		font-family: var(--font-mono);
 	}
 
-	.hero-code pre {
-		margin: 0;
-		padding: 1.25rem;
-		background: var(--color-pre-bg);
+	.terminal-body {
+		padding: 20px;
 		overflow-x: auto;
 	}
 
-	.hero-code code {
-		font-size: 0.82rem;
-		line-height: 1.7;
-		color: var(--color-pre-text);
+	.terminal-body .line {
+		display: block;
+		white-space: pre;
 	}
 
-	.code-prompt {
-		color: var(--color-primary);
-		user-select: none;
+	.terminal-body .prompt {
+		color: var(--accent);
 	}
 
-	.code-comment {
-		color: #64748b;
+	.terminal-body .cmd {
+		color: var(--text);
 	}
 
-	.code-success {
-		color: var(--color-success);
+	.terminal-body .flag {
+		color: var(--accent2);
 	}
 
-	/* ---- Sections ---- */
-	.section {
-		padding: 5rem 2rem;
+	.terminal-body .value {
+		color: #f59e0b;
 	}
 
-	.section-alt {
-		background: var(--color-surface);
+	.terminal-body .output {
+		color: var(--text-muted);
 	}
 
-	.container {
-		max-width: 1100px;
+	.terminal-body .success {
+		color: var(--accent);
+	}
+
+	.terminal-body .key {
+		color: var(--accent2);
+	}
+
+	.terminal-body .str {
+		color: #f59e0b;
+	}
+
+	.terminal-body .num {
+		color: #a78bfa;
+	}
+
+	.terminal-body .comment {
+		color: var(--text-dim);
+		font-style: italic;
+	}
+
+	/* ==================== DIVIDER ==================== */
+	.divider {
+		height: 2px;
+		background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+		margin: 0;
+		opacity: 0.5;
+	}
+
+	/* ==================== THREE WAYS ==================== */
+	.ways {
+		padding: 80px 0 0;
+	}
+
+	.ways-header {
+		padding: 0 32px;
+		max-width: 1200px;
+		margin: 0 auto 48px;
+	}
+
+	.ways-header h2 {
+		font-size: 2.5rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+	}
+
+	.ways-header h2 .accent {
+		color: var(--accent);
+	}
+
+	.ways-header p {
+		color: var(--text-muted);
+		font-size: 1.1rem;
+		margin-top: 8px;
+	}
+
+	.way {
+		border-top: 1px solid var(--border);
+		padding: 56px 32px;
+		transition: background 0.2s;
+	}
+
+	.way:hover {
+		background: rgba(20, 241, 149, 0.02);
+	}
+
+	.way:nth-child(odd) {
+		background: var(--bg-alt);
+	}
+
+	.way:nth-child(odd):hover {
+		background: rgba(10, 15, 26, 0.9);
+	}
+
+	.way-inner {
+		max-width: 1200px;
 		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 320px 1fr;
+		gap: 48px;
+		align-items: start;
 	}
 
-	.section-header {
-		text-align: center;
-		margin-bottom: 3rem;
+	.way-meta {
+		position: sticky;
+		top: 80px;
 	}
 
-	.section-header h2 {
-		font-size: 2rem;
+	.way-label {
+		display: inline-block;
+		font-size: 0.7rem;
 		font-weight: 700;
-		color: var(--color-heading);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		padding: 4px 10px;
+		border-radius: 3px;
+		margin-bottom: 16px;
+	}
+
+	.way-label.cli {
+		color: var(--accent);
+		background: var(--accent-dim);
+		border: 1px solid rgba(20, 241, 149, 0.25);
+	}
+
+	.way-label.web {
+		color: var(--accent2);
+		background: var(--accent2-dim);
+		border: 1px solid rgba(0, 212, 255, 0.25);
+	}
+
+	.way-label.mcp {
+		color: #f59e0b;
+		background: rgba(245, 158, 11, 0.1);
+		border: 1px solid rgba(245, 158, 11, 0.25);
+	}
+
+	.way-meta h3 {
+		font-size: 1.75rem;
+		font-weight: 800;
 		letter-spacing: -0.02em;
-		margin-bottom: 0.5rem;
+		margin-bottom: 12px;
 	}
 
-	.section-header p {
-		font-size: 1.05rem;
-		color: var(--color-text-muted);
-		max-width: 520px;
-		margin: 0 auto;
+	.way-meta p {
+		color: var(--text-muted);
+		font-size: 0.95rem;
 		line-height: 1.6;
 	}
 
-	/* ---- Interfaces Grid ---- */
-	.interfaces-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 1.5rem;
-	}
-
-	.interface-card {
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-lg);
-		padding: 1.75rem;
-		transition: all 0.2s ease;
-	}
-
-	.interface-card:hover {
-		border-color: var(--color-primary);
-		box-shadow: 0 4px 16px rgba(139, 92, 246, 0.08);
-		transform: translateY(-2px);
-	}
-
-	.interface-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 48px;
-		height: 48px;
-		background: rgba(139, 92, 246, 0.08);
-		color: var(--color-primary);
-		border-radius: var(--radius-md);
-		margin-bottom: 1rem;
-	}
-
-	.interface-card h3 {
-		font-size: 1.15rem;
-		font-weight: 600;
-		color: var(--color-heading);
-		margin-bottom: 0.5rem;
-	}
-
-	.interface-card p {
-		font-size: 0.9rem;
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		margin-bottom: 1rem;
-	}
-
-	.interface-example {
-		padding: 0.5rem 0.75rem;
-		background: var(--color-code-bg);
-		border-radius: var(--radius-sm);
-		margin-bottom: 1rem;
-	}
-
-	.interface-example code {
-		font-size: 0.8rem;
-		color: var(--color-heading);
-	}
-
-	.interface-link {
-		font-size: 0.85rem;
-		font-weight: 600;
-		color: var(--color-primary);
-		transition: color 0.15s ease;
-	}
-
-	.interface-link:hover {
-		color: var(--color-primary-hover);
-	}
-
-	/* ---- Features Grid ---- */
-	.features-grid {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 1.5rem;
-	}
-
-	.feature-card {
-		padding: 1.5rem;
-		background: var(--color-bg);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-lg);
-		transition: all 0.2s ease;
-	}
-
-	.feature-card:hover {
-		border-color: rgba(139, 92, 246, 0.3);
-		box-shadow: var(--shadow-sm);
-	}
-
-	.feature-icon {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		color: var(--color-primary);
-		margin-bottom: 0.75rem;
-	}
-
-	.feature-card h3 {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--color-heading);
-		margin-bottom: 0.4rem;
-	}
-
-	.feature-card p {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		line-height: 1.6;
-	}
-
-	/* ---- Architecture ---- */
-	.arch-visual {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		max-width: 720px;
-		margin: 0 auto;
-	}
-
-	.arch-row {
-		display: flex;
-		justify-content: center;
-		width: 100%;
-	}
-
-	.arch-row-three {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 1rem;
-		width: 100%;
-	}
-
-	.arch-box {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		padding: 1.25rem 1.5rem;
-		border-radius: 12px;
-		border: 1px solid var(--color-border);
-		background: var(--color-surface);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-		transition: transform 0.2s, box-shadow 0.2s;
-	}
-
-	.arch-box:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-	}
-
-	.arch-box-icon {
-		font-size: 1.5rem;
-		margin-bottom: 0.375rem;
-		line-height: 1;
-	}
-
-	.arch-box strong {
-		font-size: 0.9375rem;
-		color: var(--color-heading);
-		margin-bottom: 0.25rem;
-	}
-
-	.arch-box span {
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-		line-height: 1.4;
-	}
-
-	.arch-api {
-		border-color: rgba(239, 68, 68, 0.3);
-		background: linear-gradient(180deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%);
-		max-width: 320px;
-	}
-
-	.arch-api .arch-box-icon { color: #ef4444; }
-
-	.arch-core {
-		border-color: rgba(139, 92, 246, 0.3);
-		background: linear-gradient(180deg, rgba(139, 92, 246, 0.06) 0%, transparent 100%);
-		max-width: 400px;
-	}
-
-	.arch-core .arch-box-icon { color: var(--color-primary); }
-
-	.arch-web {
-		border-color: rgba(139, 92, 246, 0.25);
-	}
-
-	.arch-web .arch-box-icon { color: var(--color-primary); }
-
-	.arch-cli {
-		border-color: rgba(16, 185, 129, 0.25);
-	}
-
-	.arch-cli .arch-box-icon {
-		color: var(--color-success);
-		font-family: 'JetBrains Mono', monospace;
-		font-weight: 700;
-		font-size: 1.25rem;
-	}
-
-	.arch-mcp {
-		border-color: rgba(245, 158, 11, 0.25);
-	}
-
-	.arch-mcp .arch-box-icon { color: var(--color-warning); }
-
-	/* Connectors */
-	.arch-connector {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		height: 40px;
-	}
-
-	.arch-line {
-		width: 2px;
-		flex: 1;
-		background: var(--color-border);
-	}
-
-	.arch-connector-fan {
-		height: 48px;
-		position: relative;
-		width: 100%;
-		max-width: 720px;
-	}
-
-	.arch-connector-fan .arch-line {
-		position: absolute;
-		left: 50%;
-		top: 0;
-		height: 20px;
-	}
-
-	.arch-fan {
-		position: absolute;
-		top: 20px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: flex;
-		justify-content: space-around;
-		padding: 0 15%;
-	}
-
-	.arch-fan-line {
-		width: 2px;
-		height: 100%;
-		background: var(--color-border);
-	}
-
-	@media (max-width: 600px) {
-		.arch-row-three {
-			grid-template-columns: 1fr;
-			gap: 0.75rem;
-		}
-
-		.arch-connector-fan {
-			height: 32px;
-		}
-
-		.arch-fan { display: none; }
-
-		.arch-connector-fan .arch-line {
-			height: 100%;
-		}
-	}
-
-	/* ---- Getting Started Steps ---- */
-	.steps {
-		max-width: 640px;
-		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-	}
-
-	.step {
-		display: flex;
-		gap: 1.25rem;
-		align-items: flex-start;
-	}
-
-	.step-number {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 36px;
-		height: 36px;
-		background: var(--color-primary);
-		color: #fff;
-		border-radius: 50%;
-		font-size: 0.9rem;
-		font-weight: 700;
-		flex-shrink: 0;
-		margin-top: 0.125rem;
-	}
-
-	.step-content {
-		flex: 1;
+	.way-code {
 		min-width: 0;
 	}
 
-	.step-content h3 {
+	.way-code .terminal {
+		border-width: 2px;
+	}
+
+	.way:nth-child(1) .way-code .terminal { border-color: var(--accent); }
+	.way:nth-child(2) .way-code .terminal { border-color: var(--accent2); }
+	.way:nth-child(3) .way-code .terminal { border-color: #f59e0b; }
+
+	/* ==================== FEATURES ==================== */
+	.features {
+		padding: 96px 32px;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.features-header {
+		margin-bottom: 64px;
+	}
+
+	.features-header h2 {
+		font-size: 3rem;
+		font-weight: 900;
+		letter-spacing: -0.03em;
+		margin-bottom: 12px;
+	}
+
+	.features-header p {
+		color: var(--text-muted);
 		font-size: 1.1rem;
-		font-weight: 600;
-		color: var(--color-heading);
-		margin-bottom: 0.75rem;
 	}
 
-	.step-content pre {
-		background: var(--color-pre-bg);
-		color: var(--color-pre-text);
-		padding: 1rem 1.25rem;
-		border-radius: var(--radius-md);
-		overflow-x: auto;
-		font-size: 0.82rem;
-		line-height: 1.6;
+	.features-list {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0;
 	}
 
-	.step-content pre code {
-		color: inherit;
-		background: none;
-	}
-
-	.step-connector {
-		width: 2px;
-		height: 2rem;
-		background: var(--color-border);
-		margin-left: 17px;
-	}
-
-	/* ---- CTA Section ---- */
-	.section-cta {
-		text-align: center;
-		background:
-			radial-gradient(ellipse 60% 80% at 50% 100%, rgba(139, 92, 246, 0.06) 0%, transparent 70%),
-			var(--color-bg);
-		padding: 4rem 2rem 5rem;
-	}
-
-	.section-cta h2 {
-		font-size: 2rem;
-		font-weight: 700;
-		color: var(--color-heading);
-		margin-bottom: 0.5rem;
-	}
-
-	.section-cta p {
-		font-size: 1.05rem;
-		color: var(--color-text-muted);
-		margin-bottom: 2rem;
-	}
-
-	.cta-actions {
+	.feature-item {
+		padding: 32px 0;
+		border-top: 1px solid var(--border);
 		display: flex;
-		gap: 0.75rem;
-		justify-content: center;
+		gap: 16px;
+		align-items: flex-start;
 	}
 
-	/* ---- Responsive ---- */
-	@media (max-width: 900px) {
-		.interfaces-grid {
-			grid-template-columns: 1fr;
-			max-width: 480px;
-			margin: 0 auto;
-		}
-
-		.features-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-
-		.arch-labels {
-			gap: 1.5rem;
-		}
+	.feature-item:nth-child(odd) {
+		padding-right: 48px;
+		border-right: 1px solid var(--border);
 	}
 
-	@media (max-width: 640px) {
+	.feature-item:nth-child(even) {
+		padding-left: 48px;
+	}
+
+	/* Stagger effect: even items pushed down */
+	.feature-item:nth-child(2) {
+		margin-top: 48px;
+	}
+
+	.feature-tag {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		white-space: nowrap;
+		padding: 4px 8px;
+		border-radius: 3px;
+		letter-spacing: 0.02em;
+		flex-shrink: 0;
+		margin-top: 2px;
+	}
+
+	.feature-tag.green {
+		color: var(--accent);
+		background: var(--accent-dim);
+	}
+
+	.feature-tag.blue {
+		color: var(--accent2);
+		background: var(--accent2-dim);
+	}
+
+	.feature-tag.amber {
+		color: #f59e0b;
+		background: rgba(245, 158, 11, 0.1);
+	}
+
+	.feature-content h4 {
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		margin-bottom: 4px;
+	}
+
+	.feature-content p {
+		color: var(--text-muted);
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	/* ==================== INSTALL ==================== */
+	.install {
+		background: var(--bg-alt);
+		border-top: 1px solid var(--border);
+		border-bottom: 1px solid var(--border);
+		padding: 80px 32px;
+		text-align: center;
+	}
+
+	.install-inner {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.install h2 {
+		font-size: 2rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		margin-bottom: 8px;
+	}
+
+	.install .tagline {
+		color: var(--text-muted);
+		font-size: 1rem;
+		margin-bottom: 40px;
+	}
+
+	.install-cmd {
+		font-family: var(--font-mono);
+		font-size: 1.75rem;
+		font-weight: 600;
+		color: var(--accent);
+		background: var(--bg);
+		border: 3px solid var(--border-accent);
+		padding: 24px 40px;
+		border-radius: 8px;
+		display: inline-block;
+		user-select: all;
+		cursor: pointer;
+		transition: background 0.15s, box-shadow 0.15s;
+		letter-spacing: -0.02em;
+	}
+
+	.install-cmd:hover {
+		background: var(--accent-dim);
+		box-shadow: 0 0 40px rgba(20, 241, 149, 0.08);
+	}
+
+	.install-after {
+		margin-top: 24px;
+		color: var(--text-dim);
+		font-size: 0.85rem;
+	}
+
+	.install-after .inline-code {
+		font-family: var(--font-mono);
+		color: var(--accent);
+		background: none;
+		padding: 0;
+		border: none;
+	}
+
+	.install-after a {
+		color: var(--accent2);
+		border-bottom: 1px dashed var(--accent2);
+	}
+
+	.install-after a:hover {
+		border-bottom-style: solid;
+	}
+
+	/* ==================== ARCH ==================== */
+	.arch {
+		padding: 96px 32px;
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+
+	.arch h2 {
+		font-size: 2rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		margin-bottom: 48px;
+	}
+
+	.arch-diagram {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		line-height: 1.7;
+		color: var(--text-muted);
+		background: var(--bg-alt);
+		border: 2px solid var(--border);
+		border-radius: 8px;
+		padding: 32px;
+		overflow-x: auto;
+		white-space: pre;
+	}
+
+	.arch-diagram .hl {
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.arch-diagram .hl2 {
+		color: var(--accent2);
+		font-weight: 600;
+	}
+
+	.arch-diagram .hl3 {
+		color: #f59e0b;
+		font-weight: 600;
+	}
+
+	/* ==================== FOOTER ==================== */
+	.landing-footer {
+		border-top: 1px solid var(--border);
+		padding: 32px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.footer-left {
+		font-size: 0.8rem;
+		color: var(--text-dim);
+	}
+
+	.footer-left strong {
+		color: var(--text-muted);
+		font-weight: 600;
+	}
+
+	.footer-links {
+		display: flex;
+		gap: 24px;
+	}
+
+	.footer-links a {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		transition: color 0.15s;
+	}
+
+	.footer-links a:hover {
+		color: var(--text);
+	}
+
+	/* ==================== RESPONSIVE ==================== */
+	@media (max-width: 960px) {
 		.hero {
-			padding: 3rem 1.25rem 2.5rem;
+			grid-template-columns: 1fr;
+			padding: 64px 24px 48px;
+			gap: 40px;
 		}
 
-		.hero h1 {
-			font-size: 2.1rem;
+		.hero-text h1 {
+			font-size: 3rem;
 		}
 
-		.hero-subtitle {
+		.way-inner {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+
+		.way-meta {
+			position: static;
+		}
+
+		.features-list {
+			grid-template-columns: 1fr;
+		}
+
+		.feature-item:nth-child(odd) {
+			padding-right: 0;
+			border-right: none;
+		}
+
+		.feature-item:nth-child(even) {
+			padding-left: 0;
+		}
+
+		.feature-item:nth-child(2) {
+			margin-top: 0;
+		}
+
+		.install-cmd {
+			font-size: 1.1rem;
+			padding: 16px 24px;
+		}
+
+		.features-header h2 {
+			font-size: 2rem;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.hero-text h1 {
+			font-size: 2.25rem;
+		}
+
+		.hero-text .sub {
 			font-size: 1rem;
 		}
 
-		.hero-actions {
+		.hero-install {
 			flex-direction: column;
-			align-items: center;
-		}
-
-		.hero-code {
-			max-width: 100%;
-		}
-
-		.section {
-			padding: 3rem 1.25rem;
-		}
-
-		.section-header h2 {
-			font-size: 1.6rem;
-		}
-
-		.features-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.arch-diagram {
-			font-size: 0.68rem;
-			padding: 1.25rem;
-		}
-
-		.arch-labels {
-			flex-direction: column;
-			gap: 1rem;
 			align-items: flex-start;
 		}
 
-		.step {
-			gap: 1rem;
+		.nav {
+			padding: 0 16px;
 		}
 
-		.cta-actions {
+		.ways-header h2 {
+			font-size: 1.75rem;
+		}
+
+		.install-cmd {
+			font-size: 0.9rem;
+			padding: 14px 18px;
+			word-break: break-all;
+		}
+
+		.landing-footer {
 			flex-direction: column;
-			align-items: center;
+			gap: 16px;
+			text-align: center;
+		}
+
+		.arch-diagram {
+			font-size: 0.65rem;
+			padding: 16px;
 		}
 	}
 </style>
