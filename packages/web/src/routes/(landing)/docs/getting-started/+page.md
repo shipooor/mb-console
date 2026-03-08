@@ -18,15 +18,13 @@ No installation needed. Run `npm run dev -w packages/web` and open the dashboard
 ### CLI
 
 ```bash
-git clone https://github.com/shipooor/magicBlockConsole.git
-cd magicBlockConsole
-npm install && npm run build
+npm install -g @magicblock-console/cli
 ```
 
-Run any command via the workspace:
+Verify the installation:
 
 ```bash
-npx mb-console --version
+mb-console --version
 ```
 
 ### MCP Server
@@ -37,8 +35,8 @@ Add MagicBlock Console to your MCP client configuration:
 {
   "mcpServers": {
     "magicblock-console": {
-      "command": "node",
-      "args": ["<path-to-repo>/packages/mcp/dist/index.js"]
+      "command": "npx",
+      "args": ["@magicblock-console/mcp"]
     }
   }
 }
@@ -64,8 +62,8 @@ If no keypair is found, the CLI runs in simulated mode with realistic mock data.
 {
   "mcpServers": {
     "magicblock-console": {
-      "command": "node",
-      "args": ["<path-to-repo>/packages/mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["@magicblock-console/mcp"],
       "env": {
         "MB_KEYPAIR_PATH": "~/.config/solana/id.json"
       }

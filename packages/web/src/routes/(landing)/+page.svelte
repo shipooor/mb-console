@@ -241,8 +241,7 @@
 				<div class="step-number">1</div>
 				<div class="step-content">
 					<h3>Install</h3>
-					<pre><code><span class="code-prompt">$</span> git clone https://github.com/shipooor/magicBlockConsole.git
-<span class="code-prompt">$</span> cd magicBlockConsole && npm install && npm run build</code></pre>
+					<pre><code><span class="code-prompt">$</span> npm install -g @magicblock-console/cli</code></pre>
 				</div>
 			</div>
 			<div class="step-connector"></div>

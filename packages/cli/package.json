@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "CLI for MagicBlock Ephemeral Rollups — manage projects, delegate accounts, monitor costs",
   "license": "MIT",
-  "private": true,
+  "files": ["dist"],
   "type": "module",
   "bin": {
     "mb-console": "./dist/index.js"
