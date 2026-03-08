@@ -45,7 +45,8 @@
 		</div>
 	</div>
 	<div class="footer-bottom">
-		<p>Built for Solana Blitz Hackathon 2026 by <a href="https://github.com/shipooor" target="_blank" rel="noopener">shipooor</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">𝕏</a></p>
+		<p>Built for Solana Blitz Hackathon 2026</p>
+		<p>made with <span class="heart">♥</span> by shipooor — <a href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">Twitter</a></p>
 	</div>
 </footer>
 
@@ -174,6 +175,10 @@
 	.footer-bottom p {
 		font-size: 0.8rem;
 		color: #64748b;
+	}
+
+	.heart {
+		color: var(--color-primary);
 	}
 
 	.footer-bottom a {
