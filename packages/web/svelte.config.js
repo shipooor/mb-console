@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from '@sveltejs/adapter-static';
 import { mdsvex } from 'mdsvex';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -17,7 +17,11 @@ const config = {
 		})
 	],
 	kit: {
-		adapter: adapter()
+		adapter: adapter({
+			// SPA fallback for dashboard routes (ssr=false)
+			// Cloudflare Pages serves 200.html for unmatched routes
+			fallback: '200.html'
+		})
 	}
 };
 
