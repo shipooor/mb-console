@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	let { children } = $props();
+
+	const isHome = $derived(page.url.pathname === '/');
 </script>
 
+{#if !isHome}
 <nav class="navbar">
 	<a href="/" class="logo">
 		<span class="logo-icon">MB</span>
@@ -13,11 +17,13 @@
 		<a href="/dashboard" class="nav-cta">Dashboard</a>
 	</div>
 </nav>
+{/if}
 
 <main>
 	{@render children()}
 </main>
 
+{#if !isHome}
 <footer class="footer">
 	<div class="footer-content">
 		<div class="footer-section">
@@ -49,6 +55,7 @@
 		<p>made with <span class="heart">♥</span> by shipooor — <a href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">Twitter</a></p>
 	</div>
 </footer>
+{/if}
 
 <style>
 	.navbar {
