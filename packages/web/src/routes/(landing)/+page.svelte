@@ -1,3 +1,151 @@
+<script lang="ts">
+	import { onMount } from 'svelte';
+
+	// Segment-based data structure for precise styling control
+	type Segment = { text: string; cls: string };
+	type Step =
+		| { type: 'cmd'; segments: Segment[] }
+		| { type: 'output'; lines: { segments: Segment[] }[] }
+		| { type: 'pause'; ms: number };
+
+	interface RenderedLine {
+		segments: Segment[];
+	}
+
+	const steps: Step[] = [
+		{ type: 'cmd', segments: [
+			{ text: '$ ', cls: 'prompt' },
+			{ text: 'mb-console project create', cls: 'cmd' },
+			{ text: ' ', cls: '' },
+			{ text: 'my-game', cls: 'value' },
+			{ text: ' ', cls: '' },
+			{ text: '--region', cls: 'flag' },
+			{ text: ' ', cls: '' },
+			{ text: 'eu', cls: 'value' },
+		]},
+		{ type: 'output', lines: [
+			{ segments: [{ text: '\u2714', cls: 'success' }, { text: ' Project "my-game" created (eu)', cls: 'output' }] },
+			{ segments: [] },
+		]},
+		{ type: 'pause', ms: 400 },
+
+		{ type: 'cmd', segments: [
+			{ text: '$ ', cls: 'prompt' },
+			{ text: 'mb-console project configure', cls: 'cmd' },
+			{ text: ' ', cls: '' },
+			{ text: 'my-game', cls: 'value' },
+			{ text: ' ', cls: '' },
+			{ text: '--gasless --vrf --oracle', cls: 'flag' },
+		]},
+		{ type: 'output', lines: [
+			{ segments: [{ text: '  gasless: ', cls: 'output' }, { text: 'enabled', cls: 'success' }] },
+			{ segments: [{ text: '  vrf:     ', cls: 'output' }, { text: 'enabled', cls: 'success' }] },
+			{ segments: [{ text: '  oracle:  ', cls: 'output' }, { text: 'enabled', cls: 'success' }] },
+			{ segments: [] },
+		]},
+		{ type: 'pause', ms: 400 },
+
+		{ type: 'cmd', segments: [
+			{ text: '$ ', cls: 'prompt' },
+			{ text: 'mb-console er delegate', cls: 'cmd' },
+			{ text: ' ', cls: '' },
+			{ text: '7xKX...9mPq', cls: 'value' },
+			{ text: ' ', cls: '' },
+			{ text: '--project', cls: 'flag' },
+			{ text: ' ', cls: '' },
+			{ text: 'my-game', cls: 'value' },
+		]},
+		{ type: 'output', lines: [
+			{ segments: [{ text: '\u2714', cls: 'success' }, { text: ' Account 7xKX...9mPq delegated to ER', cls: 'output' }] },
+			{ segments: [{ text: '  validator:  devnet-eu.magicblock.app', cls: 'output' }] },
+			{ segments: [{ text: '  tx:         ', cls: 'output' }, { text: '4sGjM...wKp2', cls: 'key' }] },
+			{ segments: [] },
+		]},
+		{ type: 'pause', ms: 400 },
+
+		{ type: 'cmd', segments: [
+			{ text: '$ ', cls: 'prompt' },
+			{ text: 'mb-console oracle price', cls: 'cmd' },
+			{ text: ' ', cls: '' },
+			{ text: '--feed', cls: 'flag' },
+			{ text: ' ', cls: '' },
+			{ text: 'SOL/USD', cls: 'value' },
+			{ text: ' ', cls: '' },
+			{ text: '--project', cls: 'flag' },
+			{ text: ' ', cls: '' },
+			{ text: 'my-game', cls: 'value' },
+		]},
+		{ type: 'output', lines: [
+			{ segments: [{ text: '  feed:   SOL/USD', cls: 'output' }] },
+			{ segments: [{ text: '  price:  ', cls: 'output' }, { text: '$168.42', cls: 'num' }] },
+			{ segments: [{ text: '  conf:   ', cls: 'output' }, { text: '\u00b10.12', cls: 'num' }] },
+			{ segments: [{ text: '  slot:   ', cls: 'output' }, { text: '312847561', cls: 'num' }] },
+		]},
+	];
+
+	let renderedLines: RenderedLine[] = $state([]);
+	let typingSegments: Segment[] = $state([]);
+	let typingCharCount: number = $state(0);
+	let isTyping: boolean = $state(true);
+
+	let visibleTypingSegments: Segment[] = $derived(
+		getVisibleSegments(typingSegments, typingCharCount)
+	);
+
+	function getVisibleSegments(segments: Segment[], charCount: number): Segment[] {
+		const result: Segment[] = [];
+		let remaining = charCount;
+		for (const seg of segments) {
+			if (remaining <= 0) break;
+			if (remaining >= seg.text.length) {
+				result.push(seg);
+				remaining -= seg.text.length;
+			} else {
+				result.push({ text: seg.text.slice(0, remaining), cls: seg.cls });
+				remaining = 0;
+			}
+		}
+		return result;
+	}
+
+	function delay(ms: number): Promise<void> {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	async function runAnimation() {
+		const charDelay = 30;
+
+		for (const step of steps) {
+			if (step.type === 'pause') {
+				await delay(step.ms);
+			} else if (step.type === 'cmd') {
+				typingSegments = step.segments;
+				typingCharCount = 0;
+				const fullLength = step.segments.reduce((sum, s) => sum + s.text.length, 0);
+
+				for (let i = 1; i <= fullLength; i++) {
+					typingCharCount = i;
+					await delay(charDelay);
+				}
+
+				// Move completed line to rendered
+				renderedLines = [...renderedLines, { segments: step.segments }];
+				typingSegments = [];
+				typingCharCount = 0;
+			} else if (step.type === 'output') {
+				const newLines = step.lines.map(l => ({ segments: l.segments }));
+				renderedLines = [...renderedLines, ...newLines];
+			}
+		}
+
+		isTyping = false;
+	}
+
+	onMount(() => {
+		runAnimation();
+	});
+</script>
+
 <svelte:head>
 	<title>MagicBlock Console -- Stop managing ERs by hand</title>
 	<meta
@@ -16,7 +164,6 @@
 		</div>
 		<div class="nav-links">
 			<a href="/docs">Docs</a>
-			<a href="/dashboard">Dashboard</a>
 			<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
 			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener" class="nav-badge">npm</a>
 		</div>
@@ -45,24 +192,12 @@
 					<span class="terminal-title">mb-console</span>
 				</div>
 				<div class="terminal-body">
-					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console project create</span> <span class="value">my-game</span> <span class="flag">--region</span> <span class="value">eu</span></span>
-					<span class="line"><span class="success">&#10004;</span><span class="output"> Project "my-game" created (eu)</span></span>
-					<span class="line"></span>
-					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console project configure</span> <span class="value">my-game</span> <span class="flag">--gasless --vrf --oracle</span></span>
-					<span class="line"><span class="output">  gasless: </span><span class="success">enabled</span></span>
-					<span class="line"><span class="output">  vrf:     </span><span class="success">enabled</span></span>
-					<span class="line"><span class="output">  oracle:  </span><span class="success">enabled</span></span>
-					<span class="line"></span>
-					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console er delegate</span> <span class="value">7xKX...9mPq</span> <span class="flag">--project</span> <span class="value">my-game</span></span>
-					<span class="line"><span class="success">&#10004;</span><span class="output"> Account 7xKX...9mPq delegated to ER</span></span>
-					<span class="line"><span class="output">  validator:  devnet-eu.magicblock.app</span></span>
-					<span class="line"><span class="output">  tx:         </span><span class="key">4sGjM...wKp2</span></span>
-					<span class="line"></span>
-					<span class="line"><span class="prompt">$ </span><span class="cmd">mb-console oracle price</span> <span class="flag">--feed</span> <span class="value">SOL/USD</span> <span class="flag">--project</span> <span class="value">my-game</span></span>
-					<span class="line"><span class="output">  feed:   SOL/USD</span></span>
-					<span class="line"><span class="output">  price:  </span><span class="num">$168.42</span></span>
-					<span class="line"><span class="output">  conf:   </span><span class="num">&#177;0.12</span></span>
-					<span class="line"><span class="output">  slot:   </span><span class="num">312847561</span></span>
+					{#each renderedLines as line}
+						<span class="line">{#each line.segments as seg}{#if seg.cls}<span class={seg.cls}>{seg.text}</span>{:else}{seg.text}{/if}{/each}</span>
+					{/each}
+					{#if isTyping}
+						<span class="line">{#each visibleTypingSegments as seg}{#if seg.cls}<span class={seg.cls}>{seg.text}</span>{:else}{seg.text}{/if}{/each}<span class="cursor">&#9612;</span></span>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -579,6 +714,16 @@
 	.terminal-body .comment {
 		color: var(--text-dim);
 		font-style: italic;
+	}
+
+	/* Cursor */
+	.terminal-body .cursor {
+		color: var(--accent);
+		animation: blink 0.7s step-end infinite;
+	}
+
+	@keyframes blink {
+		50% { opacity: 0; }
 	}
 
 	/* ==================== DIVIDER ==================== */
