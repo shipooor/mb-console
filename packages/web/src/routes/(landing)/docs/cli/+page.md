@@ -12,7 +12,15 @@ The MagicBlock Console CLI (`mb-console`) provides full control over Ephemeral R
 ## Installation
 
 ```bash
-npm install -g @magicblock-console/cli
+git clone https://github.com/shipooor/magicBlockConsole.git
+cd magicBlockConsole
+npm install && npm run build
+```
+
+The `mb-console` binary is available via the workspace:
+
+```bash
+npx mb-console --help
 ```
 
 ## Authentication
