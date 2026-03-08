@@ -16,7 +16,7 @@
 		</div>
 		<div class="nav-links">
 			<a href="/docs">Docs</a>
-			<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
+			<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
 			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener" class="nav-badge">npm</a>
 		</div>
 	</nav>
@@ -308,7 +308,7 @@
 			</div>
 			<div class="footer-section">
 				<h4>Project</h4>
-				<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
+				<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
 				<a href="https://www.npmjs.com/package/@magicblock-console/core" target="_blank" rel="noopener">npm: core</a>
 				<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener">npm: cli</a>
 				<a href="https://www.npmjs.com/package/@magicblock-console/mcp" target="_blank" rel="noopener">npm: mcp</a>

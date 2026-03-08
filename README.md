@@ -46,8 +46,8 @@ MagicBlock Console is a complete developer interface for managing Ephemeral Roll
 ### Install & Build
 
 ```bash
-git clone https://github.com/shipooor/magicBlockConsole.git
-cd magicBlockConsole
+git clone https://github.com/shipooor/mb-console.git
+cd mb-console
 npm install
 npm run build
 ```
@@ -147,8 +147,8 @@ npm run build -w packages/core
 **Try it:**
 
 ```bash
-git clone https://github.com/shipooor/magicBlockConsole.git
-cd magicBlockConsole && npm install && npm run build
+git clone https://github.com/shipooor/mb-console.git
+cd mb-console && npm install && npm run build
 npm run dev -w packages/web
 # Open http://localhost:5173 → landing page
 # Open http://localhost:5173/dashboard → interactive dashboard
