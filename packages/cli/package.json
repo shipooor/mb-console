@@ -1,6 +1,6 @@
 {
   "name": "@magicblock-console/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for MagicBlock Ephemeral Rollups — manage projects, delegate accounts, monitor costs",
   "license": "MIT",
   "files": ["dist"],
@@ -14,7 +14,7 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@magicblock-console/core": "*",
+    "@magicblock-console/core": "^0.1.0",
     "commander": "^13.0.0"
   },
   "devDependencies": {
