@@ -14,6 +14,6 @@ export default defineConfig({
 		},
 	},
 	optimizeDeps: {
-		include: ['buffer'],
+		include: ['buffer', '@solana/web3.js', '@magicblock-labs/ephemeral-rollups-sdk'],
 	},
 });

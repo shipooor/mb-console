@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
+	import { clientVersion } from '$lib/stores/wallet';
 	import type { Project, FeatureFlags } from '@magicblock-console/core';
 
 	let projects = $state<Project[]>([]);
@@ -19,6 +20,15 @@
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 	let pendingDelete = $state<string | null>(null);
+
+	let prevVersion = $state(-1);
+	$effect(() => {
+		const v = $clientVersion;
+		if (prevVersion >= 0 && v !== prevVersion) {
+			loadProjects();
+		}
+		prevVersion = v;
+	});
 
 	const client = get(consoleClient);
 

@@ -34,7 +34,7 @@ import { createPrivacyNamespace } from './privacy.js';
 import { createCranksNamespace } from './cranks.js';
 import { createOracleNamespace } from './oracle.js';
 import { createMonitorNamespace } from './monitor.js';
-import type { BlockchainConnection } from './connection.js';
+import type { BlockchainConnection, SolanaSignerAdapter } from './connection.js';
 
 // ---------------------------------------------------------------------------
 // Namespace Interfaces
@@ -172,6 +172,26 @@ export class ConsoleClient {
   /** Returns true if a blockchain connection is active. */
   get isConnected(): boolean {
     return this._connection !== undefined;
+  }
+
+  /**
+   * Connect using a browser wallet adapter (e.g. Phantom).
+   * The signer must provide `publicKey` and `signTransaction`.
+   *
+   * Connection module is loaded dynamically to avoid pulling Node.js-only
+   * dependencies into browser bundles.
+   */
+  async connectWithSigner(signer: SolanaSignerAdapter): Promise<void> {
+    const { createBlockchainConnection } = await import('./connection.js');
+    this._connection = createBlockchainConnection(this.network, signer);
+  }
+
+  /**
+   * Disconnect from the blockchain.
+   * Namespaces automatically fall back to simulated mode.
+   */
+  disconnect(): void {
+    this._connection = undefined;
   }
 
   /** Returns true if the connection has a signer (can send transactions). */

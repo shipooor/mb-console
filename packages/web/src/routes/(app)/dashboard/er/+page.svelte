@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
+	import { clientVersion } from '$lib/stores/wallet';
 	import { isValidPubkey } from '@magicblock-console/core';
 	import type { Project, DelegatedAccount, StateDiff } from '@magicblock-console/core';
 
@@ -16,6 +17,15 @@
 	let lastSimulated = $state<boolean | null>(null);
 	let diffResult = $state<StateDiff | null>(null);
 	let showDiff = $state(false);
+
+	let prevVersion = $state(-1);
+	$effect(() => {
+		const v = $clientVersion;
+		if (prevVersion >= 0 && v !== prevVersion) {
+			loadProjects();
+		}
+		prevVersion = v;
+	});
 
 	const client = get(consoleClient);
 
