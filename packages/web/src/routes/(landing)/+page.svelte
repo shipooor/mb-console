@@ -396,6 +396,44 @@
                                  └── Session Keys</div>
 	</section>
 
+	<!-- DIVIDER -->
+	<div class="divider"></div>
+
+	<!-- ROADMAP -->
+	<section class="roadmap">
+		<div class="roadmap-header">
+			<h2>What's next.</h2>
+			<p>Where we're headed after the hackathon.</p>
+		</div>
+		<div class="timeline">
+			<div class="timeline-line"></div>
+			<div class="phase done">
+				<div class="phase-dot"></div>
+				<div class="phase-label">Phase 1</div>
+				<div class="phase-title">Console MVP</div>
+				<div class="phase-desc">Web dashboard, CLI, MCP server. Core ER lifecycle management, project system, feature toggles.</div>
+			</div>
+			<div class="phase">
+				<div class="phase-dot"></div>
+				<div class="phase-label">Phase 2</div>
+				<div class="phase-title">Advanced Ops</div>
+				<div class="phase-desc">Multi-account management, ER templates, batch delegation, transaction history.</div>
+			</div>
+			<div class="phase">
+				<div class="phase-dot"></div>
+				<div class="phase-label">Phase 3</div>
+				<div class="phase-title">Analytics</div>
+				<div class="phase-desc">ER performance metrics, cost tracking, usage dashboards, alerting system.</div>
+			</div>
+			<div class="phase">
+				<div class="phase-dot"></div>
+				<div class="phase-label">Phase 4</div>
+				<div class="phase-title">Ecosystem</div>
+				<div class="phase-desc">Plugin system, community templates, mainnet support, SDK marketplace.</div>
+			</div>
+		</div>
+	</section>
+
 	<!-- INSTALL -->
 	<section class="install">
 		<div class="install-inner">
@@ -923,6 +961,104 @@
 		line-height: 1.5;
 	}
 
+	/* ==================== ROADMAP ==================== */
+	.roadmap {
+		padding: 96px 32px;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.roadmap-header {
+		margin-bottom: 64px;
+	}
+
+	.roadmap-header h2 {
+		font-size: 2.5rem;
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		margin-bottom: 8px;
+		color: #F9FAFB;
+	}
+
+	.roadmap-header p {
+		color: var(--text-muted);
+		font-size: 1.1rem;
+	}
+
+	.timeline {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 0;
+		position: relative;
+	}
+
+	.timeline-line {
+		position: absolute;
+		top: 7px;
+		left: 0;
+		right: 0;
+		height: 2px;
+		background: var(--border);
+	}
+
+	.phase {
+		position: relative;
+		padding-top: 32px;
+		padding-right: 24px;
+	}
+
+	.phase-dot {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		border: 2px solid var(--text-dim);
+		background: var(--bg);
+	}
+
+	.phase.done .phase-dot {
+		border-color: var(--accent);
+		background: var(--accent);
+		box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+	}
+
+	.phase-label {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--text-dim);
+		margin-bottom: 8px;
+	}
+
+	.phase.done .phase-label {
+		color: var(--accent);
+	}
+
+	.phase-title {
+		font-size: 1.125rem;
+		font-weight: 700;
+		color: var(--text-muted);
+		margin-bottom: 8px;
+	}
+
+	.phase.done .phase-title {
+		color: #F9FAFB;
+	}
+
+	.phase-desc {
+		font-size: 0.85rem;
+		color: var(--text-dim);
+		line-height: 1.5;
+	}
+
+	.phase.done .phase-desc {
+		color: var(--text-muted);
+	}
+
 	/* ==================== INSTALL ==================== */
 	.install {
 		background: var(--bg-alt);
@@ -1154,6 +1290,15 @@
 		.footer-content {
 			grid-template-columns: 1fr 1fr;
 		}
+
+		.timeline {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 40px 0;
+		}
+
+		.timeline-line {
+			display: none;
+		}
 	}
 
 	@media (max-width: 600px) {
@@ -1196,6 +1341,15 @@
 		.arch-diagram {
 			font-size: 0.65rem;
 			padding: 16px;
+		}
+
+		.timeline {
+			grid-template-columns: 1fr;
+			gap: 32px;
+		}
+
+		.roadmap-header h2 {
+			font-size: 1.75rem;
 		}
 	}
 </style>
