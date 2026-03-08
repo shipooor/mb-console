@@ -121,7 +121,7 @@
 		justify-content: center;
 		width: 32px;
 		height: 32px;
-		background: var(--color-primary, #14f195);
+		background: var(--color-primary-bright, #14f195);
 		color: #0c1222;
 		border-radius: 6px;
 		font-size: 0.75rem;
@@ -163,7 +163,7 @@
 
 	.nav-item.active {
 		background: rgba(20, 241, 149, 0.15);
-		color: var(--color-primary, #8b5cf6);
+		color: var(--color-primary-bright, #14f195);
 	}
 
 	.nav-icon {
@@ -181,7 +181,7 @@
 
 	.nav-item.active .nav-icon {
 		background: rgba(20, 241, 149, 0.25);
-		color: var(--color-primary, #8b5cf6);
+		color: var(--color-primary-bright, #14f195);
 	}
 
 	.nav-label {
@@ -307,12 +307,12 @@
 	}
 
 	.wallet-btn-connect {
-		background: var(--color-primary, #8b5cf6);
+		background: var(--color-primary-bright, #14f195);
 		color: #0c1222;
 	}
 
 	.wallet-btn-connect:hover:not(:disabled) {
-		background: var(--color-primary-hover, #0ed886);
+		background: var(--color-primary-bright-hover, #0ed886);
 	}
 
 	.wallet-btn-disconnect {

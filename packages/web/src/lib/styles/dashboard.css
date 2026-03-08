@@ -82,7 +82,7 @@
 
 .form-input:focus {
 	border-color: var(--color-primary, #8b5cf6);
-	box-shadow: 0 0 0 2px rgba(20, 241, 149, 0.15);
+	box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
 }
 
 /* Buttons */
@@ -106,12 +106,12 @@
 }
 
 .btn-primary {
-	background: var(--color-primary, #14f195);
-	color: #0c1222;
+	background: var(--color-primary, #059669);
+	color: #ffffff;
 }
 
 .btn-primary:hover:not(:disabled) {
-	background: var(--color-primary-hover, #7c3aed);
+	background: var(--color-primary-hover, #047857);
 }
 
 .btn-secondary {
@@ -221,8 +221,8 @@
 }
 
 .feature-badge.enabled {
-	background: rgba(20, 241, 149, 0.1);
-	color: var(--color-primary, #14f195);
+	background: rgba(5, 150, 105, 0.1);
+	color: var(--color-primary, #059669);
 }
 
 /* Stats grid */

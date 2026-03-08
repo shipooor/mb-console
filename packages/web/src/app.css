@@ -4,8 +4,10 @@
 	--color-heading: #0f0f23;
 	--color-text: #1a1a2e;
 	--color-text-muted: #64748b;
-	--color-primary: #14f195;
-	--color-primary-hover: #0ed886;
+	--color-primary: #059669;
+	--color-primary-hover: #047857;
+	--color-primary-bright: #14f195;
+	--color-primary-bright-hover: #0ed886;
 	--color-navbar-bg: #0c1222;
 	--color-navbar-text: #e2e8f0;
 	--color-navbar-border: #1e293b;

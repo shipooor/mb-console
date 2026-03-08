@@ -153,10 +153,10 @@
 	}
 
 	.sidebar-link.active {
-		background: rgba(20, 241, 149, 0.08);
-		color: var(--color-primary, #8b5cf6);
+		background: rgba(5, 150, 105, 0.08);
+		color: var(--color-primary, #059669);
 		font-weight: 600;
-		border-left-color: var(--color-primary, #8b5cf6);
+		border-left-color: var(--color-primary, #059669);
 	}
 
 	/* -- Main content area -- */

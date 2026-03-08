@@ -115,7 +115,7 @@
 
   .doc-card:hover {
     border-color: var(--color-primary, #8b5cf6);
-    box-shadow: 0 2px 8px rgba(20, 241, 149, 0.1);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.12);
   }
 
   .doc-card h3 {

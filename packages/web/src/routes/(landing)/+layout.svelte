@@ -88,7 +88,7 @@
 		justify-content: center;
 		width: 30px;
 		height: 30px;
-		background: var(--color-primary);
+		background: var(--color-primary-bright);
 		color: #0c1222;
 		border-radius: var(--radius-sm);
 		font-size: 0.7rem;
@@ -115,7 +115,7 @@
 
 	.nav-cta {
 		padding: 0.4rem 1rem;
-		background: var(--color-primary);
+		background: var(--color-primary-bright);
 		color: #0c1222 !important;
 		border-radius: var(--radius-md);
 		font-size: 0.85rem;
@@ -124,7 +124,7 @@
 	}
 
 	.nav-cta:hover {
-		background: var(--color-primary-hover);
+		background: var(--color-primary-bright-hover);
 		color: #0c1222 !important;
 	}
 
@@ -168,7 +168,7 @@
 	}
 
 	.footer-section a:hover {
-		color: var(--color-primary);
+		color: var(--color-primary-bright);
 	}
 
 	.footer-bottom {
@@ -185,7 +185,7 @@
 	}
 
 	.heart {
-		color: var(--color-primary);
+		color: var(--color-primary-bright);
 	}
 
 	.footer-bottom a {
@@ -194,7 +194,7 @@
 	}
 
 	.footer-bottom a:hover {
-		color: var(--color-primary);
+		color: var(--color-primary-bright);
 	}
 
 	@media (max-width: 768px) {

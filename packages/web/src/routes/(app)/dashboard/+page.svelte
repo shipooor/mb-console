@@ -256,7 +256,7 @@
 		width: 48px;
 		height: 48px;
 		border-radius: 12px;
-		background: rgba(20, 241, 149, 0.1);
+		background: rgba(5, 150, 105, 0.1);
 		color: var(--color-primary, #8b5cf6);
 		font-size: 1.25rem;
 		font-weight: 700;
