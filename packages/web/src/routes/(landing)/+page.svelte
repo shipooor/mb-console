@@ -185,44 +185,47 @@
 			<h2>Architecture</h2>
 			<p>A shared Core SDK powers all three interfaces. Your choice of frontend, same capabilities underneath.</p>
 		</div>
-		<div class="architecture">
-			<pre class="arch-diagram"><code>                    +---------------------+
-                    |    MagicBlock API    |
-                    | (Ephemeral Rollups)  |
-                    +----------+----------+
-                               |
-                    +----------+----------+
-                    |      Core SDK       |
-                    |  TypeScript / Node  |
-                    +--+-------+-------+--+
-                       |       |       |
-              +--------+  +---+---+  +---------+
-              |           |       |            |
-        +-----+----+ +---+---+ +-+----------+ |
-        | Web App  | |  CLI  | | MCP Server | |
-        | SvelteKit| |Commander| | stdio/SSE  | |
-        +----------+ +-------+ +------------+ </code></pre>
-			<div class="arch-labels">
-				<div class="arch-label">
-					<span class="arch-dot arch-dot-web"></span>
-					<div>
-						<strong>Web Dashboard</strong>
-						<span>SvelteKit app with real-time UI</span>
-					</div>
+		<div class="arch-visual">
+			<div class="arch-row">
+				<div class="arch-box arch-api">
+					<span class="arch-box-icon">&#9670;</span>
+					<strong>MagicBlock API</strong>
+					<span>Ephemeral Rollups on Solana</span>
 				</div>
-				<div class="arch-label">
-					<span class="arch-dot arch-dot-cli"></span>
-					<div>
-						<strong>CLI</strong>
-						<span>Commander.js-based command-line tool</span>
-					</div>
+			</div>
+			<div class="arch-connector">
+				<div class="arch-line"></div>
+			</div>
+			<div class="arch-row">
+				<div class="arch-box arch-core">
+					<span class="arch-box-icon">&#9635;</span>
+					<strong>Core SDK</strong>
+					<span>TypeScript &middot; ER lifecycle &middot; Features &middot; Monitoring</span>
 				</div>
-				<div class="arch-label">
-					<span class="arch-dot arch-dot-mcp"></span>
-					<div>
-						<strong>MCP Server</strong>
-						<span>AI agent integration via Model Context Protocol</span>
-					</div>
+			</div>
+			<div class="arch-connector arch-connector-fan">
+				<div class="arch-line"></div>
+				<div class="arch-fan">
+					<div class="arch-fan-line arch-fan-left"></div>
+					<div class="arch-fan-line arch-fan-center"></div>
+					<div class="arch-fan-line arch-fan-right"></div>
+				</div>
+			</div>
+			<div class="arch-row arch-row-three">
+				<div class="arch-box arch-web">
+					<span class="arch-box-icon">&#9783;</span>
+					<strong>Web Dashboard</strong>
+					<span>SvelteKit &middot; Wallet Connect</span>
+				</div>
+				<div class="arch-box arch-cli">
+					<span class="arch-box-icon">&gt;_</span>
+					<strong>CLI</strong>
+					<span>Commander.js &middot; Terminal</span>
+				</div>
+				<div class="arch-box arch-mcp">
+					<span class="arch-box-icon">&#9881;</span>
+					<strong>MCP Server</strong>
+					<span>AI Agents &middot; stdio</span>
 				</div>
 			</div>
 		</div>
@@ -606,73 +609,162 @@
 	}
 
 	/* ---- Architecture ---- */
-	.architecture {
+	.arch-visual {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 2rem;
+		max-width: 720px;
+		margin: 0 auto;
 	}
 
-	.arch-diagram {
-		background: var(--color-pre-bg);
-		color: var(--color-pre-text);
-		padding: 2rem 2.5rem;
-		border-radius: var(--radius-lg);
-		overflow-x: auto;
-		font-size: 0.82rem;
-		line-height: 1.5;
-		width: 100%;
-		max-width: 620px;
-		box-shadow: var(--shadow-md);
-	}
-
-	.arch-diagram code {
-		color: inherit;
-		background: none;
-	}
-
-	.arch-labels {
+	.arch-row {
 		display: flex;
-		gap: 2.5rem;
-		flex-wrap: wrap;
 		justify-content: center;
+		width: 100%;
 	}
 
-	.arch-label {
+	.arch-row-three {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 1rem;
+		width: 100%;
+	}
+
+	.arch-box {
 		display: flex;
-		align-items: flex-start;
-		gap: 0.6rem;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding: 1.25rem 1.5rem;
+		border-radius: 12px;
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+		transition: transform 0.2s, box-shadow 0.2s;
 	}
 
-	.arch-dot {
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-		margin-top: 5px;
-		flex-shrink: 0;
+	.arch-box:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 	}
 
-	.arch-dot-web {
-		background: var(--color-primary);
+	.arch-box-icon {
+		font-size: 1.5rem;
+		margin-bottom: 0.375rem;
+		line-height: 1;
 	}
 
-	.arch-dot-cli {
-		background: var(--color-success);
-	}
-
-	.arch-dot-mcp {
-		background: var(--color-warning);
-	}
-
-	.arch-label strong {
-		display: block;
-		font-size: 0.9rem;
+	.arch-box strong {
+		font-size: 0.9375rem;
 		color: var(--color-heading);
+		margin-bottom: 0.25rem;
 	}
 
-	.arch-label span {
-		font-size: 0.8rem;
+	.arch-box span {
+		font-size: 0.75rem;
 		color: var(--color-text-muted);
+		line-height: 1.4;
+	}
+
+	.arch-api {
+		border-color: rgba(239, 68, 68, 0.3);
+		background: linear-gradient(180deg, rgba(239, 68, 68, 0.04) 0%, transparent 100%);
+		max-width: 320px;
+	}
+
+	.arch-api .arch-box-icon { color: #ef4444; }
+
+	.arch-core {
+		border-color: rgba(139, 92, 246, 0.3);
+		background: linear-gradient(180deg, rgba(139, 92, 246, 0.06) 0%, transparent 100%);
+		max-width: 400px;
+	}
+
+	.arch-core .arch-box-icon { color: var(--color-primary); }
+
+	.arch-web {
+		border-color: rgba(139, 92, 246, 0.25);
+	}
+
+	.arch-web .arch-box-icon { color: var(--color-primary); }
+
+	.arch-cli {
+		border-color: rgba(16, 185, 129, 0.25);
+	}
+
+	.arch-cli .arch-box-icon {
+		color: var(--color-success);
+		font-family: 'JetBrains Mono', monospace;
+		font-weight: 700;
+		font-size: 1.25rem;
+	}
+
+	.arch-mcp {
+		border-color: rgba(245, 158, 11, 0.25);
+	}
+
+	.arch-mcp .arch-box-icon { color: var(--color-warning); }
+
+	/* Connectors */
+	.arch-connector {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 40px;
+	}
+
+	.arch-line {
+		width: 2px;
+		flex: 1;
+		background: var(--color-border);
+	}
+
+	.arch-connector-fan {
+		height: 48px;
+		position: relative;
+		width: 100%;
+		max-width: 720px;
+	}
+
+	.arch-connector-fan .arch-line {
+		position: absolute;
+		left: 50%;
+		top: 0;
+		height: 20px;
+	}
+
+	.arch-fan {
+		position: absolute;
+		top: 20px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		justify-content: space-around;
+		padding: 0 15%;
+	}
+
+	.arch-fan-line {
+		width: 2px;
+		height: 100%;
+		background: var(--color-border);
+	}
+
+	@media (max-width: 600px) {
+		.arch-row-three {
+			grid-template-columns: 1fr;
+			gap: 0.75rem;
+		}
+
+		.arch-connector-fan {
+			height: 32px;
+		}
+
+		.arch-fan { display: none; }
+
+		.arch-connector-fan .arch-line {
+			height: 100%;
+		}
 	}
 
 	/* ---- Getting Started Steps ---- */
