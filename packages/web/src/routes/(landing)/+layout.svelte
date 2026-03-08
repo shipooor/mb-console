@@ -45,7 +45,7 @@
 		</div>
 	</div>
 	<div class="footer-bottom">
-		<p>Built for Solana Blitz Hackathon 2026</p>
+		<p>Built for <a href="https://hackathon.magicblock.app/" target="_blank" rel="noopener">Solana Blitz Hackathon 2026</a></p>
 		<p>made with <span class="heart">♥</span> by shipooor — <a href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">Twitter</a></p>
 	</div>
 </footer>
