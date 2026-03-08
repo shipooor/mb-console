@@ -304,23 +304,31 @@ export function createErNamespace(
           const region = await resolveProjectRegion(options.project);
           const erConn = conn.erConnections[region] ?? conn.routerConnection;
 
-          const ix = createCommitInstruction(
-            conn.signer.publicKey,
-            [accountPk],
-          );
+          // Verify the account exists on the ER before attempting commit
+          const erAccountInfo = await erConn.getAccountInfo(accountPk);
+          if (!erAccountInfo) {
+            console.debug(
+              `[mb-console] Account ${options.account} not found on ER, using simulated mode`,
+            );
+          } else {
+            const ix = createCommitInstruction(
+              conn.signer.publicKey,
+              [accountPk],
+            );
 
-          const tx = new Transaction().add(ix);
-          tx.feePayer = conn.signer.publicKey;
-          tx.recentBlockhash = (
-            await erConn.getLatestBlockhash()
-          ).blockhash;
+            const tx = new Transaction().add(ix);
+            tx.feePayer = conn.signer.publicKey;
+            tx.recentBlockhash = (
+              await erConn.getLatestBlockhash()
+            ).blockhash;
 
-          const signed = await conn.signer.signTransaction(tx);
-          const signature = await erConn.sendRawTransaction(signed.serialize());
+            const signed = await conn.signer.signTransaction(tx);
+            const signature = await erConn.sendRawTransaction(signed.serialize());
 
-          const slot = (await erConn.getSlot()) ?? Math.floor(Date.now() / 400);
+            const slot = (await erConn.getSlot()) ?? Math.floor(Date.now() / 400);
 
-          return { signature, slot, simulated: false };
+            return { signature, slot, simulated: false };
+          }
         } catch (err) {
           console.warn(
             `[mb-console] Real commit failed, using simulated mode: ${

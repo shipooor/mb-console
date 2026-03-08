@@ -99,11 +99,6 @@ export function createCranksNamespace(
 
           const accountPk = new PublicKey(options.account);
 
-          const ix = createCommitInstruction(
-            conn.signer.publicKey,
-            [accountPk],
-          );
-
           // Resolve ER connection for the commit
           const region = resolveProjectRegion
             ? await resolveProjectRegion(options.project)
@@ -112,19 +107,34 @@ export function createCranksNamespace(
             ? (conn.erConnections[region] ?? conn.routerConnection)
             : conn.routerConnection;
 
-          const tx = new Transaction().add(ix);
-          tx.feePayer = conn.signer.publicKey;
+          // Verify the account actually exists on the ER before attempting commit.
+          // If the account was only "delegated" in simulated mode, it won't exist
+          // on the ER and the commit would fail with "owner not allowed".
+          const erAccountInfo = await erConn.getAccountInfo(accountPk);
+          if (!erAccountInfo) {
+            console.debug(
+              `[mb-console] Account ${options.account} not found on ER, using simulated mode`,
+            );
+          } else {
+            const ix = createCommitInstruction(
+              conn.signer.publicKey,
+              [accountPk],
+            );
 
-          // Commit is an ER operation (not base chain)
-          tx.recentBlockhash = (
-            await erConn.getLatestBlockhash()
-          ).blockhash;
+            const tx = new Transaction().add(ix);
+            tx.feePayer = conn.signer.publicKey;
 
-          const signed = await conn.signer.signTransaction(tx);
-          commitSignature = await erConn.sendRawTransaction(
-            signed.serialize(),
-          );
-          simulated = false;
+            // Commit is an ER operation (not base chain)
+            tx.recentBlockhash = (
+              await erConn.getLatestBlockhash()
+            ).blockhash;
+
+            const signed = await conn.signer.signTransaction(tx);
+            commitSignature = await erConn.sendRawTransaction(
+              signed.serialize(),
+            );
+            simulated = false;
+          }
         } catch (err) {
           console.debug(
             `[mb-console] Real crank commit failed, using simulated mode: ${
