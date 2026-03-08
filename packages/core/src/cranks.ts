@@ -4,6 +4,7 @@ import type {
   Project,
   Crank,
   CrankCreateOptions,
+  Region,
 } from './types.js';
 import type { CranksNamespace } from './client.js';
 import type { BlockchainConnection } from './connection.js';
@@ -62,6 +63,7 @@ export function createCranksNamespace(
   storage: Storage,
   _network: Network,
   getConnection?: () => BlockchainConnection | undefined,
+  resolveProjectRegion?: (project: string) => Promise<Region>,
 ): CranksNamespace {
   // Helper: read the crank index for a project
   async function getCrankIndex(project: string): Promise<string[]> {
@@ -102,16 +104,24 @@ export function createCranksNamespace(
             [accountPk],
           );
 
+          // Resolve ER connection for the commit
+          const region = resolveProjectRegion
+            ? await resolveProjectRegion(options.project)
+            : undefined;
+          const erConn = region
+            ? (conn.erConnections[region] ?? conn.routerConnection)
+            : conn.routerConnection;
+
           const tx = new Transaction().add(ix);
           tx.feePayer = conn.signer.publicKey;
 
-          // Commit is a base chain operation
+          // Commit is an ER operation (not base chain)
           tx.recentBlockhash = (
-            await conn.baseConnection.getLatestBlockhash()
+            await erConn.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          commitSignature = await conn.baseConnection.sendRawTransaction(
+          commitSignature = await erConn.sendRawTransaction(
             signed.serialize(),
           );
           simulated = false;
