@@ -93,6 +93,19 @@ async function fetchBalance(address: string): Promise<void> {
 	}
 }
 
+/**
+ * Establish read-only blockchain connection for queries (status, diff, oracle).
+ * Called on initial load and after wallet disconnect.
+ */
+function restoreReadOnly(): void {
+	const client = get(consoleClient);
+	client.connectReadOnly()
+		.then(() => clientVersion.update((v) => v + 1))
+		.catch(() => {
+			// Non-critical: dashboard falls back to simulated mode
+		});
+}
+
 // ---------------------------------------------------------------------------
 // Actions
 // ---------------------------------------------------------------------------
@@ -151,6 +164,7 @@ async function disconnect(): Promise<void> {
 
 	const client = get(consoleClient);
 	client.disconnect();
+	restoreReadOnly();
 
 	wallet.set({ connecting: false, address: null, balance: null, error: null });
 	clientVersion.update((v) => v + 1);
@@ -159,6 +173,7 @@ async function disconnect(): Promise<void> {
 function handlePhantomDisconnect(): void {
 	const client = get(consoleClient);
 	client.disconnect();
+	restoreReadOnly();
 	wallet.set({ connecting: false, address: null, balance: null, error: null });
 	clientVersion.update((v) => v + 1);
 }
@@ -218,6 +233,7 @@ async function eagerConnect(): Promise<void> {
 
 // Auto-reconnect on page load
 if (browser) {
+	restoreReadOnly();
 	eagerConnect();
 }
 

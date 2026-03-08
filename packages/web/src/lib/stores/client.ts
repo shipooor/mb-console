@@ -7,10 +7,7 @@ const client = createClient({
 	storage: new BrowserStorage(),
 });
 
-// Web dashboard runs in simulated mode.
-// connectReadOnly() is not called here because the MagicBlock SDK
-// and @solana/web3.js Connection classes use Node.js APIs that are
-// not available in the browser. Real blockchain queries will be
-// enabled when a browser-compatible wallet adapter is integrated.
+// Read-only blockchain connection is established in wallet.ts on browser load.
+// When a wallet connects, it upgrades to full read+write mode.
 
 export const consoleClient = writable<ConsoleClient>(client);
