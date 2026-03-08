@@ -16,6 +16,7 @@
 		</div>
 		<div class="nav-links">
 			<a href="/docs">Docs</a>
+			<a href="/dashboard">Dashboard</a>
 			<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
 			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener" class="nav-badge">npm</a>
 		</div>
