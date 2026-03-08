@@ -1,0 +1,103 @@
+/* Prism.js syntax highlighting theme — MagicBlock Console (dark) */
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: var(--color-text-muted);
+	font-style: italic;
+}
+
+.token.punctuation {
+	color: #9CA3AF;
+}
+
+.token.namespace {
+	opacity: 0.8;
+}
+
+.token.property,
+.token.tag-id,
+.token.selector,
+.token.atrule-id {
+	color: #E2E8F0;
+}
+
+.token.attr-name {
+	color: var(--color-accent-secondary);
+}
+
+.token.keyword,
+.token.tag,
+.token.operator,
+.token.important {
+	color: var(--color-primary);
+}
+
+.token.important {
+	font-weight: 600;
+}
+
+.token.string,
+.token.attr-value,
+.token.regex,
+.token.template-string {
+	color: var(--color-success);
+}
+
+.token.number,
+.token.boolean,
+.token.constant {
+	color: #FBBF24;
+}
+
+.token.function,
+.token.function-variable {
+	color: var(--color-accent-secondary);
+}
+
+.token.class-name,
+.token.builtin,
+.token.maybe-class-name {
+	color: #A78BFA;
+}
+
+.token.variable {
+	color: #E2E8F0;
+}
+
+.token.parameter {
+	color: var(--color-text);
+}
+
+.token.interpolation {
+	color: var(--color-primary);
+}
+
+.token.symbol,
+.token.deleted {
+	color: var(--color-danger);
+}
+
+.token.inserted {
+	color: var(--color-success);
+}
+
+.token.changed {
+	color: var(--color-warning);
+}
+
+.token.decorator,
+.token.annotation {
+	color: #A78BFA;
+}
+
+.token.plain-text {
+	color: var(--color-pre-text);
+}
+
+/* Selection highlight inside code blocks */
+pre[class*="language-"] ::selection,
+code[class*="language-"] ::selection {
+	background: rgba(6, 182, 212, 0.2);
+}

@@ -1,6 +1,90 @@
 <script>
+	import { onMount } from 'svelte';
+
 	/** @type {{ title?: string, description?: string, children?: import('svelte').Snippet }} */
 	let { title = '', description = '', children } = $props();
+
+	const ICON_CLIPBOARD = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
+	const ICON_CHECK = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+	onMount(() => {
+		/** @type {Array<{ btn: HTMLButtonElement, handler: () => void }>} */
+		const listeners = [];
+
+		const preBlocks = document.querySelectorAll('.docs-content pre[class*="language-"]');
+
+		preBlocks.forEach((pre) => {
+			// Extract language name from class (e.g. "language-typescript" -> "typescript")
+			const langMatch = pre.className.match(/language-(\w+)/);
+			if (langMatch) {
+				pre.setAttribute('data-language', langMatch[1]);
+			}
+
+			// Create copy button
+			const btn = document.createElement('button');
+			btn.className = 'copy-btn';
+			btn.type = 'button';
+			btn.setAttribute('aria-label', 'Copy code');
+			btn.innerHTML = ICON_CLIPBOARD;
+
+			/** @type {number | undefined} */
+			let resetTimeout;
+
+			const handleClick = () => {
+				const code = pre.textContent || '';
+
+				const onSuccess = () => {
+					btn.innerHTML = ICON_CHECK;
+					btn.classList.add('copied');
+					clearTimeout(resetTimeout);
+					resetTimeout = window.setTimeout(() => {
+						btn.innerHTML = ICON_CLIPBOARD;
+						btn.classList.remove('copied');
+					}, 2000);
+				};
+
+				if (navigator.clipboard && window.isSecureContext) {
+					navigator.clipboard.writeText(code).then(onSuccess).catch(() => {
+						fallbackCopy(code, onSuccess);
+					});
+				} else {
+					fallbackCopy(code, onSuccess);
+				}
+			};
+
+			btn.addEventListener('click', handleClick);
+			listeners.push({ btn, handler: handleClick });
+			pre.appendChild(btn);
+		});
+
+		return () => {
+			listeners.forEach(({ btn, handler }) => {
+				btn.removeEventListener('click', handler);
+			});
+		};
+	});
+
+	/**
+	 * Fallback copy using a temporary textarea for older browsers.
+	 * @param {string} text
+	 * @param {() => void} onSuccess
+	 */
+	function fallbackCopy(text, onSuccess) {
+		const textarea = document.createElement('textarea');
+		textarea.value = text;
+		textarea.style.position = 'fixed';
+		textarea.style.left = '-9999px';
+		textarea.style.opacity = '0';
+		document.body.appendChild(textarea);
+		textarea.select();
+		try {
+			document.execCommand('copy');
+			onSuccess();
+		} catch {
+			// Silently fail — no user-facing error for copy
+		}
+		document.body.removeChild(textarea);
+	}
 </script>
 
 <svelte:head>
@@ -70,6 +154,7 @@
 	}
 
 	.docs-content :global(pre) {
+		position: relative;
 		background: var(--color-pre-bg);
 		color: var(--color-pre-text);
 		padding: 1.25rem;
@@ -80,10 +165,60 @@
 		border: 1px solid var(--color-border);
 	}
 
+	.docs-content :global(pre[data-language]) {
+		padding-top: 2.5rem;
+	}
+
+	.docs-content :global(pre[data-language])::before {
+		content: attr(data-language);
+		position: absolute;
+		top: 8px;
+		left: 12px;
+		font-size: 0.7rem;
+		font-family: 'Inter', system-ui, sans-serif;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-text-muted);
+		opacity: 0.6;
+	}
+
 	.docs-content :global(pre code) {
 		background: none;
 		padding: 0;
 		font-size: 0.85rem;
+	}
+
+	.docs-content :global(.copy-btn) {
+		position: absolute;
+		top: 8px;
+		right: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		border: none;
+		border-radius: 6px;
+		background: transparent;
+		color: var(--color-text-muted);
+		cursor: pointer;
+		opacity: 0;
+		transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+	}
+
+	.docs-content :global(pre:hover .copy-btn) {
+		opacity: 1;
+	}
+
+	.docs-content :global(.copy-btn:hover) {
+		background: rgba(6, 182, 212, 0.15);
+		color: var(--color-primary);
+	}
+
+	.docs-content :global(.copy-btn.copied) {
+		opacity: 1;
+		color: var(--color-success);
 	}
 
 	.docs-content :global(table) {
