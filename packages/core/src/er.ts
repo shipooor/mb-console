@@ -1,9 +1,3 @@
-import { PublicKey, Transaction } from '@solana/web3.js';
-import {
-  createDelegateInstruction,
-  createCommitInstruction,
-  createCommitAndUndelegateInstruction,
-} from '@magicblock-labs/ephemeral-rollups-sdk';
 import type { Storage } from './storage.js';
 import type {
   CommitOptions,
@@ -163,6 +157,11 @@ export function createErNamespace(
       // Real blockchain path
       if (conn?.signer && options.ownerProgram) {
         try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { createDelegateInstruction } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
           const accountPk = new PublicKey(options.account);
           const ownerProgramPk = new PublicKey(options.ownerProgram);
           const validatorPk = new PublicKey(validatorPubkey);
@@ -233,6 +232,11 @@ export function createErNamespace(
       // Real blockchain: commit + undelegate
       if (conn?.signer) {
         try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { createCommitAndUndelegateInstruction } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
           const accountPk = new PublicKey(options.account);
 
           // Determine which ER connection to use for the commit+undelegate
@@ -290,6 +294,11 @@ export function createErNamespace(
       // Real blockchain: schedule commit on the ER
       if (conn?.signer) {
         try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { createCommitInstruction } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
           const accountPk = new PublicKey(options.account);
           const region = await resolveProjectRegion(options.project);
           const erConn = conn.erConnections[region] ?? conn.routerConnection;
@@ -334,6 +343,8 @@ export function createErNamespace(
       // Real blockchain: check if the account is owned by the Delegation Program
       if (conn) {
         try {
+          const { PublicKey } = await import('@solana/web3.js');
+
           const accountPk = new PublicKey(account);
           const accountInfo = await conn.baseConnection.getAccountInfo(accountPk);
 
@@ -405,6 +416,8 @@ export function createErNamespace(
       // Real blockchain: compare base layer vs ER account data
       if (conn) {
         try {
+          const { PublicKey } = await import('@solana/web3.js');
+
           // Check local storage for delegation record to know which ER to query
           const data = await storage.get(delegationKey(account));
           const accountPk = new PublicKey(account);
