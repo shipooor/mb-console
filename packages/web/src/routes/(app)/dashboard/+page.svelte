@@ -256,8 +256,8 @@
 		width: 48px;
 		height: 48px;
 		border-radius: 12px;
-		background: rgba(5, 150, 105, 0.1);
-		color: var(--color-primary, #8b5cf6);
+		background: rgba(6, 182, 212, 0.12);
+		color: var(--color-primary);
 		font-size: 1.25rem;
 		font-weight: 700;
 		margin-bottom: 1rem;
@@ -266,7 +266,7 @@
 	.empty-title {
 		font-size: 1.125rem;
 		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		margin: 0 0 0.5rem;
 	}
 
@@ -282,7 +282,7 @@
 	.form-title {
 		font-size: 1.125rem;
 		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		margin: 0 0 1rem;
 	}
 
@@ -297,12 +297,12 @@
 		align-items: center;
 		gap: 0.375rem;
 		font-size: 0.875rem;
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 		cursor: pointer;
 	}
 
 	.checkbox-label input[type='checkbox'] {
-		accent-color: var(--color-primary, #8b5cf6);
+		accent-color: var(--color-primary);
 	}
 
 	.form-actions {
@@ -314,9 +314,9 @@
 
 	/* Confirmation inline alert */
 	.alert-confirm {
-		background: #fffbeb;
-		color: #92400e;
-		border: 1px solid #fde68a;
+		background: rgba(245, 158, 11, 0.1);
+		color: #FBBF24;
+		border: 1px solid rgba(245, 158, 11, 0.3);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -351,7 +351,7 @@
 	.project-name {
 		font-size: 1rem;
 		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		margin: 0;
 	}
 
@@ -378,11 +378,11 @@
 		align-items: center;
 		justify-content: space-between;
 		padding-top: 0.5rem;
-		border-top: 1px solid var(--color-border, #e2e8f0);
+		border-top: 1px solid var(--color-border);
 	}
 
 	.project-date {
 		font-size: 0.75rem;
-		color: var(--color-text-muted, #94a3b8);
+		color: var(--color-text-muted);
 	}
 </style>

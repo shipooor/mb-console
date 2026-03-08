@@ -322,7 +322,7 @@
 	.form-title {
 		font-size: 1rem;
 		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		margin: 0 0 0.75rem;
 	}
 
@@ -347,27 +347,27 @@
 	.form-hint {
 		display: block;
 		font-size: 0.75rem;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		margin-top: 0.25rem;
 	}
 
 	.btn-sm {
-		background: var(--color-bg, #f1f5f9);
-		color: var(--color-text, #1a1a2e);
-		border: 1px solid var(--color-border, #e2e8f0);
+		background: var(--color-bg);
+		color: var(--color-text);
+		border: 1px solid var(--color-border);
 	}
 
 	.btn-sm:hover {
-		background: var(--color-border, #e2e8f0);
+		background: var(--color-border);
 	}
 
 	.btn-danger-sm {
-		color: #ef4444;
-		border-color: #fecaca;
+		color: #F87171;
+		border-color: rgba(239, 68, 68, 0.3);
 	}
 
 	.btn-danger-sm:hover {
-		background: #fef2f2;
+		background: rgba(239, 68, 68, 0.1);
 	}
 
 	.table-wrap {
@@ -375,8 +375,8 @@
 	}
 
 	.data-table {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: 8px;
 		overflow: hidden;
 	}
@@ -387,7 +387,7 @@
 	}
 
 	.data-table th {
-		background: var(--color-bg, #f8fafc);
+		background: var(--color-bg);
 	}
 
 	.action-btns {
@@ -424,12 +424,12 @@
 		padding: 0.125rem 0.5rem;
 		border-radius: 9999px;
 		background: rgba(16, 185, 129, 0.1);
-		color: #10b981;
+		color: #34D399;
 	}
 
 	.diff-status.different {
 		background: rgba(245, 158, 11, 0.1);
-		color: #f59e0b;
+		color: #FBBF24;
 	}
 
 	.diff-panels {
@@ -441,15 +441,15 @@
 	.diff-panel-label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 		margin-bottom: 0.375rem;
 	}
 
 	.diff-content {
-		background: var(--color-pre-bg, #0f172a);
-		color: var(--color-pre-text, #e2e8f0);
+		background: var(--color-pre-bg);
+		color: var(--color-pre-text);
 		padding: 0.75rem;
 		border-radius: 6px;
 		font-family: 'JetBrains Mono', monospace;

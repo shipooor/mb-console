@@ -262,14 +262,14 @@
 		display: flex;
 		gap: 0;
 		margin-bottom: 1.25rem;
-		border-bottom: 1px solid var(--color-border, #e2e8f0);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.tab {
 		padding: 0.5rem 1rem;
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		background: none;
 		border: none;
 		border-bottom: 2px solid transparent;
@@ -279,12 +279,12 @@
 	}
 
 	.tab:hover {
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 	}
 
 	.tab.active {
-		color: var(--color-primary, #8b5cf6);
-		border-bottom-color: var(--color-primary, #8b5cf6);
+		color: var(--color-primary);
+		border-bottom-color: var(--color-primary);
 	}
 
 	.privacy-form {
@@ -298,7 +298,7 @@
 
 	.balance-hint {
 		font-size: 0.75rem;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		margin-top: 0.25rem;
 	}
 
@@ -317,9 +317,9 @@
 		padding: 0.25rem 0.625rem;
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--color-primary, #8b5cf6);
-		background: var(--color-primary-alpha, rgba(5, 150, 105, 0.1));
-		border: 1px solid var(--color-primary, #8b5cf6);
+		color: var(--color-primary);
+		background: var(--color-accent-dim);
+		border: 1px solid var(--color-primary);
 		border-radius: 999px;
 		cursor: pointer;
 		white-space: nowrap;
@@ -327,15 +327,15 @@
 	}
 
 	.btn-max:hover {
-		background: var(--color-primary, #8b5cf6);
+		background: var(--color-primary);
 		color: #fff;
 	}
 
 	.tab-note {
 		font-size: 0.8rem;
-		color: var(--color-text-muted, #64748b);
-		background: var(--color-surface-alt, #f8fafc);
-		border: 1px solid var(--color-border, #e2e8f0);
+		color: var(--color-text-muted);
+		background: var(--color-surface-alt);
+		border: 1px solid var(--color-border);
 		border-radius: 6px;
 		padding: 0.625rem 0.75rem;
 		margin-bottom: 0.75rem;

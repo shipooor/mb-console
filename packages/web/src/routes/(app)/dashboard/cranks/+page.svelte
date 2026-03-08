@@ -273,7 +273,7 @@
 	.form-title {
 		font-size: 1rem;
 		font-weight: 600;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		margin: 0 0 1rem;
 	}
 
@@ -290,14 +290,14 @@
 	}
 
 	.data-table {
-		background: var(--color-surface, #ffffff);
-		border: 1px solid var(--color-border, #e2e8f0);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
 		border-radius: 8px;
 		overflow: hidden;
 	}
 
 	.data-table th {
-		background: var(--color-bg, #f8fafc);
+		background: var(--color-bg);
 	}
 
 	.mono {
@@ -306,16 +306,16 @@
 
 	.btn-danger-sm {
 		background: transparent;
-		color: #ef4444;
-		border: 1px solid #fecaca;
+		color: #F87171;
+		border: 1px solid rgba(239, 68, 68, 0.3);
 	}
 
 	.btn-danger-sm:hover {
-		background: #fef2f2;
+		background: rgba(239, 68, 68, 0.1);
 	}
 
 	.text-muted {
-		color: var(--color-text-muted, #94a3b8);
+		color: var(--color-text-muted);
 	}
 
 	.status-badge {
@@ -329,7 +329,7 @@
 
 	.status-running {
 		background: rgba(16, 185, 129, 0.1);
-		color: #10b981;
+		color: #34D399;
 	}
 
 	.status-completed {

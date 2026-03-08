@@ -291,7 +291,7 @@
 
 	.total-row td {
 		font-weight: 700;
-		border-top: 2px solid var(--color-border, #e2e8f0);
+		border-top: 2px solid var(--color-border);
 	}
 
 	.log-type {
@@ -300,8 +300,8 @@
 		border-radius: 4px;
 		font-size: 0.6875rem;
 		font-weight: 600;
-		background: var(--color-bg, #f1f5f9);
-		color: var(--color-text-muted, #64748b);
+		background: var(--color-bg);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 	}
 
@@ -330,24 +330,24 @@
 	}
 
 	.health-dot.online {
-		background: #10b981;
-		box-shadow: 0 0 4px rgba(16, 185, 129, 0.4);
+		background: #06B6D4;
+		box-shadow: 0 0 4px rgba(6, 182, 212, 0.4);
 	}
 
 	.health-dot.offline {
-		background: #ef4444;
+		background: #F87171;
 		box-shadow: 0 0 4px rgba(239, 68, 68, 0.4);
 	}
 
 	.health-name {
 		flex: 1;
 		font-size: 0.875rem;
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 	}
 
 	.health-latency {
 		font-size: 0.8125rem;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		min-width: 60px;
 		text-align: right;
 	}

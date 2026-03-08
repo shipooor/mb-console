@@ -193,14 +193,14 @@
 	.result-label {
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.result-value {
 		font-size: 0.875rem;
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 	}
 
 	.wrap {
@@ -210,7 +210,7 @@
 	.info-note code {
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.75rem;
-		background: var(--color-border, #e2e8f0);
+		background: var(--color-border);
 		padding: 0.125rem 0.375rem;
 		border-radius: 3px;
 	}

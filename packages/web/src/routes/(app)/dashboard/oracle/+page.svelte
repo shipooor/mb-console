@@ -229,13 +229,13 @@
 	.price-feed {
 		font-size: 0.875rem;
 		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 	}
 
 	.price-value {
 		font-size: 2rem;
 		font-weight: 700;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 		font-family: 'JetBrains Mono', monospace;
 	}
 
@@ -244,7 +244,7 @@
 		justify-content: center;
 		gap: 2rem;
 		padding-top: 1rem;
-		border-top: 1px solid var(--color-border, #e2e8f0);
+		border-top: 1px solid var(--color-border);
 	}
 
 	.detail-item {
@@ -257,14 +257,14 @@
 	.detail-label {
 		font-size: 0.6875rem;
 		font-weight: 600;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
 	}
 
 	.detail-value {
 		font-size: 0.875rem;
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 	}
 
 	/* Source badges inherited from dashboard.css */

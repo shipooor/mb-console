@@ -98,18 +98,19 @@
 	.app-shell {
 		display: flex;
 		min-height: 100vh;
-		background: var(--color-bg, #f8fafc);
+		background: var(--color-bg);
 	}
 
 	/* Sidebar */
 	.sidebar {
 		width: 220px;
 		min-width: 220px;
-		background: var(--color-sidebar-bg, #0f172a);
-		color: var(--color-sidebar-text, #cbd5e1);
+		background: var(--color-surface);
+		color: var(--color-text);
 		display: flex;
 		flex-direction: column;
 		padding: 0;
+		border-right: 1px solid var(--color-border);
 	}
 
 	.sidebar-brand {
@@ -117,7 +118,7 @@
 		align-items: center;
 		gap: 0.625rem;
 		padding: 1.25rem 1rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.brand-icon {
@@ -126,8 +127,8 @@
 		justify-content: center;
 		width: 32px;
 		height: 32px;
-		background: var(--color-primary-bright, #14f195);
-		color: #0c1222;
+		background: var(--color-primary);
+		color: #0B0F1A;
 		border-radius: 6px;
 		font-size: 0.75rem;
 		font-weight: 700;
@@ -137,7 +138,7 @@
 	.brand-text {
 		font-size: 0.9375rem;
 		font-weight: 600;
-		color: #f1f5f9;
+		color: var(--color-heading);
 	}
 
 	.sidebar-nav {
@@ -155,20 +156,20 @@
 		padding: 0.5rem 0.75rem;
 		border-radius: 6px;
 		text-decoration: none;
-		color: var(--color-sidebar-text, #94a3b8);
+		color: var(--color-text-muted);
 		font-size: 0.875rem;
 		font-weight: 500;
 		transition: background 0.15s, color 0.15s;
 	}
 
 	.nav-item:hover {
-		background: rgba(255, 255, 255, 0.06);
-		color: #e2e8f0;
+		background: rgba(6, 182, 212, 0.06);
+		color: var(--color-text);
 	}
 
 	.nav-item.active {
-		background: rgba(20, 241, 149, 0.15);
-		color: var(--color-primary-bright, #14f195);
+		background: rgba(6, 182, 212, 0.12);
+		color: var(--color-primary);
 	}
 
 	.nav-icon {
@@ -185,8 +186,8 @@
 	}
 
 	.nav-item.active .nav-icon {
-		background: rgba(20, 241, 149, 0.25);
-		color: var(--color-primary-bright, #14f195);
+		background: rgba(6, 182, 212, 0.2);
+		color: var(--color-primary);
 	}
 
 	.nav-label {
@@ -195,7 +196,7 @@
 
 	.sidebar-footer {
 		padding: 1rem;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		border-top: 1px solid var(--color-border);
 	}
 
 	.sidebar-links {
@@ -207,13 +208,13 @@
 
 	.sidebar-link {
 		font-size: 0.8rem;
-		color: #64748b;
+		color: var(--color-text-muted);
 		text-decoration: none;
 		transition: color 0.15s;
 	}
 
 	.sidebar-link:hover {
-		color: #e2e8f0;
+		color: var(--color-text);
 	}
 
 	.network-badge {
@@ -221,8 +222,8 @@
 		align-items: center;
 		padding: 0.25rem 0.625rem;
 		border-radius: 9999px;
-		background: rgba(16, 185, 129, 0.15);
-		color: #10b981;
+		background: rgba(6, 182, 212, 0.15);
+		color: var(--color-primary);
 		font-size: 0.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
@@ -242,15 +243,17 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 0 1.5rem;
-		height: 56px;
-		background: var(--color-navbar-bg, #0c1222);
-		border-bottom: 1px solid var(--color-navbar-border, #1e293b);
+		height: 48px;
+		background: rgba(11, 15, 26, 0.85);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.topbar-title {
 		font-size: 1rem;
 		font-weight: 600;
-		color: var(--color-navbar-text, #e2e8f0);
+		color: var(--color-heading);
 		margin: 0;
 	}
 
@@ -262,7 +265,7 @@
 
 	.wallet-error {
 		font-size: 0.75rem;
-		color: #ef4444;
+		color: #F87171;
 		max-width: 240px;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -275,33 +278,33 @@
 		gap: 0.5rem;
 		padding: 0.375rem 0.75rem;
 		border-radius: 9999px;
-		background: rgba(255, 255, 255, 0.08);
-		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.05);
+		border: 1px solid var(--color-border);
 	}
 
 	.wallet-connected {
-		border-color: rgba(20, 241, 149, 0.3);
+		border-color: rgba(6, 182, 212, 0.3);
 	}
 
 	.wallet-dot {
 		width: 8px;
 		height: 8px;
 		border-radius: 50%;
-		background: #f59e0b;
+		background: var(--color-warning);
 	}
 
 	.wallet-dot-connected {
-		background: #10b981;
+		background: var(--color-primary);
 	}
 
 	.wallet-text {
 		font-size: 0.8125rem;
 		font-weight: 500;
-		color: rgba(226, 232, 240, 0.7);
+		color: var(--color-text-muted);
 	}
 
 	.wallet-connected .wallet-text {
-		color: #e2e8f0;
+		color: var(--color-text);
 		font-family: 'JetBrains Mono', monospace;
 		font-size: 0.75rem;
 	}
@@ -309,9 +312,9 @@
 	.wallet-balance {
 		font-size: 0.6875rem;
 		font-weight: 600;
-		color: #10b981;
+		color: var(--color-primary);
 		padding-left: 0.375rem;
-		border-left: 1px solid rgba(255, 255, 255, 0.15);
+		border-left: 1px solid var(--color-border);
 	}
 
 	.wallet-btn {
@@ -330,22 +333,22 @@
 	}
 
 	.wallet-btn-connect {
-		background: var(--color-primary-bright, #14f195);
-		color: #0c1222;
+		background: var(--color-primary);
+		color: #0B0F1A;
 	}
 
 	.wallet-btn-connect:hover:not(:disabled) {
-		background: var(--color-primary-bright-hover, #0ed886);
+		background: var(--color-primary-hover);
 	}
 
 	.wallet-btn-disconnect {
-		background: rgba(255, 255, 255, 0.08);
-		color: rgba(226, 232, 240, 0.7);
-		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.05);
+		color: var(--color-text-muted);
+		border: 1px solid var(--color-border);
 	}
 
 	.wallet-btn-disconnect:hover {
-		background: rgba(255, 255, 255, 0.15);
+		background: rgba(255, 255, 255, 0.1);
 	}
 
 	.content {

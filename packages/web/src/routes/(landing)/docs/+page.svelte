@@ -75,12 +75,12 @@
   h1 {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-heading, #0f0f23);
+    color: var(--color-heading);
   }
 
   .lead {
     font-size: 1.15rem;
-    color: var(--color-text-muted, #64748b);
+    color: var(--color-text-muted);
     margin-bottom: 2.5rem;
   }
 
@@ -93,7 +93,8 @@
     font-weight: 600;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border, #e2e8f0);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-heading);
   }
 
   .doc-cards {
@@ -105,8 +106,8 @@
   .doc-card {
     display: block;
     padding: 1.25rem;
-    background: var(--color-surface, #ffffff);
-    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     text-decoration: none;
     color: inherit;
@@ -114,20 +115,20 @@
   }
 
   .doc-card:hover {
-    border-color: var(--color-primary, #8b5cf6);
-    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: 0 2px 8px rgba(6, 182, 212, 0.12);
   }
 
   .doc-card h3 {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 0.375rem;
-    color: var(--color-heading, #0f0f23);
+    color: var(--color-heading);
   }
 
   .doc-card p {
     font-size: 0.875rem;
-    color: var(--color-text-muted, #64748b);
+    color: var(--color-text-muted);
     margin: 0;
     line-height: 1.5;
   }

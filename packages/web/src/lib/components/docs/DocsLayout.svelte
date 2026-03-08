@@ -28,14 +28,14 @@
 
 	.docs-content {
 		line-height: 1.7;
-		color: var(--color-text, #1a1a2e);
+		color: var(--color-text);
 	}
 
 	.docs-content :global(h1) {
 		font-size: 2rem;
 		font-weight: 700;
 		margin-bottom: 0.5rem;
-		color: var(--color-heading, #0f0f23);
+		color: var(--color-heading);
 	}
 
 	.docs-content :global(h2) {
@@ -44,7 +44,8 @@
 		margin-top: 2.5rem;
 		margin-bottom: 0.75rem;
 		padding-bottom: 0.5rem;
-		border-bottom: 1px solid var(--color-border, #e2e8f0);
+		border-bottom: 1px solid var(--color-border);
+		color: var(--color-heading);
 	}
 
 	.docs-content :global(h3) {
@@ -52,6 +53,7 @@
 		font-weight: 600;
 		margin-top: 2rem;
 		margin-bottom: 0.5rem;
+		color: var(--color-heading);
 	}
 
 	.docs-content :global(p) {
@@ -61,19 +63,21 @@
 	.docs-content :global(code) {
 		font-family: 'JetBrains Mono', 'Fira Code', monospace;
 		font-size: 0.875em;
-		background: var(--color-code-bg, #f1f5f9);
+		background: var(--color-code-bg);
 		padding: 0.15em 0.4em;
 		border-radius: 4px;
+		color: var(--color-text);
 	}
 
 	.docs-content :global(pre) {
-		background: var(--color-pre-bg, #0f172a);
-		color: var(--color-pre-text, #e2e8f0);
+		background: var(--color-pre-bg);
+		color: var(--color-pre-text);
 		padding: 1.25rem;
 		border-radius: 8px;
 		overflow-x: auto;
 		margin-bottom: 1.5rem;
 		line-height: 1.5;
+		border: 1px solid var(--color-border);
 	}
 
 	.docs-content :global(pre code) {
@@ -92,7 +96,7 @@
 	.docs-content :global(td) {
 		text-align: left;
 		padding: 0.625rem 1rem;
-		border-bottom: 1px solid var(--color-border, #e2e8f0);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.docs-content :global(th) {
@@ -100,14 +104,14 @@
 		font-size: 0.875rem;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 	}
 
 	.docs-content :global(blockquote) {
-		border-left: 3px solid var(--color-primary, #8b5cf6);
+		border-left: 3px solid var(--color-primary);
 		padding-left: 1rem;
 		margin: 1.5rem 0;
-		color: var(--color-text-muted, #64748b);
+		color: var(--color-text-muted);
 	}
 
 	.docs-content :global(ul),
@@ -121,7 +125,7 @@
 	}
 
 	.docs-content :global(a) {
-		color: var(--color-primary, #8b5cf6);
+		color: var(--color-primary);
 		text-decoration: none;
 	}
 
@@ -131,7 +135,7 @@
 
 	.docs-content :global(hr) {
 		border: none;
-		border-top: 1px solid var(--color-border, #e2e8f0);
+		border-top: 1px solid var(--color-border);
 		margin: 2rem 0;
 	}
 </style>

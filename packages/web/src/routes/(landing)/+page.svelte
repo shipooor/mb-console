@@ -159,11 +159,12 @@
 	<!-- NAV -->
 	<nav class="nav">
 		<div class="nav-brand">
-			<span class="dot"></span>
+			<span class="diamond">&#9670;</span>
 			MagicBlock Console
 		</div>
 		<div class="nav-links">
 			<a href="/docs">Docs</a>
+			<a href="/dashboard">Dashboard</a>
 			<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
 			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener" class="nav-badge">npm</a>
 		</div>
@@ -186,10 +187,7 @@
 		<div class="hero-terminal">
 			<div class="terminal">
 				<div class="terminal-bar">
-					<span class="terminal-dot r"></span>
-					<span class="terminal-dot y"></span>
-					<span class="terminal-dot g"></span>
-					<span class="terminal-title">mb-console</span>
+<span class="terminal-title">mb-console</span>
 				</div>
 				<div class="terminal-body">
 					{#each renderedLines as line}
@@ -224,9 +222,6 @@
 				<div class="way-code">
 					<div class="terminal">
 						<div class="terminal-bar">
-							<span class="terminal-dot r"></span>
-							<span class="terminal-dot y"></span>
-							<span class="terminal-dot g"></span>
 							<span class="terminal-title">terminal</span>
 						</div>
 						<div class="terminal-body">
@@ -255,11 +250,8 @@
 					<p>Connect your wallet, toggle features, monitor state. For when you want to see what's happening, not read JSON output.</p>
 				</div>
 				<div class="way-code">
-					<div class="terminal" style="border-color: var(--accent2);">
+					<div class="terminal">
 						<div class="terminal-bar">
-							<span class="terminal-dot r"></span>
-							<span class="terminal-dot y"></span>
-							<span class="terminal-dot g"></span>
 							<span class="terminal-title">mb-console.pages.dev/dashboard</span>
 						</div>
 						<div class="terminal-body">
@@ -290,11 +282,8 @@
 					<p>Drop this into Claude, Cursor, or any MCP client. Your AI manages infrastructure. Seriously.</p>
 				</div>
 				<div class="way-code">
-					<div class="terminal" style="border-color: #f59e0b;">
+					<div class="terminal">
 						<div class="terminal-bar">
-							<span class="terminal-dot r"></span>
-							<span class="terminal-dot y"></span>
-							<span class="terminal-dot g"></span>
 							<span class="terminal-title">claude_desktop_config.json</span>
 						</div>
 						<div class="terminal-body">
@@ -461,19 +450,19 @@
 <style>
 	/* ==================== SCOPED VARIABLES ==================== */
 	.landing {
-		--bg: #0c1222;
-		--bg-raised: #111a2e;
-		--bg-surface: #162036;
-		--bg-alt: #0a0f1a;
-		--text: #e2e8f0;
-		--text-muted: #64748b;
-		--text-dim: #475569;
-		--accent: #14f195;
-		--accent-dim: rgba(20, 241, 149, 0.15);
-		--accent2: #00d4ff;
-		--accent2-dim: rgba(0, 212, 255, 0.1);
-		--border: #1e293b;
-		--border-accent: #14f195;
+		--bg: #0B0F1A;
+		--bg-raised: #111827;
+		--bg-surface: #1F2937;
+		--bg-alt: #0D1117;
+		--text: #D1D5DB;
+		--text-muted: #6B7280;
+		--text-dim: #4B5563;
+		--accent: #06B6D4;
+		--accent-dim: rgba(6, 182, 212, 0.12);
+		--accent2: #93C5FD;
+		--accent2-dim: rgba(147, 197, 253, 0.1);
+		--border: #1F2937;
+		--border-accent: #06B6D4;
 		--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 		--font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
@@ -494,12 +483,12 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		background: rgba(12, 18, 34, 0.85);
+		background: rgba(11, 15, 26, 0.85);
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		border-bottom: 1px solid var(--border);
 		padding: 0 32px;
-		height: 56px;
+		height: 48px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -514,11 +503,9 @@
 		gap: 8px;
 	}
 
-	.nav-brand .dot {
-		width: 8px;
-		height: 8px;
-		background: var(--accent);
-		border-radius: 2px;
+	.nav-brand .diamond {
+		color: var(--accent);
+		font-size: 0.875rem;
 		display: inline-block;
 	}
 
@@ -543,7 +530,7 @@
 		font-size: 0.75rem;
 		font-weight: 600;
 		color: var(--accent);
-		border: 1px solid rgba(20, 241, 149, 0.3);
+		border: 1px solid rgba(6, 182, 212, 0.3);
 		padding: 2px 8px;
 		border-radius: 4px;
 		letter-spacing: 0.02em;
@@ -551,7 +538,7 @@
 
 	/* ==================== HERO ==================== */
 	.hero {
-		padding: 100px 32px 80px;
+		padding: 80px 32px 64px;
 		max-width: 1200px;
 		margin: 0 auto;
 		display: grid;
@@ -561,11 +548,12 @@
 	}
 
 	.hero-text h1 {
-		font-size: 4.5rem;
+		font-size: 3.5rem;
 		font-weight: 900;
-		line-height: 1.05;
+		line-height: 1.08;
 		letter-spacing: -0.04em;
 		margin-bottom: 24px;
+		color: #F9FAFB;
 	}
 
 	.hero-text h1 .highlight {
@@ -573,7 +561,7 @@
 	}
 
 	.hero-text .sub {
-		font-size: 1.25rem;
+		font-size: 1.125rem;
 		color: var(--text-muted);
 		line-height: 1.5;
 		max-width: 440px;
@@ -594,10 +582,10 @@
 
 	.hero-install code {
 		font-family: var(--font-mono);
-		font-size: 1rem;
+		font-size: 0.9375rem;
 		background: var(--bg-raised);
-		border: 2px solid var(--border-accent);
-		padding: 12px 20px;
+		border: 1px solid var(--border-accent);
+		padding: 10px 18px;
 		border-radius: 6px;
 		color: var(--accent);
 		user-select: all;
@@ -628,40 +616,33 @@
 		border-bottom-color: var(--accent2);
 	}
 
-	/* Terminal */
+	/* Terminal / Panel */
 	.terminal {
-		background: #0a0e18;
-		border: 2px solid var(--border-accent);
+		background: var(--bg);
+		border: 1px solid var(--border);
 		border-radius: 8px;
 		overflow: hidden;
 		font-family: var(--font-mono);
 		font-size: 0.8rem;
 		line-height: 1.7;
-		box-shadow: 0 0 60px rgba(20, 241, 149, 0.06);
+		transition: border-color 0.2s;
+	}
+
+	.terminal:hover {
+		border-color: rgba(6, 182, 212, 0.4);
 	}
 
 	.terminal-bar {
-		background: #111827;
-		padding: 10px 16px;
+		background: var(--bg-surface);
+		padding: 8px 16px;
 		display: flex;
 		align-items: center;
 		gap: 8px;
 		border-bottom: 1px solid var(--border);
 	}
 
-	.terminal-dot {
-		width: 10px;
-		height: 10px;
-		border-radius: 50%;
-	}
-
-	.terminal-dot.r { background: #ef4444; }
-	.terminal-dot.y { background: #eab308; }
-	.terminal-dot.g { background: #22c55e; }
-
 	.terminal-title {
-		margin-left: 8px;
-		color: var(--text-dim);
+		color: var(--text-muted);
 		font-size: 0.75rem;
 	}
 
@@ -688,7 +669,7 @@
 	}
 
 	.terminal-body .value {
-		color: #f59e0b;
+		color: #FBBF24;
 	}
 
 	.terminal-body .output {
@@ -696,7 +677,7 @@
 	}
 
 	.terminal-body .success {
-		color: var(--accent);
+		color: #34D399;
 	}
 
 	.terminal-body .key {
@@ -704,7 +685,7 @@
 	}
 
 	.terminal-body .str {
-		color: #f59e0b;
+		color: #FBBF24;
 	}
 
 	.terminal-body .num {
@@ -728,10 +709,10 @@
 
 	/* ==================== DIVIDER ==================== */
 	.divider {
-		height: 2px;
+		height: 1px;
 		background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
 		margin: 0;
-		opacity: 0.5;
+		opacity: 0.3;
 	}
 
 	/* ==================== THREE WAYS ==================== */
@@ -749,6 +730,7 @@
 		font-size: 2.5rem;
 		font-weight: 800;
 		letter-spacing: -0.03em;
+		color: #F9FAFB;
 	}
 
 	.ways-header h2 .accent {
@@ -768,7 +750,7 @@
 	}
 
 	.way:hover {
-		background: rgba(20, 241, 149, 0.02);
+		background: rgba(6, 182, 212, 0.02);
 	}
 
 	.way:nth-child(odd) {
@@ -776,7 +758,7 @@
 	}
 
 	.way:nth-child(odd):hover {
-		background: rgba(10, 15, 26, 0.9);
+		background: rgba(13, 17, 23, 0.9);
 	}
 
 	.way-inner {
@@ -790,7 +772,7 @@
 
 	.way-meta {
 		position: sticky;
-		top: 80px;
+		top: 72px;
 	}
 
 	.way-label {
@@ -807,19 +789,19 @@
 	.way-label.cli {
 		color: var(--accent);
 		background: var(--accent-dim);
-		border: 1px solid rgba(20, 241, 149, 0.25);
+		border: 1px solid rgba(6, 182, 212, 0.25);
 	}
 
 	.way-label.web {
 		color: var(--accent2);
 		background: var(--accent2-dim);
-		border: 1px solid rgba(0, 212, 255, 0.25);
+		border: 1px solid rgba(147, 197, 253, 0.25);
 	}
 
 	.way-label.mcp {
-		color: #f59e0b;
-		background: rgba(245, 158, 11, 0.1);
-		border: 1px solid rgba(245, 158, 11, 0.25);
+		color: #FBBF24;
+		background: rgba(251, 191, 36, 0.1);
+		border: 1px solid rgba(251, 191, 36, 0.25);
 	}
 
 	.way-meta h3 {
@@ -827,6 +809,7 @@
 		font-weight: 800;
 		letter-spacing: -0.02em;
 		margin-bottom: 12px;
+		color: #F9FAFB;
 	}
 
 	.way-meta p {
@@ -840,12 +823,12 @@
 	}
 
 	.way-code .terminal {
-		border-width: 2px;
+		border-width: 1px;
 	}
 
-	.way:nth-child(1) .way-code .terminal { border-color: var(--accent); }
-	.way:nth-child(2) .way-code .terminal { border-color: var(--accent2); }
-	.way:nth-child(3) .way-code .terminal { border-color: #f59e0b; }
+	.way:nth-child(1) .way-code .terminal { border-color: rgba(6, 182, 212, 0.4); }
+	.way:nth-child(2) .way-code .terminal { border-color: rgba(147, 197, 253, 0.4); }
+	.way:nth-child(3) .way-code .terminal { border-color: rgba(251, 191, 36, 0.4); }
 
 	/* ==================== FEATURES ==================== */
 	.features {
@@ -863,6 +846,7 @@
 		font-weight: 900;
 		letter-spacing: -0.03em;
 		margin-bottom: 12px;
+		color: #F9FAFB;
 	}
 
 	.features-header p {
@@ -921,8 +905,8 @@
 	}
 
 	.feature-tag.amber {
-		color: #f59e0b;
-		background: rgba(245, 158, 11, 0.1);
+		color: #FBBF24;
+		background: rgba(251, 191, 36, 0.1);
 	}
 
 	.feature-content h4 {
@@ -930,6 +914,7 @@
 		font-weight: 700;
 		letter-spacing: -0.01em;
 		margin-bottom: 4px;
+		color: #F9FAFB;
 	}
 
 	.feature-content p {
@@ -957,6 +942,7 @@
 		font-weight: 800;
 		letter-spacing: -0.03em;
 		margin-bottom: 8px;
+		color: #F9FAFB;
 	}
 
 	.install .tagline {
@@ -967,12 +953,12 @@
 
 	.install-cmd {
 		font-family: var(--font-mono);
-		font-size: 1.75rem;
+		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--accent);
 		background: var(--bg);
-		border: 3px solid var(--border-accent);
-		padding: 24px 40px;
+		border: 1px solid var(--border-accent);
+		padding: 20px 36px;
 		border-radius: 8px;
 		display: inline-block;
 		user-select: all;
@@ -983,7 +969,7 @@
 
 	.install-cmd:hover {
 		background: var(--accent-dim);
-		box-shadow: 0 0 40px rgba(20, 241, 149, 0.08);
+		box-shadow: 0 0 30px rgba(6, 182, 212, 0.08);
 	}
 
 	.install-after {
@@ -1021,6 +1007,7 @@
 		font-weight: 800;
 		letter-spacing: -0.03em;
 		margin-bottom: 48px;
+		color: #F9FAFB;
 	}
 
 	.arch-diagram {
@@ -1029,7 +1016,7 @@
 		line-height: 1.7;
 		color: var(--text-muted);
 		background: var(--bg-alt);
-		border: 2px solid var(--border);
+		border: 1px solid var(--border);
 		border-radius: 8px;
 		padding: 32px;
 		overflow-x: auto;
@@ -1047,7 +1034,7 @@
 	}
 
 	.arch-diagram .hl3 {
-		color: #f59e0b;
+		color: #FBBF24;
 		font-weight: 600;
 	}
 
@@ -1055,7 +1042,7 @@
 	.landing-footer {
 		border-top: 1px solid var(--border);
 		padding: 3rem 2rem 1.5rem;
-		background: var(--bg-alt);
+		background: var(--bg-raised);
 	}
 
 	.footer-content {
@@ -1070,7 +1057,7 @@
 		font-size: 0.9rem;
 		font-weight: 600;
 		margin-bottom: 0.75rem;
-		color: var(--text);
+		color: #F9FAFB;
 	}
 
 	.footer-section p {
@@ -1126,7 +1113,7 @@
 		}
 
 		.hero-text h1 {
-			font-size: 3rem;
+			font-size: 2.75rem;
 		}
 
 		.way-inner {
