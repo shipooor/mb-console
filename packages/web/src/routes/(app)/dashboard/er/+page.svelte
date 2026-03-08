@@ -11,6 +11,7 @@
 	let selectedProject = $state('');
 	let accounts = $state<DelegatedAccount[]>([]);
 	let newAccount = $state('');
+	let ownerProgram = $state('');
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 	let success = $state<string | null>(null);
@@ -68,17 +69,23 @@
 			error = 'Invalid Solana address (expected base58, 32-44 characters)';
 			return;
 		}
+		if (ownerProgram.trim() && !isValidPubkey(ownerProgram.trim())) {
+			error = 'Invalid owner program address (expected base58, 32-44 characters)';
+			return;
+		}
 		error = null;
 		success = null;
 		try {
 			const result = await client.er.delegate({
 				account: newAccount.trim(),
 				project: selectedProject,
+				ownerProgram: ownerProgram.trim() || undefined,
 			});
 			lastSimulated = result.simulated;
 			const badge = result.simulated ? ' (simulated)' : '';
 			success = `Delegated to ${result.validator}${badge}. Signature: ${result.signature.slice(0, 20)}...`;
 			newAccount = '';
+			ownerProgram = '';
 			await loadAccounts();
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
@@ -192,13 +199,28 @@
 
 		<div class="card delegate-form">
 			<h3 class="form-title">Delegate Account</h3>
-			<form class="inline-form" onsubmit={(e) => { e.preventDefault(); delegateAccount(); }}>
-				<input
-					class="form-input"
-					type="text"
-					bind:value={newAccount}
-					placeholder="Account address (e.g. DYw8jC...)"
-				/>
+			<form class="delegate-fields" onsubmit={(e) => { e.preventDefault(); delegateAccount(); }}>
+				<div class="form-group">
+					<label class="form-label" for="er-account">Account Address</label>
+					<input
+						id="er-account"
+						class="form-input"
+						type="text"
+						bind:value={newAccount}
+						placeholder="Account address (e.g. DYw8jC...)"
+					/>
+				</div>
+				<div class="form-group">
+					<label class="form-label" for="er-owner-program">Owner Program</label>
+					<input
+						id="er-owner-program"
+						class="form-input"
+						type="text"
+						bind:value={ownerProgram}
+						placeholder="Program that owns this account (e.g. game program)"
+					/>
+					<span class="form-hint">Required for live delegation. The Solana program that owns this account.</span>
+				</div>
 				<button type="submit" class="btn btn-primary">Delegate</button>
 			</form>
 		</div>
@@ -304,13 +326,25 @@
 		margin-bottom: 1.5rem;
 	}
 
-	.inline-form {
+	.delegate-fields {
 		display: flex;
-		gap: 0.5rem;
+		flex-direction: column;
+		gap: 0.75rem;
 	}
 
-	.inline-form .form-input {
-		flex: 1;
+	.delegate-fields .form-group {
+		margin-bottom: 0;
+	}
+
+	.delegate-fields .btn {
+		align-self: flex-start;
+	}
+
+	.form-hint {
+		display: block;
+		font-size: 0.75rem;
+		color: var(--color-text-muted, #64748b);
+		margin-top: 0.25rem;
 	}
 
 	.btn-sm {

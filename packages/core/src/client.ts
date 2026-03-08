@@ -11,6 +11,7 @@ import type {
   DelegatedAccount,
   DelegationResult,
   DelegationStatus,
+  EndpointHealth,
   LogEntry,
   Network,
   PriceFeed,
@@ -81,6 +82,7 @@ export interface MonitorNamespace {
   status(project: string): Promise<ProjectStatus>;
   costs(project: string, period?: string): Promise<CostBreakdown>;
   logs(project: string, limit?: number): Promise<LogEntry[]>;
+  health(): Promise<EndpointHealth[]>;
 }
 
 // ---------------------------------------------------------------------------
@@ -135,7 +137,13 @@ export class ConsoleClient {
       this.storage, this.network, () => this._connection,
     );
     this.cranks = namespaces.cranks ?? createCranksNamespace(
-      this.storage, this.network, () => this._connection,
+      this.storage,
+      this.network,
+      () => this._connection,
+      async (project) => {
+        const p = await this.projects.get(project);
+        return p.region;
+      },
     );
     this.oracle = namespaces.oracle ?? createOracleNamespace(
       this.storage, this.network, () => this._connection,

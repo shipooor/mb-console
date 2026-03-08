@@ -150,6 +150,13 @@ export interface LogEntry {
   data?: Record<string, unknown>;
 }
 
+export interface EndpointHealth {
+  name: string;
+  url: string;
+  status: 'online' | 'offline';
+  latencyMs: number | null;
+}
+
 // ---------------------------------------------------------------------------
 // Client Options
 // ---------------------------------------------------------------------------

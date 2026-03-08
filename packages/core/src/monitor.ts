@@ -2,11 +2,13 @@ import type { Storage } from './storage.js';
 import type {
   CostBreakdown,
   DelegatedAccount,
+  EndpointHealth,
   LogEntry,
   Network,
   Project,
   ProjectStatus,
 } from './types.js';
+import { MAGIC_ROUTER, REGIONS } from './config.js';
 import type { MonitorNamespace } from './client.js';
 
 // ---------------------------------------------------------------------------
@@ -125,7 +127,7 @@ export async function appendLog(
  */
 export function createMonitorNamespace(
   storage: Storage,
-  _network: Network,
+  network: Network,
 ): MonitorNamespace {
   // -----------------------------------------------------------------------
   // Shared helpers
@@ -242,6 +244,60 @@ export function createMonitorNamespace(
         .slice(-effectiveLimit)
         .reverse()
         .map(deserializeLogEntry);
+    },
+
+    async health(): Promise<EndpointHealth[]> {
+      const solanaRpc = network === 'devnet'
+        ? 'https://api.devnet.solana.com'
+        : 'https://api.mainnet-beta.solana.com';
+
+      const targets: { name: string; url: string }[] = [
+        { name: 'Solana Devnet', url: solanaRpc },
+        { name: 'Magic Router', url: MAGIC_ROUTER[network].http },
+        { name: 'ER US', url: REGIONS.us[network].http },
+        { name: 'ER EU', url: REGIONS.eu[network].http },
+        { name: 'ER Asia', url: REGIONS.asia[network].http },
+      ];
+
+      const body = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getSlot' });
+
+      const results = await Promise.allSettled(
+        targets.map(async (target): Promise<EndpointHealth> => {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 10_000);
+          const start = Date.now();
+          try {
+            const res = await fetch(target.url, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body,
+              signal: controller.signal,
+            });
+            const latencyMs = Date.now() - start;
+            return {
+              name: target.name,
+              url: target.url,
+              status: res.ok ? 'online' : 'offline',
+              latencyMs,
+            };
+          } catch {
+            return {
+              name: target.name,
+              url: target.url,
+              status: 'offline',
+              latencyMs: null,
+            };
+          } finally {
+            clearTimeout(timeout);
+          }
+        }),
+      );
+
+      return results.map((r) =>
+        r.status === 'fulfilled'
+          ? r.value
+          : { name: 'Unknown', url: '', status: 'offline' as const, latencyMs: null },
+      );
     },
   };
 }

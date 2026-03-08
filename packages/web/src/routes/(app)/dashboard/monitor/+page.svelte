@@ -9,6 +9,7 @@
 		ProjectStatus,
 		CostBreakdown,
 		LogEntry,
+		EndpointHealth,
 	} from '@magicblock-console/core';
 
 	let projects = $state<Project[]>([]);
@@ -18,6 +19,8 @@
 	let status = $state<ProjectStatus | null>(null);
 	let costs = $state<CostBreakdown | null>(null);
 	let logs = $state<LogEntry[]>([]);
+	let healthData = $state<EndpointHealth[]>([]);
+	let healthLoading = $state(false);
 
 	let prevVersion = $state(-1);
 	$effect(() => {
@@ -37,6 +40,7 @@
 			if (projects.length > 0) {
 				selectedProject = projects[0].name;
 				await loadMonitorData();
+				loadHealth();
 			}
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
@@ -63,6 +67,18 @@
 			logs = l;
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
+		}
+	}
+
+	async function loadHealth() {
+		healthLoading = true;
+		try {
+			healthData = await client.monitor.health();
+		} catch {
+			// Health check is best-effort, don't show error
+			healthData = [];
+		} finally {
+			healthLoading = false;
 		}
 	}
 
@@ -119,7 +135,32 @@
 					{/each}
 				</select>
 			</div>
-			<button class="btn btn-secondary" onclick={loadMonitorData}>Refresh</button>
+			<button class="btn btn-secondary" onclick={() => { loadMonitorData(); loadHealth(); }}>Refresh</button>
+		</div>
+
+		<div class="card health-card">
+			<h3 class="card-title">Endpoint Health</h3>
+			{#if healthLoading && healthData.length === 0}
+				<p class="empty-text">Checking endpoints...</p>
+			{:else if healthData.length === 0}
+				<p class="empty-text">No health data available.</p>
+			{:else}
+				<div class="health-grid">
+					{#each healthData as endpoint}
+						<div class="health-row">
+							<span class="health-dot" class:online={endpoint.status === 'online'} class:offline={endpoint.status === 'offline'}></span>
+							<span class="health-name">{endpoint.name}</span>
+							<span class="health-latency mono">
+								{#if endpoint.latencyMs !== null}
+									{endpoint.latencyMs} ms
+								{:else}
+									—
+								{/if}
+							</span>
+						</div>
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		{#if status}
@@ -258,5 +299,52 @@
 		background: var(--color-bg, #f1f5f9);
 		color: var(--color-text-muted, #64748b);
 		text-transform: uppercase;
+	}
+
+	.health-card {
+		margin-bottom: 1.5rem;
+	}
+
+	.health-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.health-row {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.375rem 0;
+	}
+
+	.health-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+
+	.health-dot.online {
+		background: #10b981;
+		box-shadow: 0 0 4px rgba(16, 185, 129, 0.4);
+	}
+
+	.health-dot.offline {
+		background: #ef4444;
+		box-shadow: 0 0 4px rgba(239, 68, 68, 0.4);
+	}
+
+	.health-name {
+		flex: 1;
+		font-size: 0.875rem;
+		color: var(--color-text, #1a1a2e);
+	}
+
+	.health-latency {
+		font-size: 0.8125rem;
+		color: var(--color-text-muted, #64748b);
+		min-width: 60px;
+		text-align: right;
 	}
 </style>
