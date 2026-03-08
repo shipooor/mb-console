@@ -289,14 +289,34 @@
 
 	<!-- FOOTER -->
 	<footer class="landing-footer">
-		<div class="footer-left">
-			<strong>MagicBlock Console</strong> &mdash; Built for Solana Blitz 2026
+		<div class="footer-content">
+			<div class="footer-section">
+				<h4>MagicBlock Console</h4>
+				<p>Developer console for Ephemeral Rollups on Solana.</p>
+			</div>
+			<div class="footer-section">
+				<h4>Documentation</h4>
+				<a href="/docs/getting-started">Getting Started</a>
+				<a href="/docs/er-lifecycle">ER Lifecycle</a>
+				<a href="/docs/features/gasless">Features</a>
+			</div>
+			<div class="footer-section">
+				<h4>Interfaces</h4>
+				<a href="/docs/cli">CLI Reference</a>
+				<a href="/docs/mcp">MCP Reference</a>
+				<a href="/dashboard">Web Dashboard</a>
+			</div>
+			<div class="footer-section">
+				<h4>Project</h4>
+				<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
+				<a href="https://www.npmjs.com/package/@magicblock-console/core" target="_blank" rel="noopener">npm: core</a>
+				<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener">npm: cli</a>
+				<a href="https://www.npmjs.com/package/@magicblock-console/mcp" target="_blank" rel="noopener">npm: mcp</a>
+			</div>
 		</div>
-		<div class="footer-links">
-			<a href="/docs">Docs</a>
-			<a href="https://github.com/shipooor/magicBlockConsole" target="_blank" rel="noopener">GitHub</a>
-			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener">npm</a>
-			<a href="/dashboard">Dashboard</a>
+		<div class="footer-bottom">
+			<p>Built for <a href="https://hackathon.magicblock.app/" target="_blank" rel="noopener">Solana Blitz Hackathon 2026</a></p>
+			<p>made with <span class="heart">&hearts;</span> by shipooor &mdash; <a href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://x.com/shipooor" target="_blank" rel="noopener">Twitter</a></p>
 		</div>
 	</footer>
 
@@ -885,37 +905,67 @@
 	/* ==================== FOOTER ==================== */
 	.landing-footer {
 		border-top: 1px solid var(--border);
-		padding: 32px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		max-width: 1200px;
-		margin: 0 auto;
+		padding: 3rem 2rem 1.5rem;
+		background: var(--bg-alt);
 	}
 
-	.footer-left {
+	.footer-content {
+		max-width: 1100px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 2fr 1fr 1fr 1fr;
+		gap: 2rem;
+	}
+
+	.footer-section h4 {
+		font-size: 0.9rem;
+		font-weight: 600;
+		margin-bottom: 0.75rem;
+		color: var(--text);
+	}
+
+	.footer-section p {
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		line-height: 1.6;
+	}
+
+	.footer-section a {
+		display: block;
+		font-size: 0.85rem;
+		color: var(--text-muted);
+		margin-bottom: 0.5rem;
+		transition: color 0.15s;
+	}
+
+	.footer-section a:hover {
+		color: var(--accent);
+	}
+
+	.footer-bottom {
+		max-width: 1100px;
+		margin: 2rem auto 0;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+		text-align: center;
+	}
+
+	.footer-bottom p {
 		font-size: 0.8rem;
 		color: var(--text-dim);
 	}
 
-	.footer-left strong {
-		color: var(--text-muted);
-		font-weight: 600;
-	}
-
-	.footer-links {
-		display: flex;
-		gap: 24px;
-	}
-
-	.footer-links a {
-		font-size: 0.8rem;
+	.footer-bottom a {
 		color: var(--text-muted);
 		transition: color 0.15s;
 	}
 
-	.footer-links a:hover {
-		color: var(--text);
+	.footer-bottom a:hover {
+		color: var(--accent);
+	}
+
+	.heart {
+		color: var(--accent);
 	}
 
 	/* ==================== RESPONSIVE ==================== */
@@ -964,6 +1014,10 @@
 		.features-header h2 {
 			font-size: 2rem;
 		}
+
+		.footer-content {
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 
 	@media (max-width: 600px) {
@@ -994,9 +1048,12 @@
 			word-break: break-all;
 		}
 
-		.landing-footer {
-			flex-direction: column;
-			gap: 16px;
+		.footer-content {
+			grid-template-columns: 1fr;
+			gap: 1.5rem;
+		}
+
+		.footer-bottom {
 			text-align: center;
 		}
 
