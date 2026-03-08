@@ -67,8 +67,8 @@
 		justify-content: space-between;
 		padding: 0 2rem;
 		height: 60px;
-		background: var(--color-surface);
-		border-bottom: 1px solid var(--color-border);
+		background: var(--color-navbar-bg);
+		border-bottom: 1px solid var(--color-navbar-border);
 		backdrop-filter: blur(8px);
 	}
 
@@ -78,7 +78,7 @@
 		gap: 0.625rem;
 		font-weight: 700;
 		font-size: 1.05rem;
-		color: var(--color-heading);
+		color: var(--color-navbar-text);
 		letter-spacing: -0.01em;
 	}
 
@@ -89,7 +89,7 @@
 		width: 30px;
 		height: 30px;
 		background: var(--color-primary);
-		color: #fff;
+		color: #0c1222;
 		border-radius: var(--radius-sm);
 		font-size: 0.7rem;
 		font-weight: 700;
@@ -105,18 +105,18 @@
 	.nav-links a {
 		font-size: 0.9rem;
 		font-weight: 500;
-		color: var(--color-text-muted);
+		color: rgba(226, 232, 240, 0.7);
 		transition: color 0.15s ease;
 	}
 
 	.nav-links a:hover {
-		color: var(--color-heading);
+		color: #ffffff;
 	}
 
 	.nav-cta {
 		padding: 0.4rem 1rem;
 		background: var(--color-primary);
-		color: #fff !important;
+		color: #0c1222 !important;
 		border-radius: var(--radius-md);
 		font-size: 0.85rem;
 		font-weight: 600;
@@ -125,7 +125,7 @@
 
 	.nav-cta:hover {
 		background: var(--color-primary-hover);
-		color: #fff !important;
+		color: #0c1222 !important;
 	}
 
 	main {

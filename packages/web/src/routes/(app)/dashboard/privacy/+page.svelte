@@ -318,7 +318,7 @@
 		font-size: 0.75rem;
 		font-weight: 600;
 		color: var(--color-primary, #8b5cf6);
-		background: var(--color-primary-alpha, rgba(139, 92, 246, 0.1));
+		background: var(--color-primary-alpha, rgba(20, 241, 149, 0.1));
 		border: 1px solid var(--color-primary, #8b5cf6);
 		border-radius: 999px;
 		cursor: pointer;

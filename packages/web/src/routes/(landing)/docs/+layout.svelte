@@ -153,7 +153,7 @@
 	}
 
 	.sidebar-link.active {
-		background: rgba(139, 92, 246, 0.08);
+		background: rgba(20, 241, 149, 0.08);
 		color: var(--color-primary, #8b5cf6);
 		font-weight: 600;
 		border-left-color: var(--color-primary, #8b5cf6);
