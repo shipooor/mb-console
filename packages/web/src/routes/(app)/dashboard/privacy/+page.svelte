@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
-	import { clientVersion } from '$lib/stores/wallet';
+	import { wallet, clientVersion } from '$lib/stores/wallet';
 	import { isValidPubkey } from '@magicblock-console/core';
 	import type { Project, PrivacyResult } from '@magicblock-console/core';
 
@@ -184,19 +184,33 @@
 						<option value="USDC">USDC</option>
 						<option value="USDT">USDT</option>
 					</select>
+					{#if $wallet.balance !== null && token === 'SOL'}
+						<div class="balance-hint">Balance: {$wallet.balance.toFixed(4)} SOL</div>
+					{/if}
 				</div>
 
 				<div class="form-group">
 					<label class="form-label" for="privacy-amount">Amount</label>
-					<input
-						id="privacy-amount"
-						class="form-input"
-						type="number"
-						step="0.001"
-						min="0"
-						bind:value={amount}
-						placeholder="0.0"
-					/>
+					<div class="amount-row">
+						<input
+							id="privacy-amount"
+							class="form-input"
+							type="number"
+							step="0.001"
+							min="0"
+							bind:value={amount}
+							placeholder="0.0"
+						/>
+						{#if activeTab === 'deposit' && $wallet.balance !== null && token === 'SOL'}
+							<button
+								type="button"
+								class="btn-max"
+								onclick={() => { amount = Math.max(0, parseFloat(($wallet.balance! - 0.01).toFixed(4))); }}
+							>
+								Max
+							</button>
+						{/if}
+					</div>
 				</div>
 
 				{#if activeTab === 'transfer'}
@@ -209,6 +223,12 @@
 							bind:value={recipient}
 							placeholder="Recipient wallet address"
 						/>
+					</div>
+				{/if}
+
+				{#if activeTab === 'withdraw'}
+					<div class="tab-note">
+						Withdrawal requires the TEE validator to release delegated tokens back to the base chain. This may fail if the account has not been fully committed by the TEE yet.
 					</div>
 				{/if}
 
@@ -270,6 +290,52 @@
 
 	.btn {
 		align-self: flex-start;
+	}
+
+	.balance-hint {
+		font-size: 0.75rem;
+		color: var(--color-text-muted, #64748b);
+		margin-top: 0.25rem;
+	}
+
+	.amount-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.amount-row .form-input {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.btn-max {
+		padding: 0.25rem 0.625rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: var(--color-primary, #8b5cf6);
+		background: var(--color-primary-alpha, rgba(139, 92, 246, 0.1));
+		border: 1px solid var(--color-primary, #8b5cf6);
+		border-radius: 999px;
+		cursor: pointer;
+		white-space: nowrap;
+		transition: background 0.15s, color 0.15s;
+	}
+
+	.btn-max:hover {
+		background: var(--color-primary, #8b5cf6);
+		color: #fff;
+	}
+
+	.tab-note {
+		font-size: 0.8rem;
+		color: var(--color-text-muted, #64748b);
+		background: var(--color-surface-alt, #f8fafc);
+		border: 1px solid var(--color-border, #e2e8f0);
+		border-radius: 6px;
+		padding: 0.625rem 0.75rem;
+		margin-bottom: 0.75rem;
+		line-height: 1.5;
 	}
 
 	/* Source badges inherited from dashboard.css */

@@ -21,7 +21,11 @@ const config = {
 			// SPA fallback for dashboard routes (ssr=false)
 			// Cloudflare Pages serves 200.html for unmatched routes
 			fallback: '200.html'
-		})
+		}),
+		paths: {
+			// Use absolute paths so 200.html fallback works from any route depth
+			relative: false
+		}
 	}
 };
 

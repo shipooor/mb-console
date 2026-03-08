@@ -10,7 +10,7 @@ import type { PublicKey, Transaction } from '@solana/web3.js';
 interface PhantomProvider {
 	isPhantom: boolean;
 	publicKey: PublicKey | null;
-	connect(): Promise<{ publicKey: PublicKey }>;
+	connect(opts?: { onlyIfTrusted?: boolean }): Promise<{ publicKey: PublicKey }>;
 	disconnect(): Promise<void>;
 	signTransaction(tx: Transaction): Promise<Transaction>;
 	on(event: string, handler: (...args: unknown[]) => void): void;
@@ -180,6 +180,45 @@ async function handleAccountChanged(newPublicKey: unknown): Promise<void> {
 	wallet.set({ connecting: false, address: null, balance: null, error: null });
 
 	await connect();
+}
+
+// ---------------------------------------------------------------------------
+// Eager Reconnect
+// ---------------------------------------------------------------------------
+
+/**
+ * Silently reconnect if user previously approved this dApp.
+ * Uses Phantom's `onlyIfTrusted` flag — no popup shown.
+ */
+async function eagerConnect(): Promise<void> {
+	const phantom = getPhantom();
+	if (!phantom) return;
+
+	try {
+		const { publicKey } = await phantom.connect({ onlyIfTrusted: true });
+		if (!publicKey || typeof publicKey.toBase58 !== 'function') return;
+		const address = publicKey.toBase58();
+
+		const client = get(consoleClient);
+		await client.connectWithSigner({
+			publicKey,
+			signTransaction: (tx: Transaction) => phantom.signTransaction(tx),
+		});
+
+		wallet.set({ connecting: false, address, balance: null, error: null });
+		clientVersion.update((v) => v + 1);
+		fetchBalance(address);
+
+		phantom.on('disconnect', handlePhantomDisconnect);
+		phantom.on('accountChanged', handleAccountChanged);
+	} catch {
+		// User hasn't approved this dApp yet — stay disconnected
+	}
+}
+
+// Auto-reconnect on page load
+if (browser) {
+	eagerConnect();
 }
 
 // ---------------------------------------------------------------------------
