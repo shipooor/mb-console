@@ -107,8 +107,9 @@ packages/
 
 Full documentation including getting started, API reference, CLI commands, and MCP tools:
 
-- Landing: http://localhost:5173
-- Docs: http://localhost:5173/docs
+- **Live**: https://mb-console.pages.dev
+- **Docs**: https://mb-console.pages.dev/docs
+- **Dev**: http://localhost:5173 (after `npm run dev -w packages/web`)
 
 ## Development Workflow
 
@@ -132,7 +133,7 @@ npm run build -w packages/core
 
 ## Hackathon
 
-**Event:** [Solana Blitz](https://www.colosseum.org/) by MagicBlock — March 6–8, 2026
+**Event:** [Solana Blitz](https://hackathon.magicblock.app/) by MagicBlock — March 6–8, 2026
 
 **Track:** Ephemeral Rollups / Infrastructure tooling
 
