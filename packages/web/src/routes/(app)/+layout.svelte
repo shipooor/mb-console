@@ -45,6 +45,11 @@
 		</nav>
 
 		<div class="sidebar-footer">
+			<div class="sidebar-links">
+				<a href="/docs/getting-started" class="sidebar-link">Docs</a>
+				<a href="https://github.com/shipooor/mb-console" class="sidebar-link" target="_blank" rel="noopener">GitHub</a>
+				<a href="https://x.com/shipooor" class="sidebar-link" target="_blank" rel="noopener">Twitter</a>
+			</div>
 			<span class="network-badge">devnet</span>
 		</div>
 	</aside>
@@ -191,6 +196,24 @@
 	.sidebar-footer {
 		padding: 1rem;
 		border-top: 1px solid rgba(255, 255, 255, 0.08);
+	}
+
+	.sidebar-links {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.sidebar-link {
+		font-size: 0.8rem;
+		color: #64748b;
+		text-decoration: none;
+		transition: color 0.15s;
+	}
+
+	.sidebar-link:hover {
+		color: #e2e8f0;
 	}
 
 	.network-badge {
