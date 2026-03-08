@@ -98,10 +98,41 @@ export function createPrivacyNamespace(
           const teeValidator = new PublicKey(VALIDATORS[conn.network].tee);
           const lamports = BigInt(Math.round(options.amount * 1e9));
 
+          const isNativeSol = mintPk.equals(NATIVE_MINT);
+
+          // Build delegation instructions
+          const delegationIxs = await delegatePrivateSpl(
+            conn.signer.publicKey,
+            mintPk,
+            lamports,
+            { validator: teeValidator, delegatePermission: true },
+          );
+
+          // Simulate delegation first to check if already delegated
+          const simTx = new Transaction();
+          for (const ix of delegationIxs) simTx.add(ix);
+          simTx.feePayer = conn.signer.publicKey;
+          simTx.recentBlockhash = (
+            await conn.baseConnection.getLatestBlockhash()
+          ).blockhash;
+
+          let alreadyDelegated = false;
+          try {
+            await conn.baseConnection.simulateTransaction(simTx);
+          } catch {
+            alreadyDelegated = true;
+          }
+          // Also check simulation result for errors
+          if (!alreadyDelegated) {
+            const simResult = await conn.baseConnection.simulateTransaction(simTx);
+            if (simResult.value.err) {
+              alreadyDelegated = true;
+            }
+          }
+
           const tx = new Transaction();
 
           // For native SOL: wrap into wSOL before delegating
-          const isNativeSol = mintPk.equals(NATIVE_MINT);
           if (isNativeSol) {
             const wsolAta = await getAssociatedTokenAddress(
               NATIVE_MINT,
@@ -131,18 +162,14 @@ export function createPrivacyNamespace(
             tx.add(createSyncNativeInstruction(wsolAta));
           }
 
-          const instructions = await delegatePrivateSpl(
-            conn.signer.publicKey,
-            mintPk,
-            lamports,
-            { validator: teeValidator, delegatePermission: true },
-          );
-
-          for (const ix of instructions) {
-            tx.add(ix);
+          // Only add delegation instructions if not already delegated
+          if (!alreadyDelegated) {
+            for (const ix of delegationIxs) {
+              tx.add(ix);
+            }
           }
+
           tx.feePayer = conn.signer.publicKey;
-          // Delegation happens on the base Solana chain, not the Magic Router
           tx.recentBlockhash = (
             await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
