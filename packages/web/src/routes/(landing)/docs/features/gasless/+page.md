@@ -1,13 +1,13 @@
 ---
 layout: docs
 title: Gasless Transactions
-description: Execute transactions on Ephemeral Rollups with zero fees.
+description: Low-cost transactions on Ephemeral Rollups — end users don't need SOL for gas.
 section: features
 ---
 
 # Gasless Transactions
 
-Ephemeral Rollups on MagicBlock public nodes have a base transaction fee of **zero**. Your users can interact with your application without holding SOL for gas.
+Ephemeral Rollups on MagicBlock dramatically reduce transaction costs. The base fee is the standard Solana transaction fee (0.000005 SOL), but session and commit costs are absorbed by the delegator — your end users don't need SOL for gas.
 
 ## How It Works
 
@@ -15,7 +15,7 @@ On Solana, every transaction requires a fee (typically 0.000005 SOL). On an Ephe
 
 | Fee Type | Amount | When |
 |----------|--------|------|
-| Transaction | **0 SOL** | Every transaction on ER |
+| Transaction | **0.000005 SOL** | Every transaction on ER (standard Solana fee) |
 | Session | 0.0003 SOL | On undelegation |
 | Commit | 0.0001 SOL | Each state commit to base layer |
 
@@ -47,10 +47,10 @@ Output:
 
 ```json
 {
-  "transactions": { "count": 12450, "cost": 0 },
+  "transactions": { "count": 12450, "cost": 0.062250 },
   "commits": { "count": 8, "cost": 0.0008 },
   "sessions": { "count": 2, "cost": 0.0006 },
-  "total": 0.0014,
+  "total": 0.063650,
   "period": "30d"
 }
 ```

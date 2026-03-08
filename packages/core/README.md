@@ -45,7 +45,7 @@ await client.er.delegate({
 
 // Request VRF randomness
 const result = await client.vrf.request({ project: 'my-game' });
-console.log(result.value); // 32 bytes of randomness
+console.log(result.randomness); // 32 bytes of randomness
 ```
 
 ## Wallet Connection

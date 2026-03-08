@@ -41,7 +41,7 @@ Move SPL tokens into a private vault:
 
 ```bash
 mb-console privacy deposit \
-  --token <TOKEN_MINT> \
+  --token <symbol> \
   --amount 100 \
   --project my-game
 ```
@@ -52,7 +52,7 @@ Transfer tokens privately within the PER:
 
 ```bash
 mb-console privacy transfer \
-  --token <TOKEN_MINT> \
+  --token <symbol> \
   --amount 50 \
   --to <RECIPIENT_WALLET> \
   --project my-game
@@ -64,7 +64,7 @@ Move tokens back to the public Solana base layer:
 
 ```bash
 mb-console privacy withdraw \
-  --token <TOKEN_MINT> \
+  --token <symbol> \
   --amount 25 \
   --project my-game
 ```

@@ -90,6 +90,7 @@ const project = await client.projects.get('my-game');
 ```typescript
 await client.projects.configure('my-game', {
   features: { vrf: true, cranks: true },
+  region: 'eu', // optional — change project region
 });
 ```
 
@@ -383,6 +384,25 @@ const logs = await client.monitor.logs('my-game', 50);
 ```
 
 **Returns:** `LogEntry[]`
+
+### `client.monitor.health`
+
+Ping all MagicBlock endpoints and return latency/status.
+
+```typescript
+const endpoints = await client.monitor.health();
+```
+
+**Returns:** `EndpointHealth[]`
+
+```typescript
+interface EndpointHealth {
+  name: string;
+  url: string;
+  status: 'online' | 'offline';
+  latencyMs: number | null;
+}
+```
 
 ## Types
 

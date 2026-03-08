@@ -33,7 +33,7 @@ For real blockchain operations, provide a keypair:
 }
 ```
 
-## Available Tools (20)
+## Available Tools (22)
 
 ### Projects
 | Tool | Description |

@@ -62,15 +62,15 @@ Common price feeds available through Pyth Lazer:
 
 ## How It Works
 
-Price data is derived from Pyth Lazer on-chain accounts:
+Price data is read from Pyth Solana Receiver on-chain accounts:
 
-1. A Price Feed PDA is derived from 4 seeds: `"price_feed"`, `"pyth-lazer"`, feed ID, and the Oracle Program ID
-2. The price is stored as a signed 64-bit integer at byte offset 73
-3. The final price is calculated by multiplying by `10^exponent`
+1. `PriceUpdateV2` accounts are found via `getProgramAccounts` with a `memcmp` filter matching the 32-byte feed ID at byte offset 41
+2. The price is stored as a signed 64-bit integer at byte offset 73, with a confidence interval (u64) at offset 81 and exponent (i32) at offset 89
+3. The final price is calculated as `rawPrice * 10^exponent`; stale data (>120s) is rejected automatically
 
-The Console handles all PDA derivation and byte parsing. You get a clean JSON response.
+The Console handles all account discovery and byte parsing. You get a clean JSON response.
 
-Oracle Program ID: `PriCems5tHihc6UDXDjzjeawomAwBduWMGAi8ZUjppd`
+Pyth Solana Receiver Program: `rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ`
 
 ## Monitoring
 
