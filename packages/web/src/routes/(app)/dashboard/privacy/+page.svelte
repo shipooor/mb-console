@@ -16,7 +16,7 @@
 	// Form state
 	let activeTab = $state<'deposit' | 'transfer' | 'withdraw'>('deposit');
 	let token = $state('SOL');
-	let amount = $state(0);
+	let amount = $state<number | null>(null);
 	let recipient = $state('');
 	let submitting = $state(false);
 
@@ -41,7 +41,7 @@
 			error = 'Select a project first';
 			return;
 		}
-		if (amount <= 0) {
+		if (!amount || amount <= 0) {
 			error = 'Amount must be greater than 0';
 			return;
 		}
@@ -85,7 +85,7 @@
 			lastResult = result;
 			const badge = result.simulated ? ' (simulated)' : '';
 			success = `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} successful${badge}. Signature: ${result.signature.slice(0, 24)}...`;
-			amount = 0;
+			amount = null;
 			recipient = '';
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);

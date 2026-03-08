@@ -348,7 +348,7 @@ server.tool(
 server.tool(
   'get_project_logs',
   'Get recent log entries for a project, newest first',
-  { project: z.string(), limit: z.number().optional() },
+  { project: z.string(), limit: z.number().positive().optional() },
   async ({ project, limit }) => {
     try {
       return ok(await client.monitor.logs(project, limit));
