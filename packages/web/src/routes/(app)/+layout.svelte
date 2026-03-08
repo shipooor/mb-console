@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '$lib/polyfills';
 	import { page } from '$app/state';
 
 	let { children } = $props();

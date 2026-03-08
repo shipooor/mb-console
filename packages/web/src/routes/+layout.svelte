@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '$lib/polyfills';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
