@@ -83,7 +83,13 @@ export function createPrivacyNamespace(
 
       if (conn?.signer && mintAddress) {
         try {
-          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { PublicKey, Transaction, SystemProgram } = await import('@solana/web3.js');
+          const {
+            getAssociatedTokenAddress,
+            createAssociatedTokenAccountInstruction,
+            createSyncNativeInstruction,
+            NATIVE_MINT,
+          } = await import('@solana/spl-token');
           const { delegatePrivateSpl } = await import(
             '@magicblock-labs/ephemeral-rollups-sdk'
           );
@@ -92,6 +98,39 @@ export function createPrivacyNamespace(
           const teeValidator = new PublicKey(VALIDATORS[conn.network].tee);
           const lamports = BigInt(Math.round(options.amount * 1e9));
 
+          const tx = new Transaction();
+
+          // For native SOL: wrap into wSOL before delegating
+          const isNativeSol = mintPk.equals(NATIVE_MINT);
+          if (isNativeSol) {
+            const wsolAta = await getAssociatedTokenAddress(
+              NATIVE_MINT,
+              conn.signer.publicKey,
+            );
+            // Create wSOL ATA if it doesn't exist
+            const ataInfo = await conn.baseConnection.getAccountInfo(wsolAta);
+            if (!ataInfo) {
+              tx.add(
+                createAssociatedTokenAccountInstruction(
+                  conn.signer.publicKey,
+                  wsolAta,
+                  conn.signer.publicKey,
+                  NATIVE_MINT,
+                ),
+              );
+            }
+            // Transfer native SOL to wSOL ATA
+            tx.add(
+              SystemProgram.transfer({
+                fromPubkey: conn.signer.publicKey,
+                toPubkey: wsolAta,
+                lamports,
+              }),
+            );
+            // Sync native balance so SPL token program sees it
+            tx.add(createSyncNativeInstruction(wsolAta));
+          }
+
           const instructions = await delegatePrivateSpl(
             conn.signer.publicKey,
             mintPk,
@@ -99,17 +138,17 @@ export function createPrivacyNamespace(
             { validator: teeValidator, delegatePermission: true },
           );
 
-          const tx = new Transaction();
           for (const ix of instructions) {
             tx.add(ix);
           }
           tx.feePayer = conn.signer.publicKey;
+          // Delegation happens on the base Solana chain, not the Magic Router
           tx.recentBlockhash = (
-            await conn.routerConnection.getLatestBlockhash()
+            await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          const signature = await conn.routerConnection.sendRawTransaction(
+          const signature = await conn.baseConnection.sendRawTransaction(
             signed.serialize(),
           );
 
@@ -193,11 +232,11 @@ export function createPrivacyNamespace(
 
           tx.feePayer = conn.signer.publicKey;
           tx.recentBlockhash = (
-            await conn.routerConnection.getLatestBlockhash()
+            await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          const signature = await conn.routerConnection.sendRawTransaction(
+          const signature = await conn.baseConnection.sendRawTransaction(
             signed.serialize(),
           );
 
@@ -250,12 +289,13 @@ export function createPrivacyNamespace(
             .add(undelegateInstruction);
 
           tx.feePayer = conn.signer.publicKey;
+          // Undelegation returns to the base Solana chain
           tx.recentBlockhash = (
-            await conn.routerConnection.getLatestBlockhash()
+            await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          const signature = await conn.routerConnection.sendRawTransaction(
+          const signature = await conn.baseConnection.sendRawTransaction(
             signed.serialize(),
           );
 

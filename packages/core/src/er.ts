@@ -178,12 +178,13 @@ export function createErNamespace(
 
           const tx = new Transaction().add(ix);
           tx.feePayer = conn.signer.publicKey;
+          // Delegation is a base chain operation
           tx.recentBlockhash = (
-            await conn.routerConnection.getLatestBlockhash()
+            await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          const signature = await conn.routerConnection.sendRawTransaction(
+          const signature = await conn.baseConnection.sendRawTransaction(
             signed.serialize(),
           );
 

@@ -105,18 +105,18 @@ export function createCranksNamespace(
           const tx = new Transaction().add(ix);
           tx.feePayer = conn.signer.publicKey;
 
-          // Use router connection for commit
+          // Commit is a base chain operation
           tx.recentBlockhash = (
-            await conn.routerConnection.getLatestBlockhash()
+            await conn.baseConnection.getLatestBlockhash()
           ).blockhash;
 
           const signed = await conn.signer.signTransaction(tx);
-          commitSignature = await conn.routerConnection.sendRawTransaction(
+          commitSignature = await conn.baseConnection.sendRawTransaction(
             signed.serialize(),
           );
           simulated = false;
         } catch (err) {
-          console.warn(
+          console.debug(
             `[mb-console] Real crank commit failed, using simulated mode: ${
               err instanceof Error ? err.message : String(err)
             }`,
