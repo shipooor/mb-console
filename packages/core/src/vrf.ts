@@ -67,6 +67,7 @@ export function createVrfNamespace(
         randomness,
         proof: generateBase58(128),
         latencyMs,
+        simulated: true,
       };
     },
   };

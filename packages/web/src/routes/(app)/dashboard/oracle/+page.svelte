@@ -112,7 +112,12 @@
 		{#if priceResult}
 			<div class="card price-card">
 				<div class="price-header">
-					<span class="price-feed">{priceResult.feed}</span>
+					<div class="price-title-row">
+						<span class="price-feed">{priceResult.feed}</span>
+						<span class="source-badge" class:source-live={!priceResult.simulated} class:source-simulated={priceResult.simulated}>
+							{priceResult.simulated ? 'simulated' : 'live'}
+						</span>
+					</div>
 					<span class="price-value">{formatPrice(priceResult.price)}</span>
 				</div>
 				<div class="price-details">
@@ -144,6 +149,7 @@
 								<th>Price</th>
 								<th>Confidence</th>
 								<th>Slot</th>
+								<th>Source</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -154,6 +160,11 @@
 									<td class="mono">{formatPrice(entry.price)}</td>
 									<td>{entry.confidence}</td>
 									<td class="mono">{entry.slot}</td>
+									<td>
+										<span class="source-badge" class:source-live={!entry.simulated} class:source-simulated={entry.simulated}>
+											{entry.simulated ? 'simulated' : 'live'}
+										</span>
+									</td>
 								</tr>
 							{/each}
 						</tbody>
@@ -189,6 +200,12 @@
 		align-items: center;
 		gap: 0.25rem;
 		margin-bottom: 1rem;
+	}
+
+	.price-title-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.price-feed {
@@ -231,4 +248,6 @@
 		font-size: 0.875rem;
 		color: var(--color-text, #1a1a2e);
 	}
+
+	/* Source badges inherited from dashboard.css */
 </style>

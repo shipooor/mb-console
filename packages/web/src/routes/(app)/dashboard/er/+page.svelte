@@ -13,6 +13,7 @@
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 	let success = $state<string | null>(null);
+	let lastSimulated = $state<boolean | null>(null);
 	let diffResult = $state<StateDiff | null>(null);
 	let showDiff = $state(false);
 
@@ -58,11 +59,15 @@
 			return;
 		}
 		error = null;
+		success = null;
 		try {
-			await client.er.delegate({
+			const result = await client.er.delegate({
 				account: newAccount.trim(),
 				project: selectedProject,
 			});
+			lastSimulated = result.simulated;
+			const badge = result.simulated ? ' (simulated)' : '';
+			success = `Delegated to ${result.validator}${badge}. Signature: ${result.signature.slice(0, 20)}...`;
 			newAccount = '';
 			await loadAccounts();
 		} catch (e) {
@@ -91,7 +96,9 @@
 				account: address,
 				project: selectedProject,
 			});
-			success = `Committed at slot ${result.slot}. Signature: ${result.signature.slice(0, 20)}...`;
+			lastSimulated = result.simulated;
+			const badge = result.simulated ? ' (simulated)' : '';
+			success = `Committed at slot ${result.slot}${badge}. Signature: ${result.signature.slice(0, 20)}...`;
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
 		}
@@ -140,7 +147,14 @@
 	{/if}
 
 	{#if success}
-		<div class="alert alert-success">{success}</div>
+		<div class="alert alert-success">
+			{success}
+			{#if lastSimulated !== null}
+				<span class="source-badge" class:source-live={!lastSimulated} class:source-simulated={lastSimulated}>
+					{lastSimulated ? 'simulated' : 'live'}
+				</span>
+			{/if}
+		</div>
 	{/if}
 
 	{#if loading}

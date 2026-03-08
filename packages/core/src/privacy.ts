@@ -3,11 +3,23 @@ import type {
   Network,
   Project,
   PrivacyDepositOptions,
+  PrivacyResult,
   PrivacyTransferOptions,
   PrivacyWithdrawOptions,
 } from './types.js';
 import type { PrivacyNamespace } from './client.js';
+import type { BlockchainConnection } from './connection.js';
 import { generateSignature, assertPubkey } from './utils.js';
+import { VALIDATORS } from './config.js';
+
+// ---------------------------------------------------------------------------
+// Known devnet SPL token mints
+// ---------------------------------------------------------------------------
+
+const KNOWN_MINTS: Record<string, string> = {
+  'SOL': 'So11111111111111111111111111111111111111112',
+  'USDC': '4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU',
+};
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -31,6 +43,15 @@ async function requirePrivacyEnabled(storage: Storage, project: string): Promise
   return parsed;
 }
 
+/**
+ * Resolve a mint address from either an explicit `mint` option or
+ * a well-known token symbol (SOL, USDC).
+ */
+function resolveMint(token: string, mint?: string): string | undefined {
+  if (mint) return mint;
+  return KNOWN_MINTS[token.toUpperCase()];
+}
+
 // ---------------------------------------------------------------------------
 // Factory
 // ---------------------------------------------------------------------------
@@ -38,30 +59,74 @@ async function requirePrivacyEnabled(storage: Storage, project: string): Promise
 /**
  * Create a fully-functional `PrivacyNamespace` backed by the given Storage.
  *
- * All three operations (deposit, transfer, withdraw) validate that the
- * project exists and has the privacy feature enabled, then return a
- * simulated transaction signature.
- *
- * NOTE: In a real implementation these would construct and submit
- * confidential transfer instructions to the MagicBlock privacy layer.
- * The current implementation is simulated for hackathon demo purposes.
+ * When a `getConnection` callback returns a valid `BlockchainConnection`
+ * with a signer, real TEE delegation / withdrawal / transfer operations
+ * are attempted via the MagicBlock SDK. Falls back to simulated behavior
+ * on any error or missing connection.
  */
 export function createPrivacyNamespace(
   storage: Storage,
   _network: Network,
+  getConnection?: () => BlockchainConnection | undefined,
 ): PrivacyNamespace {
   return {
-    async deposit(options: PrivacyDepositOptions): Promise<string> {
+    async deposit(options: PrivacyDepositOptions): Promise<PrivacyResult> {
       await requirePrivacyEnabled(storage, options.project);
 
       if (options.amount <= 0) {
         throw new Error('Deposit amount must be greater than 0');
       }
 
-      return generateSignature();
+      // Real blockchain: delegate SPL tokens to TEE validator
+      const conn = getConnection?.();
+      const mintAddress = resolveMint(options.token, options.mint);
+
+      if (conn?.signer && mintAddress) {
+        try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { delegatePrivateSpl } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
+          const mintPk = new PublicKey(mintAddress);
+          const teeValidator = new PublicKey(VALIDATORS[conn.network].tee);
+          const lamports = BigInt(Math.round(options.amount * 1e9));
+
+          const instructions = await delegatePrivateSpl(
+            conn.signer.publicKey,
+            mintPk,
+            lamports,
+            { validator: teeValidator, delegatePermission: true },
+          );
+
+          const tx = new Transaction();
+          for (const ix of instructions) {
+            tx.add(ix);
+          }
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await conn.routerConnection.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await conn.routerConnection.sendRawTransaction(
+            signed.serialize(),
+          );
+
+          return { signature, simulated: false };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real privacy deposit failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      return { signature: generateSignature(), simulated: true };
     },
 
-    async transfer(options: PrivacyTransferOptions): Promise<string> {
+    async transfer(options: PrivacyTransferOptions): Promise<PrivacyResult> {
       await requirePrivacyEnabled(storage, options.project);
 
       if (options.amount <= 0) {
@@ -73,17 +138,138 @@ export function createPrivacyNamespace(
       }
       assertPubkey(options.to, 'recipient');
 
-      return generateSignature();
+      // Real blockchain: SPL transfer via TEE ER connection
+      const conn = getConnection?.();
+      const mintAddress = resolveMint(options.token, options.mint);
+
+      if (conn?.signer && mintAddress) {
+        try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const {
+            createAssociatedTokenAccountInstruction,
+            createTransferInstruction,
+            getAssociatedTokenAddress,
+          } = await import('@solana/spl-token');
+
+          const mintPk = new PublicKey(mintAddress);
+          const recipientPk = new PublicKey(options.to);
+          const lamports = BigInt(Math.round(options.amount * 1e9));
+
+          // Get/create associated token accounts
+          const senderAta = await getAssociatedTokenAddress(
+            mintPk,
+            conn.signer.publicKey,
+          );
+          const recipientAta = await getAssociatedTokenAddress(
+            mintPk,
+            recipientPk,
+          );
+
+          const tx = new Transaction();
+
+          // Create recipient ATA if needed
+          const recipientAtaInfo = await conn.routerConnection.getAccountInfo(
+            recipientAta,
+          );
+          if (!recipientAtaInfo) {
+            tx.add(
+              createAssociatedTokenAccountInstruction(
+                conn.signer.publicKey,
+                recipientAta,
+                recipientPk,
+                mintPk,
+              ),
+            );
+          }
+
+          tx.add(
+            createTransferInstruction(
+              senderAta,
+              recipientAta,
+              conn.signer.publicKey,
+              lamports,
+            ),
+          );
+
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await conn.routerConnection.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await conn.routerConnection.sendRawTransaction(
+            signed.serialize(),
+          );
+
+          return { signature, simulated: false };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real privacy transfer failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      return { signature: generateSignature(), simulated: true };
     },
 
-    async withdraw(options: PrivacyWithdrawOptions): Promise<string> {
+    async withdraw(options: PrivacyWithdrawOptions): Promise<PrivacyResult> {
       await requirePrivacyEnabled(storage, options.project);
 
       if (options.amount <= 0) {
         throw new Error('Withdraw amount must be greater than 0');
       }
 
-      return generateSignature();
+      // Real blockchain: withdraw SPL + undelegate from TEE
+      const conn = getConnection?.();
+      const mintAddress = resolveMint(options.token, options.mint);
+
+      if (conn?.signer && mintAddress) {
+        try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { withdrawSplIx, undelegateIx } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
+          const mintPk = new PublicKey(mintAddress);
+          const lamports = BigInt(Math.round(options.amount * 1e9));
+
+          const withdrawInstruction = withdrawSplIx(
+            conn.signer.publicKey,
+            mintPk,
+            lamports,
+          );
+          const undelegateInstruction = undelegateIx(
+            conn.signer.publicKey,
+            mintPk,
+          );
+
+          const tx = new Transaction()
+            .add(withdrawInstruction)
+            .add(undelegateInstruction);
+
+          tx.feePayer = conn.signer.publicKey;
+          tx.recentBlockhash = (
+            await conn.routerConnection.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          const signature = await conn.routerConnection.sendRawTransaction(
+            signed.serialize(),
+          );
+
+          return { signature, simulated: false };
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real privacy withdraw failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
+
+      return { signature: generateSignature(), simulated: true };
     },
   };
 }

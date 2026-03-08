@@ -4,13 +4,14 @@
 	import { get } from 'svelte/store';
 	import { consoleClient } from '$lib/stores/client';
 	import { isValidPubkey } from '@magicblock-console/core';
-	import type { Project } from '@magicblock-console/core';
+	import type { Project, PrivacyResult } from '@magicblock-console/core';
 
 	let projects = $state<Project[]>([]);
 	let selectedProject = $state('');
 	let loading = $state(true);
 	let error = $state<string | null>(null);
 	let success = $state<string | null>(null);
+	let lastResult = $state<PrivacyResult | null>(null);
 
 	// Form state
 	let activeTab = $state<'deposit' | 'transfer' | 'withdraw'>('deposit');
@@ -46,12 +47,13 @@
 		}
 		error = null;
 		success = null;
+		lastResult = null;
 		submitting = true;
 
 		try {
-			let signature: string;
+			let result: PrivacyResult;
 			if (activeTab === 'deposit') {
-				signature = await client.privacy.deposit({
+				result = await client.privacy.deposit({
 					project: selectedProject,
 					token,
 					amount,
@@ -67,20 +69,22 @@
 					submitting = false;
 					return;
 				}
-				signature = await client.privacy.transfer({
+				result = await client.privacy.transfer({
 					project: selectedProject,
 					token,
 					amount,
 					to: recipient.trim(),
 				});
 			} else {
-				signature = await client.privacy.withdraw({
+				result = await client.privacy.withdraw({
 					project: selectedProject,
 					token,
 					amount,
 				});
 			}
-			success = `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} successful. Signature: ${signature.slice(0, 24)}...`;
+			lastResult = result;
+			const badge = result.simulated ? ' (simulated)' : '';
+			success = `${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} successful${badge}. Signature: ${result.signature.slice(0, 24)}...`;
 			amount = 0;
 			recipient = '';
 		} catch (e) {
@@ -105,7 +109,14 @@
 	{/if}
 
 	{#if success}
-		<div class="alert alert-success">{success}</div>
+		<div class="alert alert-success">
+			{success}
+			{#if lastResult}
+				<span class="source-badge" class:source-live={!lastResult.simulated} class:source-simulated={lastResult.simulated}>
+					{lastResult.simulated ? 'simulated' : 'live'}
+				</span>
+			{/if}
+		</div>
 	{/if}
 
 	{#if loading}
@@ -245,5 +256,10 @@
 
 	.btn {
 		align-self: flex-start;
+	}
+
+	/* Source badges inherited from dashboard.css */
+	.source-badge {
+		margin-left: 0.5rem;
 	}
 </style>

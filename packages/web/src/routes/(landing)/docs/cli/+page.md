@@ -164,13 +164,14 @@ mb-console vrf request --project <name>
 
 ### `mb-console privacy deposit`
 
-Deposit SPL tokens into a private vault.
+Deposit SPL tokens into a private vault via TEE.
 
 ```bash
 mb-console privacy deposit \
-  --token <mint_address> \
+  --token <symbol> \
   --amount <number> \
-  --project <name>
+  --project <name> \
+  --mint <spl_mint_address>  # optional
 ```
 
 ### `mb-console privacy transfer`
@@ -179,10 +180,11 @@ Transfer tokens privately within PER.
 
 ```bash
 mb-console privacy transfer \
-  --token <mint_address> \
+  --token <symbol> \
   --amount <number> \
   --to <recipient_wallet> \
-  --project <name>
+  --project <name> \
+  --mint <spl_mint_address>  # optional
 ```
 
 ### `mb-console privacy withdraw`
@@ -191,9 +193,10 @@ Withdraw tokens from private vault to Solana.
 
 ```bash
 mb-console privacy withdraw \
-  --token <mint_address> \
+  --token <symbol> \
   --amount <number> \
-  --project <name>
+  --project <name> \
+  --mint <spl_mint_address>  # optional
 ```
 
 ### `mb-console crank create`
@@ -204,7 +207,8 @@ Create a scheduled execution task.
 mb-console crank create \
   --interval <ms> \
   --iterations <count> \
-  --project <name>
+  --project <name> \
+  --account <pubkey>  # optional, enables real blockchain commits
 ```
 
 ### `mb-console crank list`

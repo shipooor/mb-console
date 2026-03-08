@@ -1,6 +1,6 @@
 import type { Command } from 'commander';
 import type { ConsoleClient } from '@magicblock-console/core';
-import { printJson, printError } from '../utils/output.js';
+import { printJson, printError, printSuccess } from '../utils/output.js';
 
 export function registerOracleCommands(program: Command, client: ConsoleClient): void {
   const oracle = program
@@ -20,6 +20,9 @@ export function registerOracleCommands(program: Command, client: ConsoleClient):
           feed: opts.feed,
         });
         printJson(result);
+        if (result.simulated) {
+          printSuccess('(simulated mode — no blockchain connection)');
+        }
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err));
       }

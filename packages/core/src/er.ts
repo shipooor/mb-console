@@ -19,7 +19,7 @@ import type {
 } from './types.js';
 import type { ErNamespace } from './client.js';
 import type { BlockchainConnection } from './connection.js';
-import { VALIDATORS, REGIONS } from './config.js';
+import { VALIDATORS, REGIONS, PROGRAM_IDS } from './config.js';
 import { generateSignature } from './utils.js';
 
 // ---------------------------------------------------------------------------
@@ -331,24 +331,28 @@ export function createErNamespace(
     async status(account: string): Promise<DelegationStatus> {
       const conn = getConnection?.();
 
-      // Real blockchain: query Magic Router for delegation status
+      // Real blockchain: check if the account is owned by the Delegation Program
       if (conn) {
         try {
-          const result = await conn.routerConnection.getDelegationStatus(account);
+          const accountPk = new PublicKey(account);
+          const accountInfo = await conn.baseConnection.getAccountInfo(accountPk);
 
-          if (result.isDelegated) {
-            // Enrich with local storage data if available
-            const data = await storage.get(delegationKey(account));
-            if (data) {
-              const record = JSON.parse(data) as DelegationRecord;
-              return {
-                isDelegated: true,
-                validator: record.validator,
-                validatorPubkey: record.validatorPubkey,
-                delegatedAt: new Date(record.delegatedAt),
-              };
+          if (accountInfo) {
+            const delegationProgramId = new PublicKey(PROGRAM_IDS.delegation);
+            if (accountInfo.owner.equals(delegationProgramId)) {
+              // Account is delegated — enrich with local storage data
+              const data = await storage.get(delegationKey(account));
+              if (data) {
+                const record = JSON.parse(data) as DelegationRecord;
+                return {
+                  isDelegated: true,
+                  validator: record.validator,
+                  validatorPubkey: record.validatorPubkey,
+                  delegatedAt: new Date(record.delegatedAt),
+                };
+              }
+              return { isDelegated: true };
             }
-            return { isDelegated: true };
           }
 
           return { isDelegated: false };

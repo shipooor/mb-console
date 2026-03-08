@@ -196,6 +196,27 @@ Schedule automatic execution for a project.
 | `project` | string | Yes | Project name |
 | `intervalMs` | number | Yes | Interval between executions in milliseconds |
 | `iterations` | number | No | Number of iterations (0 or omitted = infinite) |
+| `account` | string | No | Account to commit (enables real blockchain operations) |
+
+#### `list_cranks`
+
+List all cranks for a project.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `project` | string | Yes | Project name |
+
+#### `stop_crank`
+
+Stop a running crank by its ID.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `crankId` | string | Yes | Crank ID |
 
 #### `get_price_feed`
 
@@ -207,6 +228,48 @@ Get current price from an oracle feed (Pyth Lazer).
 |------|------|----------|-------------|
 | `project` | string | Yes | Project name |
 | `feed` | string | Yes | Price pair (e.g., `SOL/USD`, `BTC/USD`, `ETH/USD`, `USDC/USD`) |
+
+### Privacy
+
+#### `deposit_private`
+
+Deposit tokens into the privacy layer via TEE confidential transfers.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `project` | string | Yes | Project name |
+| `token` | string | Yes | Token symbol (`SOL`, `USDC`) or mint address |
+| `amount` | number | Yes | Amount to deposit |
+| `mint` | string | No | Explicit SPL mint address |
+
+#### `transfer_private`
+
+Transfer tokens confidentially via the TEE privacy layer.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `project` | string | Yes | Project name |
+| `token` | string | Yes | Token symbol or mint address |
+| `amount` | number | Yes | Amount to transfer |
+| `to` | string | Yes | Recipient wallet address |
+| `mint` | string | No | Explicit SPL mint address |
+
+#### `withdraw_private`
+
+Withdraw tokens from the privacy layer back to the base layer.
+
+**Parameters:**
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `project` | string | Yes | Project name |
+| `token` | string | Yes | Token symbol or mint address |
+| `amount` | number | Yes | Amount to withdraw |
+| `mint` | string | No | Explicit SPL mint address |
 
 ### Monitoring
 

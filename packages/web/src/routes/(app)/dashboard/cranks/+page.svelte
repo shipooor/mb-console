@@ -15,6 +15,7 @@
 	let showCreateForm = $state(false);
 	let intervalMs = $state(1000);
 	let iterations = $state(10);
+	let account = $state('');
 	let creating = $state(false);
 
 	const client = get(consoleClient);
@@ -53,10 +54,12 @@
 				project: selectedProject,
 				intervalMs,
 				iterations,
+				account: account.trim() || undefined,
 			});
 			showCreateForm = false;
 			intervalMs = 1000;
 			iterations = 10;
+			account = '';
 			await loadCranks();
 		} catch (e) {
 			error = e instanceof Error ? e.message : String(e);
@@ -160,6 +163,16 @@
 							/>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="form-label" for="crank-account">Account (optional)</label>
+						<input
+							id="crank-account"
+							class="form-input"
+							type="text"
+							bind:value={account}
+							placeholder="Solana account pubkey for real commits"
+						/>
+					</div>
 					<div class="form-actions">
 						<button type="button" class="btn btn-secondary" onclick={() => (showCreateForm = false)}>
 							Cancel
@@ -186,6 +199,7 @@
 							<th>Iterations</th>
 							<th>Executed</th>
 							<th>Status</th>
+							<th>Mode</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -199,6 +213,11 @@
 								<td>
 									<span class="status-badge {statusColor(crank.status)}">
 										{crank.status}
+									</span>
+								</td>
+								<td>
+									<span class="source-badge" class:source-live={!crank.simulated} class:source-simulated={crank.simulated}>
+										{crank.simulated ? 'simulated' : 'live'}
 									</span>
 								</td>
 								<td>
@@ -304,4 +323,6 @@
 		background: rgba(148, 163, 184, 0.15);
 		color: #64748b;
 	}
+
+	/* Source badges inherited from dashboard.css */
 </style>

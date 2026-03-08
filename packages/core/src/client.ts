@@ -16,6 +16,7 @@ import type {
   PriceFeed,
   PriceFeedOptions,
   PrivacyDepositOptions,
+  PrivacyResult,
   PrivacyTransferOptions,
   PrivacyWithdrawOptions,
   Project,
@@ -36,7 +37,7 @@ import { createMonitorNamespace } from './monitor.js';
 import type { BlockchainConnection } from './connection.js';
 
 // ---------------------------------------------------------------------------
-// Namespace Interfaces (stubs — implementations in later tasks)
+// Namespace Interfaces
 // ---------------------------------------------------------------------------
 
 export interface ProjectsNamespace {
@@ -61,9 +62,9 @@ export interface VrfNamespace {
 }
 
 export interface PrivacyNamespace {
-  deposit(options: PrivacyDepositOptions): Promise<string>;
-  transfer(options: PrivacyTransferOptions): Promise<string>;
-  withdraw(options: PrivacyWithdrawOptions): Promise<string>;
+  deposit(options: PrivacyDepositOptions): Promise<PrivacyResult>;
+  transfer(options: PrivacyTransferOptions): Promise<PrivacyResult>;
+  withdraw(options: PrivacyWithdrawOptions): Promise<PrivacyResult>;
 }
 
 export interface CranksNamespace {
@@ -130,9 +131,15 @@ export class ConsoleClient {
       () => this._connection,
     );
     this.vrf = namespaces.vrf ?? createVrfNamespace(this.storage, this.network);
-    this.privacy = namespaces.privacy ?? createPrivacyNamespace(this.storage, this.network);
-    this.cranks = namespaces.cranks ?? createCranksNamespace(this.storage, this.network);
-    this.oracle = namespaces.oracle ?? createOracleNamespace(this.storage, this.network);
+    this.privacy = namespaces.privacy ?? createPrivacyNamespace(
+      this.storage, this.network, () => this._connection,
+    );
+    this.cranks = namespaces.cranks ?? createCranksNamespace(
+      this.storage, this.network, () => this._connection,
+    );
+    this.oracle = namespaces.oracle ?? createOracleNamespace(
+      this.storage, this.network, () => this._connection,
+    );
     this.monitor = namespaces.monitor ?? createMonitorNamespace(this.storage, this.network);
   }
 

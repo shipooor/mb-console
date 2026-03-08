@@ -9,6 +9,11 @@ function validateAmount(value: number, label: string): void {
   }
 }
 
+function formatResult(operation: string, signature: string, simulated: boolean): string {
+  const badge = simulated ? ' (simulated)' : '';
+  return `${operation} successful${badge}. Signature: ${signature}`;
+}
+
 export function registerPrivacyCommands(program: Command, client: ConsoleClient): void {
   const privacy = program
     .command('privacy')
@@ -18,18 +23,20 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
   privacy
     .command('deposit')
     .description('Deposit tokens into the privacy layer')
-    .requiredOption('--token <mint>', 'Token mint address')
+    .requiredOption('--token <mint>', 'Token symbol or mint address')
     .requiredOption('--amount <n>', 'Amount to deposit', parseFloat)
     .requiredOption('--project <name>', 'Project name')
-    .action(async (opts: { token: string; amount: number; project: string }) => {
+    .option('--mint <address>', 'Explicit SPL mint address')
+    .action(async (opts: { token: string; amount: number; project: string; mint?: string }) => {
       try {
         validateAmount(opts.amount, 'Deposit amount');
-        const signature = await client.privacy.deposit({
+        const result = await client.privacy.deposit({
           project: opts.project,
           token: opts.token,
           amount: opts.amount,
+          mint: opts.mint,
         });
-        printSuccess(`Deposit successful. Signature: ${signature}`);
+        printSuccess(formatResult('Deposit', result.signature, result.simulated));
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err));
       }
@@ -39,21 +46,23 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
   privacy
     .command('transfer')
     .description('Transfer tokens confidentially')
-    .requiredOption('--token <mint>', 'Token mint address')
+    .requiredOption('--token <mint>', 'Token symbol or mint address')
     .requiredOption('--amount <n>', 'Amount to transfer', parseFloat)
     .requiredOption('--to <wallet>', 'Recipient wallet address')
     .requiredOption('--project <name>', 'Project name')
-    .action(async (opts: { token: string; amount: number; to: string; project: string }) => {
+    .option('--mint <address>', 'Explicit SPL mint address')
+    .action(async (opts: { token: string; amount: number; to: string; project: string; mint?: string }) => {
       try {
         validateAmount(opts.amount, 'Transfer amount');
         assertPubkey(opts.to, 'recipient');
-        const signature = await client.privacy.transfer({
+        const result = await client.privacy.transfer({
           project: opts.project,
           token: opts.token,
           amount: opts.amount,
           to: opts.to,
+          mint: opts.mint,
         });
-        printSuccess(`Transfer successful. Signature: ${signature}`);
+        printSuccess(formatResult('Transfer', result.signature, result.simulated));
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err));
       }
@@ -63,18 +72,20 @@ export function registerPrivacyCommands(program: Command, client: ConsoleClient)
   privacy
     .command('withdraw')
     .description('Withdraw tokens from the privacy layer')
-    .requiredOption('--token <mint>', 'Token mint address')
+    .requiredOption('--token <mint>', 'Token symbol or mint address')
     .requiredOption('--amount <n>', 'Amount to withdraw', parseFloat)
     .requiredOption('--project <name>', 'Project name')
-    .action(async (opts: { token: string; amount: number; project: string }) => {
+    .option('--mint <address>', 'Explicit SPL mint address')
+    .action(async (opts: { token: string; amount: number; project: string; mint?: string }) => {
       try {
         validateAmount(opts.amount, 'Withdraw amount');
-        const signature = await client.privacy.withdraw({
+        const result = await client.privacy.withdraw({
           project: opts.project,
           token: opts.token,
           amount: opts.amount,
+          mint: opts.mint,
         });
-        printSuccess(`Withdraw successful. Signature: ${signature}`);
+        printSuccess(formatResult('Withdraw', result.signature, result.simulated));
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err));
       }

@@ -76,6 +76,8 @@ export interface VrfResult {
   randomness: Uint8Array;
   proof: string;
   latencyMs: number;
+  /** True when the result was simulated (no real on-chain VRF). */
+  simulated: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -88,6 +90,12 @@ export interface Crank {
   iterations: number;
   executed: number;
   status: 'running' | 'completed' | 'stopped';
+  /** Account being committed (when using real blockchain). */
+  account?: string;
+  /** Initial commit transaction signature (when using real blockchain). */
+  commitSignature?: string;
+  /** True when the result was simulated (no real blockchain transaction). */
+  simulated: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -100,6 +108,18 @@ export interface PriceFeed {
   confidence: number;
   timestamp: Date;
   slot: number;
+  /** True when the price was simulated (no real on-chain read). */
+  simulated: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Privacy Result
+// ---------------------------------------------------------------------------
+
+export interface PrivacyResult {
+  signature: string;
+  /** True when the result was simulated (no real blockchain transaction). */
+  simulated: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -177,6 +197,8 @@ export interface PrivacyDepositOptions {
   project: string;
   token: string;
   amount: number;
+  /** SPL mint address (optional, for real blockchain operations). */
+  mint?: string;
 }
 
 export interface PrivacyTransferOptions {
@@ -184,18 +206,24 @@ export interface PrivacyTransferOptions {
   token: string;
   amount: number;
   to: string;
+  /** SPL mint address (optional, for real blockchain operations). */
+  mint?: string;
 }
 
 export interface PrivacyWithdrawOptions {
   project: string;
   token: string;
   amount: number;
+  /** SPL mint address (optional, for real blockchain operations). */
+  mint?: string;
 }
 
 export interface CrankCreateOptions {
   project: string;
   intervalMs: number;
   iterations?: number;
+  /** Account to commit (required for real blockchain operations). */
+  account?: string;
 }
 
 export interface PriceFeedOptions {

@@ -39,6 +39,11 @@ async function main() {
 
   try {
     await client.connectWithKeypair(keypairPath);
+    if (!explicitKeypair) {
+      console.error(
+        'Using default Solana keypair (~/.config/solana/id.json). Set MB_KEYPAIR_PATH to override.',
+      );
+    }
   } catch (err) {
     if (explicitKeypair) {
       // User explicitly set MB_KEYPAIR_PATH — warn about the failure

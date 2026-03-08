@@ -13,15 +13,18 @@ export function registerCrankCommands(program: Command, client: ConsoleClient): 
     .description('Create a new crank')
     .requiredOption('--interval <ms>', 'Interval in milliseconds', parseInt)
     .option('--iterations <n>', 'Number of iterations (0 = infinite)', parseInt)
+    .option('--account <pubkey>', 'Account to commit (enables real blockchain)')
     .requiredOption('--project <name>', 'Project name')
-    .action(async (opts: { interval: number; iterations?: number; project: string }) => {
+    .action(async (opts: { interval: number; iterations?: number; account?: string; project: string }) => {
       try {
         const result = await client.cranks.create({
           project: opts.project,
           intervalMs: opts.interval,
           iterations: opts.iterations,
+          account: opts.account,
         });
-        printSuccess(`Crank created: ${result.id}`);
+        const badge = result.simulated ? ' (simulated)' : '';
+        printSuccess(`Crank created${badge}: ${result.id}`);
         printJson(result);
       } catch (err) {
         printError(err instanceof Error ? err.message : String(err));
@@ -43,6 +46,7 @@ export function registerCrankCommands(program: Command, client: ConsoleClient): 
             iterations: c.iterations === 0 ? 'infinite' : String(c.iterations),
             executed: String(c.executed),
             status: c.status,
+            mode: c.simulated ? 'simulated' : 'live',
           })),
           [
             { header: 'ID', key: 'id' },
@@ -50,6 +54,7 @@ export function registerCrankCommands(program: Command, client: ConsoleClient): 
             { header: 'Iterations', key: 'iterations' },
             { header: 'Executed', key: 'executed' },
             { header: 'Status', key: 'status' },
+            { header: 'Mode', key: 'mode' },
           ],
         );
       } catch (err) {

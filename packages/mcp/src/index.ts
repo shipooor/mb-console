@@ -223,26 +223,98 @@ server.tool(
 
 server.tool(
   'create_crank',
-  'Create a crank (automated periodic execution) for a project',
+  'Create a crank (automated periodic execution) for a project. Optionally specify an account for real blockchain commits.',
   {
     project: z.string(),
-    intervalMs: z.number(),
+    intervalMs: z.number().positive(),
     iterations: z.number().optional(),
+    account: solanaAddress.optional().describe('Account to commit (enables real blockchain operations)'),
   },
-  async ({ project, intervalMs, iterations }) => {
+  async ({ project, intervalMs, iterations, account }) => {
     try {
-      return ok(await client.cranks.create({ project, intervalMs, iterations }));
+      return ok(await client.cranks.create({ project, intervalMs, iterations, account }));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'list_cranks',
+  'List all cranks for a project',
+  { project: z.string() },
+  async ({ project }) => {
+    try {
+      return ok(await client.cranks.list(project));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'stop_crank',
+  'Stop a running crank by its ID',
+  { crankId: z.string() },
+  async ({ crankId }) => {
+    try {
+      return ok(await client.cranks.stop(crankId));
     } catch (err) { return fail(err); }
   },
 );
 
 server.tool(
   'get_price_feed',
-  'Get a real-time price feed from the Pyth Lazer oracle (SOL/USD, BTC/USD, ETH/USD, USDC/USD)',
+  'Get a real-time price feed from the Pyth Lazer oracle (SOL/USD, BTC/USD, ETH/USD, USDC/USD). Returns simulated data when no blockchain connection is available.',
   { project: z.string(), feed: z.string() },
   async ({ project, feed }) => {
     try {
       return ok(await client.oracle.getPrice({ project, feed }));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'deposit_private',
+  'Deposit tokens into the privacy layer via TEE confidential transfers',
+  {
+    project: z.string(),
+    token: z.string().describe('Token symbol (SOL, USDC) or mint address'),
+    amount: z.number().positive(),
+    mint: solanaAddress.optional().describe('Explicit SPL mint address'),
+  },
+  async ({ project, token, amount, mint }) => {
+    try {
+      return ok(await client.privacy.deposit({ project, token, amount, mint }));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'transfer_private',
+  'Transfer tokens confidentially via the TEE privacy layer',
+  {
+    project: z.string(),
+    token: z.string().describe('Token symbol (SOL, USDC) or mint address'),
+    amount: z.number().positive(),
+    to: solanaAddress.describe('Recipient wallet address'),
+    mint: solanaAddress.optional().describe('Explicit SPL mint address'),
+  },
+  async ({ project, token, amount, to, mint }) => {
+    try {
+      return ok(await client.privacy.transfer({ project, token, amount, to, mint }));
+    } catch (err) { return fail(err); }
+  },
+);
+
+server.tool(
+  'withdraw_private',
+  'Withdraw tokens from the privacy layer back to the base layer',
+  {
+    project: z.string(),
+    token: z.string().describe('Token symbol (SOL, USDC) or mint address'),
+    amount: z.number().positive(),
+    mint: solanaAddress.optional().describe('Explicit SPL mint address'),
+  },
+  async ({ project, token, amount, mint }) => {
+    try {
+      return ok(await client.privacy.withdraw({ project, token, amount, mint }));
     } catch (err) { return fail(err); }
   },
 );

@@ -205,6 +205,7 @@ interface VrfResult {
   randomness: Uint8Array;
   proof: string;
   latencyMs: number;
+  simulated: boolean;
 }
 ```
 
@@ -232,9 +233,19 @@ vrf.split(randomBytes: Uint8Array, count: number): Uint8Array[]
 ```typescript
 const result = await client.privacy.deposit({
   project: 'my-game',
-  token: 'TokenMintAddress...',
-  amount: 100,
+  token: 'SOL',
+  amount: 1.5,
+  mint: 'So11111111111111111111111111111111111111112', // optional
 });
+```
+
+**Returns:** `PrivacyResult`
+
+```typescript
+interface PrivacyResult {
+  signature: string;
+  simulated: boolean;
+}
 ```
 
 ### `client.privacy.transfer`
@@ -242,21 +253,25 @@ const result = await client.privacy.deposit({
 ```typescript
 const result = await client.privacy.transfer({
   project: 'my-game',
-  token: 'TokenMintAddress...',
+  token: 'USDC',
   amount: 50,
   to: 'RecipientWallet...',
 });
 ```
+
+**Returns:** `PrivacyResult`
 
 ### `client.privacy.withdraw`
 
 ```typescript
 const result = await client.privacy.withdraw({
   project: 'my-game',
-  token: 'TokenMintAddress...',
-  amount: 25,
+  token: 'SOL',
+  amount: 0.5,
 });
 ```
+
+**Returns:** `PrivacyResult`
 
 ## Cranks
 
@@ -267,6 +282,7 @@ const crank = await client.cranks.create({
   project: 'my-game',
   intervalMs: 5000,
   iterations: 100,
+  account: 'AccountPublicKey...', // optional, enables real blockchain commits
 });
 ```
 
@@ -279,6 +295,9 @@ interface Crank {
   iterations: number;
   executed: number;
   status: 'running' | 'completed' | 'stopped';
+  account?: string;
+  commitSignature?: string;
+  simulated: boolean;
 }
 ```
 
@@ -314,6 +333,7 @@ interface PriceFeed {
   confidence: number;
   timestamp: Date;
   slot: number;
+  simulated: boolean;
 }
 ```
 

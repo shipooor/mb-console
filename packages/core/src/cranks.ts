@@ -6,6 +6,7 @@ import type {
   CrankCreateOptions,
 } from './types.js';
 import type { CranksNamespace } from './client.js';
+import type { BlockchainConnection } from './connection.js';
 import { generateBase58 } from './utils.js';
 
 // ---------------------------------------------------------------------------
@@ -52,16 +53,15 @@ async function requireCranksEnabled(storage: Storage, project: string): Promise<
 /**
  * Create a fully-functional `CranksNamespace` backed by the given Storage.
  *
- * Crank records are persisted under `crank:<id>` keys.
- * A per-project crank index is maintained under `crank-index:<project>`.
- *
- * NOTE: Crank execution is simulated for hackathon demo purposes.
- * In a real implementation, the crank service would run on the
- * MagicBlock infrastructure and periodically invoke program instructions.
+ * When a `getConnection` callback returns a valid `BlockchainConnection`
+ * with a signer, and the `account` option is provided, a real
+ * `createCommitInstruction` is sent to the ER validator.
+ * Otherwise, crank creation falls back to simulated behavior.
  */
 export function createCranksNamespace(
   storage: Storage,
   _network: Network,
+  getConnection?: () => BlockchainConnection | undefined,
 ): CranksNamespace {
   // Helper: read the crank index for a project
   async function getCrankIndex(project: string): Promise<string[]> {
@@ -83,6 +83,46 @@ export function createCranksNamespace(
       }
 
       const id = `crank_${Date.now().toString(36)}_${generateBase58(6)}`;
+      let commitSignature: string | undefined;
+      let simulated = true;
+
+      // Real blockchain: send initial commit instruction
+      const conn = getConnection?.();
+      if (options.account && conn?.signer) {
+        try {
+          const { PublicKey, Transaction } = await import('@solana/web3.js');
+          const { createCommitInstruction } = await import(
+            '@magicblock-labs/ephemeral-rollups-sdk'
+          );
+
+          const accountPk = new PublicKey(options.account);
+
+          const ix = createCommitInstruction(
+            conn.signer.publicKey,
+            [accountPk],
+          );
+
+          const tx = new Transaction().add(ix);
+          tx.feePayer = conn.signer.publicKey;
+
+          // Use router connection for commit
+          tx.recentBlockhash = (
+            await conn.routerConnection.getLatestBlockhash()
+          ).blockhash;
+
+          const signed = await conn.signer.signTransaction(tx);
+          commitSignature = await conn.routerConnection.sendRawTransaction(
+            signed.serialize(),
+          );
+          simulated = false;
+        } catch (err) {
+          console.warn(
+            `[mb-console] Real crank commit failed, using simulated mode: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          );
+        }
+      }
 
       const crank: Crank = {
         id,
@@ -90,6 +130,9 @@ export function createCranksNamespace(
         iterations: options.iterations ?? 0,
         executed: 0,
         status: 'running',
+        account: options.account,
+        commitSignature,
+        simulated,
       };
 
       // Persist crank record
