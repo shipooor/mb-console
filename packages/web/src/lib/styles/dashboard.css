@@ -276,3 +276,19 @@
 	background: rgba(148, 163, 184, 0.15);
 	color: #64748b;
 }
+
+/* Info notes (contextual footnotes explaining simulated vs live) */
+.info-note {
+	font-size: 0.8rem;
+	color: var(--color-text-muted, #64748b);
+	background: var(--color-surface-alt, #f8fafc);
+	border: 1px solid var(--color-border, #e2e8f0);
+	border-radius: 6px;
+	padding: 0.625rem 0.75rem;
+	margin-bottom: 1rem;
+	line-height: 1.5;
+}
+
+.info-note strong {
+	color: var(--color-text, #1a1a2e);
+}

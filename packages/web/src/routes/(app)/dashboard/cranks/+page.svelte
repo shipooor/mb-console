@@ -199,6 +199,10 @@
 			</div>
 		{/if}
 
+		<div class="info-note">
+			<strong>Simulated vs Live.</strong> A crank sends periodic commit instructions to the ER validator. Live mode requires a connected wallet and an account that was delegated on-chain (not simulated). If the account doesn't exist on the ER, the crank falls back to simulated mode.
+		</div>
+
 		{#if cranks.length === 0}
 			<div class="empty-state">
 				<p class="empty-text">No cranks for this project.</p>

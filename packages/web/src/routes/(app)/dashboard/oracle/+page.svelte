@@ -123,6 +123,10 @@
 			</button>
 		</div>
 
+		<div class="info-note">
+			<strong>Simulated vs Live.</strong> Price feeds read from Pyth Network on Solana devnet in real-time. If the Pyth price account is unavailable or stale, the oracle falls back to simulated prices. No wallet connection needed — this is a read-only operation.
+		</div>
+
 		{#if priceResult}
 			<div class="card price-card">
 				<div class="price-header">

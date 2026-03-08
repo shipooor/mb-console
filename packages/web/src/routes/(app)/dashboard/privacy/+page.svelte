@@ -237,6 +237,10 @@
 				</button>
 			</form>
 		</div>
+
+		<div class="info-note">
+			<strong>Simulated vs Live.</strong> Deposits run live when a Phantom wallet is connected — SOL is wrapped to wSOL and delegated to the TEE validator. Transfer and Withdraw are currently simulated as they require the TEE Privacy Engine API, which is not yet publicly available.
+		</div>
 	{/if}
 </div>
 

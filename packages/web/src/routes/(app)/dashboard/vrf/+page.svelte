@@ -114,6 +114,10 @@
 			</button>
 		</div>
 
+		<div class="info-note">
+			<strong>Always simulated.</strong> Randomness is generated using <code>crypto.getRandomValues</code> (cryptographically secure) but the proof is not verifiable on-chain. On-chain VRF integration with MagicBlock is planned for a future release.
+		</div>
+
 		{#if lastResult}
 			<div class="card result-card">
 				<h3 class="card-title">VRF Result</h3>
@@ -201,5 +205,13 @@
 
 	.wrap {
 		word-break: break-all;
+	}
+
+	.info-note code {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.75rem;
+		background: var(--color-border, #e2e8f0);
+		padding: 0.125rem 0.375rem;
+		border-radius: 3px;
 	}
 </style>

@@ -452,6 +452,7 @@
 	.hero-install {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 		gap: 12px;
 	}
 
@@ -466,6 +467,7 @@
 		user-select: all;
 		cursor: pointer;
 		transition: background 0.15s;
+		white-space: nowrap;
 	}
 
 	.hero-install code:hover {
@@ -483,6 +485,7 @@
 		color: var(--accent2);
 		border-bottom: 1px solid transparent;
 		transition: border-color 0.15s;
+		white-space: nowrap;
 	}
 
 	.hero-install .dashboard-link:hover {

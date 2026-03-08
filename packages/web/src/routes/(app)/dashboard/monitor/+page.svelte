@@ -163,6 +163,10 @@
 			{/if}
 		</div>
 
+		<div class="info-note">
+			<strong>Endpoint Health</strong> pings real Solana and MagicBlock RPC endpoints. Stats below (uptime, costs, logs) are derived from local session data and do not reflect on-chain metrics.
+		</div>
+
 		{#if status}
 			<div class="stats-grid">
 				<div class="stat-card">

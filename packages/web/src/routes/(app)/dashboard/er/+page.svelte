@@ -225,6 +225,10 @@
 			</form>
 		</div>
 
+		<div class="info-note">
+			<strong>Simulated vs Live.</strong> Delegation runs on-chain when a wallet is connected and the Owner Program is provided — this is the Solana program that owns the account (e.g. your game program PDA). Without both, operations use simulated mode with locally-generated signatures. Status and Diff queries work in read-only mode (wallet not required).
+		</div>
+
 		{#if accounts.length === 0}
 			<div class="empty-state">
 				<p class="empty-text">No delegated accounts for this project.</p>
