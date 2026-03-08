@@ -36,9 +36,16 @@
 			<a href="/docs/mcp">MCP Reference</a>
 			<a href="/dashboard">Web Dashboard</a>
 		</div>
+		<div class="footer-section">
+			<h4>Project</h4>
+			<a href="https://github.com/shipooor/mb-console" target="_blank" rel="noopener">GitHub</a>
+			<a href="https://www.npmjs.com/package/@magicblock-console/core" target="_blank" rel="noopener">npm: core</a>
+			<a href="https://www.npmjs.com/package/@magicblock-console/cli" target="_blank" rel="noopener">npm: cli</a>
+			<a href="https://www.npmjs.com/package/@magicblock-console/mcp" target="_blank" rel="noopener">npm: mcp</a>
+		</div>
 	</div>
 	<div class="footer-bottom">
-		<p>Built for Solana Blitz Hackathon 2026</p>
+		<p>Built for Solana Blitz Hackathon 2026 by <a href="https://github.com/shipooor" target="_blank" rel="noopener">shipooor</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">𝕏</a></p>
 	</div>
 </footer>
 
@@ -127,7 +134,7 @@
 		max-width: 1100px;
 		margin: 0 auto;
 		display: grid;
-		grid-template-columns: 2fr 1fr 1fr;
+		grid-template-columns: 2fr 1fr 1fr 1fr;
 		gap: 2rem;
 	}
 
@@ -167,6 +174,15 @@
 	.footer-bottom p {
 		font-size: 0.8rem;
 		color: #64748b;
+	}
+
+	.footer-bottom a {
+		color: #94a3b8;
+		transition: color 0.15s ease;
+	}
+
+	.footer-bottom a:hover {
+		color: var(--color-primary);
 	}
 
 	@media (max-width: 768px) {
