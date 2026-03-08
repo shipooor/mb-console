@@ -57,7 +57,7 @@ export const PROGRAM_IDS = {
   magicContext: 'MagicContext1111111111111111111111111111111',
   permission: 'ACLseoPoyC3cBqoUtkbjZ4aDrkurZW86v19pXz2XQnp1',
   ephemeralSplToken: 'SPLxh1LVZzEkX99H6rqYizhytLWPZVV296zyYDPagv2',
-  pythOracle: 'PriCems5tHihc6UDXDjzjeawomAwBduWMGAi8ZUjppd',
+  pythReceiver: 'rec5EKMGg6MxZYaMdyBfgwp4d5rB9T1VQH5pJv5LtFJ',
 } as const;
 
 // ---------------------------------------------------------------------------
