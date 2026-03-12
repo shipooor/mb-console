@@ -1,6 +1,6 @@
 {
   "name": "@magicblock-console/cli",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "CLI for MagicBlock Ephemeral Rollups — manage projects, delegate accounts, monitor costs",
   "license": "MIT",
   "author": "shipooor",

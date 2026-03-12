@@ -1,6 +1,6 @@
 {
   "name": "@magicblock-console/core",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Core SDK for MagicBlock Ephemeral Rollups — shared logic for CLI, MCP, and Web",
   "license": "MIT",
   "author": "shipooor",
