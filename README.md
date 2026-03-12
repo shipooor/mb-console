@@ -85,13 +85,12 @@ npx @magicblock-console/cli --help
 
 ## Project Structure
 
-```
-packages/
-├── core/   # @magicblock-console/core — shared SDK
-├── web/    # @magicblock-console/web — SvelteKit (landing + docs + dashboard)
-├── cli/    # @magicblock-console/cli — terminal tool
-└── mcp/    # @magicblock-console/mcp — MCP server for AI agents
-```
+| Package | npm | Description |
+|---------|-----|-------------|
+| [`packages/core`](./packages/core) | [`@magicblock-console/core`](https://www.npmjs.com/package/@magicblock-console/core) | Shared SDK |
+| [`packages/web`](./packages/web) | — | SvelteKit (landing + docs + dashboard) |
+| [`packages/cli`](./packages/cli) | [`@magicblock-console/cli`](https://www.npmjs.com/package/@magicblock-console/cli) | Terminal tool |
+| [`packages/mcp`](./packages/mcp) | [`@magicblock-console/mcp`](https://www.npmjs.com/package/@magicblock-console/mcp) | MCP server for AI agents |
 
 ## Tech Stack
 
