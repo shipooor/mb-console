@@ -15,3 +15,5 @@ tasks/
 landings/
 DEPLOY.md
 design/
+packages/promo/
+*.tgz
