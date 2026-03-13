@@ -154,6 +154,10 @@ npm run dev -w packages/web
 # Open http://localhost:5173/dashboard → interactive dashboard
 ```
 
+## Author
+
+**shipped by [shipooor](https://shipooor.xyz)** — [X/Twitter](https://x.com/shipooor) · [GitHub](https://github.com/shipooor)
+
 ## License
 
 MIT — see [LICENSE](./LICENSE)

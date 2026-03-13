@@ -139,9 +139,10 @@
 	}
 
 	.brand-text {
-		font-size: 0.9375rem;
+		font-size: 0.8rem;
 		font-weight: 600;
 		color: var(--color-heading);
+		white-space: nowrap;
 	}
 
 	.sidebar-nav {

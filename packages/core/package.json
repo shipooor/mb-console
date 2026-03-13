@@ -3,7 +3,8 @@
   "version": "0.1.4",
   "description": "Core SDK for MagicBlock Ephemeral Rollups — shared logic for CLI, MCP, and Web",
   "license": "MIT",
-  "author": "shipooor",
+  "author": "shipooor (https://shipooor.xyz)",
+  "homepage": "https://mb-console.pages.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/shipooor/mb-console",
