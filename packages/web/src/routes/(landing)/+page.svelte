@@ -239,25 +239,19 @@
 		<div class="start-options reveal">
 			<div class="start-card">
 				<div class="start-card-label">CLI</div>
-				<div class="code-block"><span class="dim">$</span> <span class="hl">npm i -g @magicblock-console/cli</span>
-<span class="dim">$</span> mb-console init
-<span class="dim">$</span> mb-console dashboard</div>
+				<div class="code-block"><span class="dim">$</span> <span class="hl">npm i -g mb-console</span><br><span class="dim">$</span> mb-console init<br><span class="dim">$</span> mb-console dashboard</div>
 				<p class="start-card-desc">Install, init, open dashboard. Three commands to full control.</p>
 			</div>
 
 			<div class="start-card">
 				<div class="start-card-label">Web</div>
-				<div class="code-block"><span class="hl">mb-console.pages.dev</span>
-
-Connect wallet → select project → go</div>
+				<div class="code-block"><span class="hl">mb-console.pages.dev</span><br><br><span class="dim">Connect wallet → select project → go</span></div>
 				<p class="start-card-desc">No install. Open in browser, connect wallet, start managing.</p>
 			</div>
 
 			<div class="start-card">
 				<div class="start-card-label">MCP</div>
-				<div class="code-block"><span class="hl2">"Add mb-console MCP server
- and configure gasless
- for my game project"</span></div>
+				<div class="code-block"><span class="hl2">"Add mb-console MCP server</span><br><span class="hl2"> and configure gasless</span><br><span class="hl2"> for my game project"</span></div>
 				<p class="start-card-desc">Tell your AI. It handles the rest via MCP protocol.</p>
 			</div>
 		</div>
@@ -717,7 +711,11 @@ Connect wallet → select project → go</div>
 		color: rgba(139,92,246,0.5);
 		margin-bottom: 12px;
 	}
-	.start-card .code-block { margin-bottom: 12px; }
+	.start-card .code-block {
+		margin-bottom: 12px;
+		white-space: normal;
+		min-height: 72px;
+	}
 	.start-card-desc { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; }
 
 	/* ===================== FOOTER ===================== */
@@ -761,6 +759,13 @@ Connect wallet → select project → go</div>
 	.footer-bottom a { color: var(--color-text-dim); transition: color 0.2s; }
 	.footer-bottom a:hover { color: var(--color-text); }
 
+	.shipped-group {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		position: relative;
+	}
+
 	.shipped-by {
 		display: inline-flex;
 		align-items: center;
@@ -769,14 +774,83 @@ Connect wallet → select project → go</div>
 		font-size: 12px;
 		font-weight: 500;
 		letter-spacing: 0.02em;
-		transition: color 0.2s;
+		transition: all 0.3s ease;
+		position: relative;
 	}
-	.shipped-by:hover { color: var(--color-primary-bright); }
+
+	.shipped-by:hover {
+		color: #fff;
+		text-shadow: 0 0 8px rgba(192,132,252, 0.8), 0 0 20px rgba(139,92,246, 0.5);
+		filter: drop-shadow(0 0 6px rgba(139,92,246, 0.3));
+	}
+
 	.shipped-by:hover .shipped-stamp {
 		background: var(--color-primary);
-		border-color: var(--color-primary);
-		box-shadow: 0 0 12px rgba(139,92,246, 0.4);
-		transform: rotate(-3deg) scale(1.1);
+		border-color: transparent;
+		color: #fff;
+		box-shadow:
+			0 0 12px rgba(139,92,246, 0.6),
+			0 0 30px rgba(139,92,246, 0.3),
+			inset 0 0 8px rgba(255,255,255, 0.1);
+		animation: stamp-chaos 0.6s ease;
+	}
+
+	@keyframes stamp-chaos {
+		0% { transform: rotate(-3deg) scale(1); }
+		15% { transform: rotate(15deg) scale(1.4); }
+		30% { transform: rotate(-10deg) scale(1.2); }
+		50% { transform: rotate(360deg) scale(0.8); }
+		70% { transform: rotate(375deg) scale(1.15); }
+		85% { transform: rotate(355deg) scale(1.05); }
+		100% { transform: rotate(357deg) scale(1.1); }
+	}
+
+	/* Spark particles */
+	.shipped-by::before,
+	.shipped-by::after,
+	.shipped-stamp::before,
+	.shipped-stamp::after {
+		content: '';
+		position: absolute;
+		border-radius: 50%;
+		background: #c084fc;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.shipped-by::before { width: 5px; height: 5px; }
+	.shipped-by::after { width: 6px; height: 6px; background: #a78bfa; }
+	.shipped-stamp::before { width: 3px; height: 3px; background: #e9d5ff; }
+	.shipped-stamp::after { width: 4px; height: 4px; background: #8b5cf6; }
+
+	.shipped-by:hover::before {
+		animation: spark1 0.7s ease-out forwards;
+	}
+	.shipped-by:hover::after {
+		animation: spark2 0.7s 0.05s ease-out forwards;
+	}
+	.shipped-by:hover .shipped-stamp::before {
+		animation: spark3 0.6s 0.1s ease-out forwards;
+	}
+	.shipped-by:hover .shipped-stamp::after {
+		animation: spark4 0.6s 0.15s ease-out forwards;
+	}
+
+	@keyframes spark1 {
+		0% { left: 11px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 6px #c084fc; }
+		100% { left: -24px; top: -20px; opacity: 0; transform: scale(0.3); box-shadow: 0 0 0 transparent; }
+	}
+	@keyframes spark2 {
+		0% { left: 11px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 8px #a78bfa; }
+		100% { left: 40px; top: -22px; opacity: 0; transform: scale(0.2); box-shadow: 0 0 0 transparent; }
+	}
+	@keyframes spark3 {
+		0% { left: 50%; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 4px #e9d5ff; }
+		100% { left: -18px; top: 20px; opacity: 0; transform: scale(0.3); box-shadow: 0 0 0 transparent; }
+	}
+	@keyframes spark4 {
+		0% { left: 50%; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 6px #8b5cf6; }
+		100% { left: 32px; top: 22px; opacity: 0; transform: scale(0.2); box-shadow: 0 0 0 transparent; }
 	}
 
 	.shipped-stamp {
@@ -797,20 +871,15 @@ Connect wallet → select project → go</div>
 		flex-shrink: 0;
 	}
 
-	.shipped-group {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-	}
-
 	.shipped-sep { color: rgba(255,255,255, 0.1); font-size: 12px; }
 
 	.shipped-link {
 		font-size: 12px;
 		color: var(--color-text-muted);
-		transition: color 0.2s;
+		transition: all 0.3s ease;
 	}
-	.shipped-link:hover { color: var(--color-primary-bright); }
+	.shipped-group:hover .shipped-link { color: rgba(192,132,252, 0.7); }
+	.shipped-link:hover { color: #fff !important; text-shadow: 0 0 8px rgba(192,132,252, 0.5); }
 
 	/* ===================== RESPONSIVE ===================== */
 	@media (max-width: 768px) {
