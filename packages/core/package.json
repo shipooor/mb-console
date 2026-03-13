@@ -1,16 +1,28 @@
 {
   "name": "@magicblock-console/core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Core SDK for MagicBlock Ephemeral Rollups — shared logic for CLI, MCP, and Web",
   "license": "MIT",
-  "author": "shipooor (https://shipooor.xyz)",
+  "author": {
+    "name": "shipooor",
+    "url": "https://shipooor.xyz"
+  },
   "homepage": "https://mb-console.pages.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/shipooor/mb-console",
     "directory": "packages/core"
   },
-  "files": ["dist"],
+  "keywords": [
+    "magicblock",
+    "ephemeral-rollups",
+    "solana",
+    "sdk",
+    "web3"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

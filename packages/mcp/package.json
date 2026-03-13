@@ -1,16 +1,29 @@
 {
   "name": "@magicblock-console/mcp",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "MCP server for MagicBlock Ephemeral Rollups — AI agent integration via Model Context Protocol",
   "license": "MIT",
-  "author": "shipooor (https://shipooor.xyz)",
+  "author": {
+    "name": "shipooor",
+    "url": "https://shipooor.xyz"
+  },
   "homepage": "https://mb-console.pages.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/shipooor/mb-console",
     "directory": "packages/mcp"
   },
-  "files": ["dist"],
+  "keywords": [
+    "magicblock",
+    "ephemeral-rollups",
+    "solana",
+    "mcp",
+    "ai-agent",
+    "web3"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "bin": {

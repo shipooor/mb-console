@@ -1,16 +1,28 @@
 {
   "name": "@magicblock-console/cli",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "CLI for MagicBlock Ephemeral Rollups — manage projects, delegate accounts, monitor costs",
   "license": "MIT",
-  "author": "shipooor (https://shipooor.xyz)",
+  "author": {
+    "name": "shipooor",
+    "url": "https://shipooor.xyz"
+  },
   "homepage": "https://mb-console.pages.dev",
   "repository": {
     "type": "git",
     "url": "https://github.com/shipooor/mb-console",
     "directory": "packages/cli"
   },
-  "files": ["dist"],
+  "keywords": [
+    "magicblock",
+    "ephemeral-rollups",
+    "solana",
+    "cli",
+    "web3"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "bin": {
     "mb-console": "./dist/index.js"
