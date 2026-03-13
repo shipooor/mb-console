@@ -244,6 +244,7 @@
 		text-transform: uppercase;
 		color: rgba(255,255,255, 0.85);
 		position: relative;
+		z-index: 1;
 		overflow: hidden;
 		transition: border-color 0.3s ease;
 	}
