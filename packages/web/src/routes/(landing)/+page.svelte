@@ -299,7 +299,16 @@ Connect wallet → select project → go</div>
 
 		<div class="footer-bottom">
 			<span>MagicBlock Console — open source</span>
-			<span>Built by <a href="https://github.com/shipooor" target="_blank" rel="noopener">shipooor</a></span>
+			<div class="shipped-group">
+				<a class="shipped-by" href="https://x.com/shipooor" target="_blank" rel="noopener">
+					<span class="shipped-stamp">S</span>
+					shipped by shipooor
+				</a>
+				<span class="shipped-sep">·</span>
+				<a class="shipped-link" href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a>
+				<span class="shipped-sep">·</span>
+				<a class="shipped-link" href="https://x.com/shipooor" target="_blank" rel="noopener">X</a>
+			</div>
 		</div>
 	</div>
 </footer>
@@ -751,6 +760,57 @@ Connect wallet → select project → go</div>
 	}
 	.footer-bottom a { color: var(--color-text-dim); transition: color 0.2s; }
 	.footer-bottom a:hover { color: var(--color-text); }
+
+	.shipped-by {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--color-text-muted);
+		font-size: 12px;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		transition: color 0.2s;
+	}
+	.shipped-by:hover { color: var(--color-primary-bright); }
+	.shipped-by:hover .shipped-stamp {
+		background: var(--color-primary);
+		border-color: var(--color-primary);
+		box-shadow: 0 0 12px rgba(139,92,246, 0.4);
+		transform: rotate(-3deg) scale(1.1);
+	}
+
+	.shipped-stamp {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 22px;
+		height: 22px;
+		border: 1.5px solid rgba(139,92,246, 0.4);
+		border-radius: 5px;
+		font-family: var(--font-mono);
+		font-size: 11px;
+		font-weight: 700;
+		color: #c084fc;
+		background: rgba(139,92,246, 0.08);
+		transform: rotate(-3deg);
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+
+	.shipped-group {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.shipped-sep { color: rgba(255,255,255, 0.1); font-size: 12px; }
+
+	.shipped-link {
+		font-size: 12px;
+		color: var(--color-text-muted);
+		transition: color 0.2s;
+	}
+	.shipped-link:hover { color: var(--color-primary-bright); }
 
 	/* ===================== RESPONSIVE ===================== */
 	@media (max-width: 768px) {
