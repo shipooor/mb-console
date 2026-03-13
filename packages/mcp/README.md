@@ -84,6 +84,10 @@ The agent will call `create_project` and `configure_project` to set everything u
 - [`@magicblock-console/core`](https://www.npmjs.com/package/@magicblock-console/core) — Core SDK
 - [`@magicblock-console/cli`](https://www.npmjs.com/package/@magicblock-console/cli) — Terminal interface
 
+## Author
+
+**[shipooor](https://shipooor.xyz)** · [@shipooor](https://x.com/shipooor)
+
 ## License
 
 MIT

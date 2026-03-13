@@ -72,6 +72,10 @@ mb-console monitor costs --project my-game --period 30d
 - [`@magicblock-console/core`](https://www.npmjs.com/package/@magicblock-console/core) — Core SDK
 - [`@magicblock-console/mcp`](https://www.npmjs.com/package/@magicblock-console/mcp) — AI agent interface (MCP Server)
 
+## Author
+
+**[shipooor](https://shipooor.xyz)** · [@shipooor](https://x.com/shipooor)
+
 ## License
 
 MIT

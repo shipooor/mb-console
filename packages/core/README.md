@@ -74,6 +74,10 @@ Operates on Solana Devnet by default. ER validators available in US, EU, and Asi
 - [`@magicblock-console/cli`](https://www.npmjs.com/package/@magicblock-console/cli) — Terminal interface
 - [`@magicblock-console/mcp`](https://www.npmjs.com/package/@magicblock-console/mcp) — AI agent interface (MCP Server)
 
+## Author
+
+**[shipooor](https://shipooor.xyz)** · [@shipooor](https://x.com/shipooor)
+
 ## License
 
 MIT

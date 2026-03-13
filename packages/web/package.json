@@ -1,6 +1,6 @@
 {
   "name": "@magicblock-console/web",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Web dashboard and documentation for MagicBlock Ephemeral Rollups Console",
   "license": "MIT",
   "private": true,
