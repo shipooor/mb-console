@@ -1,28 +1,25 @@
 :root {
-	--color-bg: #0B0F1A;
-	--color-surface: #111827;
+	--color-bg: #020005;
+	--color-surface: rgba(255,255,255, 0.02);
 	--color-heading: #F9FAFB;
-	--color-text: #D1D5DB;
-	--color-text-muted: #6B7280;
-	--color-primary: #06B6D4;
-	--color-primary-hover: #0891B2;
-	--color-primary-bright: #06B6D4;
-	--color-primary-bright-hover: #0891B2;
-	--color-navbar-bg: #0B0F1A;
-	--color-navbar-text: #F9FAFB;
-	--color-navbar-border: #1F2937;
-	--color-border: #1F2937;
-	--color-code-bg: #1F2937;
-	--color-pre-bg: #0B0F1A;
-	--color-pre-text: #D1D5DB;
+	--color-text: rgba(255,255,255, 0.85);
+	--color-text-muted: rgba(255,255,255, 0.45);
+	--color-text-dim: rgba(255,255,255, 0.2);
+	--color-primary: #8b5cf6;
+	--color-primary-hover: #7c3aed;
+	--color-primary-bright: #c084fc;
+	--color-border: rgba(255,255,255, 0.06);
+	--color-code-bg: rgba(0,0,0, 0.4);
 	--color-success: #34D399;
 	--color-warning: #FBBF24;
 	--color-danger: #F87171;
 
-	--color-accent-secondary: #93C5FD;
-	--color-accent-dim: rgba(6, 182, 212, 0.12);
+	/* Dashboard-specific (keep for app pages) */
+	--color-navbar-bg: #0B0F1A;
+	--color-navbar-text: #F9FAFB;
+	--color-navbar-border: #1F2937;
 	--color-bar-bg: #1F2937;
-	--color-surface-alt: #162036;
+	--color-surface-alt: rgba(139,92,246, 0.04);
 
 	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 	--font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
@@ -55,10 +52,7 @@ html {
 
 body {
 	min-height: 100vh;
-	background-image:
-		linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
-	background-size: 40px 40px;
+	overflow-x: hidden;
 }
 
 a {

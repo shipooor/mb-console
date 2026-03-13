@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@magicblock-console/core": "*",
-    "buffer": "^6.0.3"
+    "buffer": "^6.0.3",
+    "gsap": "^3.14.2"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.10",
