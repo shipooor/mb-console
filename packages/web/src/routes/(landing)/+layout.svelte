@@ -52,7 +52,16 @@
 	</div>
 	<div class="footer-bottom">
 		<p>Built for <a href="https://hackathon.magicblock.app/" target="_blank" rel="noopener">Solana Blitz Hackathon 2026</a></p>
-		<p>made with <span class="heart">♥</span> by shipooor — <a href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a> · <a href="https://x.com/shipooor" target="_blank" rel="noopener">Twitter</a></p>
+		<div class="footer-shipped">
+			<a class="shipped-by" href="https://x.com/shipooor" target="_blank" rel="noopener">
+				<span class="shipped-stamp">S</span>
+				shipped by shipooor
+			</a>
+			<span class="shipped-sep">·</span>
+			<a class="shipped-link" href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a>
+			<span class="shipped-sep">·</span>
+			<a class="shipped-link" href="https://x.com/shipooor" target="_blank" rel="noopener">X</a>
+		</div>
 	</div>
 </footer>
 {/if}
@@ -170,9 +179,90 @@
 		text-align: center;
 	}
 	.footer-bottom p { font-size: 0.8rem; color: var(--color-text-muted); }
-	.heart { color: var(--color-primary); }
 	.footer-bottom a { color: var(--color-text-muted); transition: color 0.15s ease; }
 	.footer-bottom a:hover { color: var(--color-primary); }
+
+	.footer-shipped {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 0.5rem;
+	}
+
+	.shipped-by {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: var(--color-text-muted);
+		font-size: 0.8rem;
+		font-weight: 500;
+		transition: all 0.3s ease;
+		position: relative;
+	}
+	.shipped-by:hover {
+		color: #fff;
+		text-shadow: 0 0 8px rgba(192,132,252, 0.8), 0 0 20px rgba(139,92,246, 0.5);
+	}
+	.shipped-by:hover .shipped-stamp {
+		background: var(--color-primary);
+		border-color: transparent;
+		color: #fff;
+		box-shadow: 0 0 12px rgba(139,92,246, 0.6), 0 0 30px rgba(139,92,246, 0.3);
+		animation: stamp-chaos 0.6s ease;
+	}
+
+	.shipped-by::before,
+	.shipped-by::after {
+		content: '';
+		position: absolute;
+		border-radius: 50%;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.shipped-by::before { width: 4px; height: 4px; background: #c084fc; }
+	.shipped-by::after { width: 5px; height: 5px; background: #a78bfa; }
+	.shipped-by:hover::before { animation: spark1 0.7s ease-out forwards; }
+	.shipped-by:hover::after { animation: spark2 0.7s 0.05s ease-out forwards; }
+
+	@keyframes stamp-chaos {
+		0% { transform: rotate(-3deg) scale(1); }
+		15% { transform: rotate(15deg) scale(1.4); }
+		30% { transform: rotate(-10deg) scale(1.2); }
+		50% { transform: rotate(360deg) scale(0.8); }
+		70% { transform: rotate(375deg) scale(1.15); }
+		85% { transform: rotate(355deg) scale(1.05); }
+		100% { transform: rotate(357deg) scale(1.1); }
+	}
+	@keyframes spark1 {
+		0% { left: 8px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 6px #c084fc; }
+		100% { left: -14px; top: -10px; opacity: 0; transform: scale(0.3); box-shadow: 0 0 0 transparent; }
+	}
+	@keyframes spark2 {
+		0% { left: 8px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 8px #a78bfa; }
+		100% { left: 30px; top: -12px; opacity: 0; transform: scale(0.2); box-shadow: 0 0 0 transparent; }
+	}
+
+	.shipped-stamp {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		border: 1.5px solid rgba(139,92,246, 0.4);
+		border-radius: 4px;
+		font-family: var(--font-mono);
+		font-size: 10px;
+		font-weight: 700;
+		color: #c084fc;
+		background: rgba(139,92,246, 0.08);
+		transform: rotate(-3deg);
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+
+	.shipped-sep { color: rgba(255,255,255, 0.15); font-size: 0.8rem; }
+	.shipped-link { font-size: 0.8rem; color: var(--color-text-muted); transition: color 0.2s; }
+	.shipped-link:hover { color: var(--color-primary-bright); }
 
 	@media (max-width: 768px) {
 		.navbar { padding: 0 1rem; }

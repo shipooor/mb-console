@@ -28,7 +28,7 @@
 	<aside class="sidebar">
 		<div class="sidebar-brand">
 			<span class="brand-icon">MB</span>
-			<span class="brand-text">MagicBlock</span>
+			<span class="brand-text">MagicBlock Console</span>
 		</div>
 
 		<nav class="sidebar-nav">
@@ -45,18 +45,16 @@
 		</nav>
 
 		<div class="sidebar-footer">
-			<div class="sidebar-links">
-				<a href="/docs/getting-started" class="sidebar-link">Docs</a>
-				<a href="https://github.com/shipooor/mb-console" class="sidebar-link" target="_blank" rel="noopener">GitHub</a>
-				<a href="https://x.com/shipooor" class="sidebar-link" target="_blank" rel="noopener">Twitter</a>
-			</div>
-			<span class="network-badge">devnet</span>
+			<a class="shipped-by" href="https://x.com/shipooor" target="_blank" rel="noopener">
+				<span class="shipped-stamp">S</span>
+				<span class="shipped-text">shipped by shipooor</span>
+			</a>
 		</div>
 	</aside>
 
 	<div class="main-area">
 		<header class="topbar">
-			<h1 class="topbar-title">MagicBlock Console</h1>
+			<div></div>
 			<div class="wallet-area">
 				{#if $wallet.error}
 					<span class="wallet-error">{$wallet.error}</span>
@@ -117,7 +115,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.625rem;
-		padding: 1.25rem 1rem;
+		padding: 0 1rem;
+		height: 48px;
 		border-bottom: 1px solid var(--color-border);
 	}
 
@@ -195,27 +194,91 @@
 	}
 
 	.sidebar-footer {
-		padding: 1rem;
+		padding: 0.75rem 1rem;
 		border-top: 1px solid var(--color-border);
-	}
-
-	.sidebar-links {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-		margin-bottom: 0.75rem;
+		gap: 0.5rem;
 	}
 
-	.sidebar-link {
-		font-size: 0.8rem;
-		color: var(--color-text-muted);
+	.shipped-by {
+		display: flex;
+		align-items: center;
+		gap: 8px;
 		text-decoration: none;
-		transition: color 0.15s;
+		color: var(--color-text-muted);
+		font-size: 0.75rem;
+		font-weight: 500;
+		transition: all 0.3s ease;
+		position: relative;
+		margin-top: 0.25rem;
 	}
 
-	.sidebar-link:hover {
-		color: var(--color-text);
+	.shipped-by:hover {
+		color: #fff;
+		text-shadow: 0 0 8px rgba(192,132,252, 0.8), 0 0 20px rgba(139,92,246, 0.5);
 	}
+
+	.shipped-by:hover .shipped-stamp {
+		background: var(--color-primary);
+		border-color: transparent;
+		color: #fff;
+		box-shadow: 0 0 12px rgba(139,92,246, 0.6), 0 0 30px rgba(139,92,246, 0.3);
+		animation: stamp-chaos 0.6s ease;
+	}
+
+	/* Spark particles */
+	.shipped-by::before,
+	.shipped-by::after {
+		content: '';
+		position: absolute;
+		border-radius: 50%;
+		opacity: 0;
+		pointer-events: none;
+	}
+	.shipped-by::before { width: 4px; height: 4px; background: #c084fc; }
+	.shipped-by::after { width: 5px; height: 5px; background: #a78bfa; }
+	.shipped-by:hover::before { animation: spark1 0.7s ease-out forwards; }
+	.shipped-by:hover::after { animation: spark2 0.7s 0.05s ease-out forwards; }
+
+	@keyframes stamp-chaos {
+		0% { transform: rotate(-3deg) scale(1); }
+		15% { transform: rotate(15deg) scale(1.4); }
+		30% { transform: rotate(-10deg) scale(1.2); }
+		50% { transform: rotate(360deg) scale(0.8); }
+		70% { transform: rotate(375deg) scale(1.15); }
+		85% { transform: rotate(355deg) scale(1.05); }
+		100% { transform: rotate(357deg) scale(1.1); }
+	}
+
+	@keyframes spark1 {
+		0% { left: 10px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 6px #c084fc; }
+		100% { left: -16px; top: -10px; opacity: 0; transform: scale(0.3); box-shadow: 0 0 0 transparent; }
+	}
+	@keyframes spark2 {
+		0% { left: 10px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 8px #a78bfa; }
+		100% { left: 34px; top: -12px; opacity: 0; transform: scale(0.2); box-shadow: 0 0 0 transparent; }
+	}
+
+	.shipped-stamp {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 18px;
+		height: 18px;
+		border: 1.5px solid rgba(139,92,246, 0.4);
+		border-radius: 4px;
+		font-family: var(--font-mono);
+		font-size: 9px;
+		font-weight: 700;
+		color: #c084fc;
+		background: rgba(139,92,246, 0.08);
+		transform: rotate(-3deg);
+		transition: all 0.3s ease;
+		flex-shrink: 0;
+	}
+
+	.shipped-text { white-space: nowrap; }
 
 	.network-badge {
 		display: inline-flex;
@@ -248,13 +311,6 @@
 		backdrop-filter: blur(12px);
 		-webkit-backdrop-filter: blur(12px);
 		border-bottom: 1px solid var(--color-border);
-	}
-
-	.topbar-title {
-		font-size: 1rem;
-		font-weight: 600;
-		color: var(--color-heading);
-		margin: 0;
 	}
 
 	.wallet-area {
