@@ -52,16 +52,15 @@
 	</div>
 	<div class="footer-bottom">
 		<p>Built for <a href="https://hackathon.magicblock.app/" target="_blank" rel="noopener">Solana Blitz Hackathon 2026</a></p>
-		<div class="footer-shipped">
-			<a class="shipped-by" href="https://x.com/shipooor" target="_blank" rel="noopener">
-				<span class="shipped-stamp">S</span>
-				shipped by shipooor
+		<footer class="shipooor-footer">
+			<a class="shipooor-link" href="https://shipooor.xyz" target="_blank" rel="noopener">
+				<span class="shipooor-stamp-outer">
+					<span class="shipooor-stamp-inner">SHIPPED</span>
+				</span>
+				<span class="shipooor-ft">by <strong>shipooor</strong> · </span>
 			</a>
-			<span class="shipped-sep">·</span>
-			<a class="shipped-link" href="https://github.com/shipooor" target="_blank" rel="noopener">GitHub</a>
-			<span class="shipped-sep">·</span>
-			<a class="shipped-link" href="https://x.com/shipooor" target="_blank" rel="noopener">X</a>
-		</div>
+			<a class="shipooor-x" href="https://x.com/shipooor" target="_blank" rel="noopener">X</a>
+		</footer>
 	</div>
 </footer>
 {/if}
@@ -182,87 +181,103 @@
 	.footer-bottom a { color: var(--color-text-muted); transition: color 0.15s ease; }
 	.footer-bottom a:hover { color: var(--color-primary); }
 
-	.footer-shipped {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		margin-top: 0.5rem;
-	}
-
-	.shipped-by {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		color: var(--color-text-muted);
-		font-size: 0.8rem;
-		font-weight: 500;
-		transition: all 0.3s ease;
-		position: relative;
-	}
-	.shipped-by:hover {
-		color: #fff;
-		text-shadow: 0 0 8px rgba(192,132,252, 0.8), 0 0 20px rgba(139,92,246, 0.5);
-	}
-	.shipped-by:hover .shipped-stamp {
-		background: var(--color-primary);
-		border-color: transparent;
-		color: #fff;
-		box-shadow: 0 0 12px rgba(139,92,246, 0.6), 0 0 30px rgba(139,92,246, 0.3);
-		animation: stamp-chaos 0.6s ease;
-	}
-
-	.shipped-by::before,
-	.shipped-by::after {
-		content: '';
-		position: absolute;
-		border-radius: 50%;
-		opacity: 0;
-		pointer-events: none;
-	}
-	.shipped-by::before { width: 4px; height: 4px; background: #c084fc; }
-	.shipped-by::after { width: 5px; height: 5px; background: #a78bfa; }
-	.shipped-by:hover::before { animation: spark1 0.7s ease-out forwards; }
-	.shipped-by:hover::after { animation: spark2 0.7s 0.05s ease-out forwards; }
-
-	@keyframes stamp-chaos {
-		0% { transform: rotate(-3deg) scale(1); }
-		15% { transform: rotate(15deg) scale(1.4); }
-		30% { transform: rotate(-10deg) scale(1.2); }
-		50% { transform: rotate(360deg) scale(0.8); }
-		70% { transform: rotate(375deg) scale(1.15); }
-		85% { transform: rotate(355deg) scale(1.05); }
-		100% { transform: rotate(357deg) scale(1.1); }
-	}
-	@keyframes spark1 {
-		0% { left: 8px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 6px #c084fc; }
-		100% { left: -14px; top: -10px; opacity: 0; transform: scale(0.3); box-shadow: 0 0 0 transparent; }
-	}
-	@keyframes spark2 {
-		0% { left: 8px; top: 50%; opacity: 1; transform: scale(1); box-shadow: 0 0 8px #a78bfa; }
-		100% { left: 30px; top: -12px; opacity: 0; transform: scale(0.2); box-shadow: 0 0 0 transparent; }
-	}
-
-	.shipped-stamp {
-		display: inline-flex;
+	/* ═══ shipooor footer stamp (from brand kit) ═══ */
+	.shipooor-footer {
+		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 20px;
-		height: 20px;
-		border: 1.5px solid rgba(139,92,246, 0.4);
-		border-radius: 4px;
-		font-family: var(--font-mono);
-		font-size: 10px;
-		font-weight: 700;
-		color: #c084fc;
-		background: rgba(139,92,246, 0.08);
-		transform: rotate(-3deg);
-		transition: all 0.3s ease;
-		flex-shrink: 0;
+		gap: 0;
+		margin-top: 0.5rem;
 	}
-
-	.shipped-sep { color: rgba(255,255,255, 0.15); font-size: 0.8rem; }
-	.shipped-link { font-size: 0.8rem; color: var(--color-text-muted); transition: color 0.2s; }
-	.shipped-link:hover { color: var(--color-primary-bright); }
+	.shipooor-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.shipooor-stamp-outer {
+		display: inline-block;
+		transform: rotate(-5deg);
+		border: 2px solid rgba(255,255,255, 0.7);
+		border-radius: 3px;
+		padding: 2px;
+		position: relative;
+		overflow: visible;
+		transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	}
+	.shipooor-stamp-inner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 0.75px solid rgba(255,255,255, 0.4);
+		border-radius: 1.5px;
+		height: 16px;
+		padding: 0 6px;
+		font-family: var(--font-mono);
+		font-weight: 700;
+		font-size: 8px;
+		letter-spacing: 0.1em;
+		line-height: 1;
+		text-transform: uppercase;
+		color: rgba(255,255,255, 0.85);
+		position: relative;
+		overflow: hidden;
+		transition: border-color 0.3s ease;
+	}
+	.shipooor-stamp-inner::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: #fff;
+		transform: translateY(100%);
+		transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+		z-index: 0;
+	}
+	.shipooor-stamp-outer::after {
+		content: '';
+		position: absolute;
+		inset: -3px;
+		border-radius: 5px;
+		border: 1.5px solid transparent;
+		pointer-events: none;
+	}
+	.shipooor-ft {
+		font-family: var(--font-sans);
+		font-size: 12px;
+		color: rgba(255,255,255, 0.3);
+		transition: color 0.3s ease;
+	}
+	.shipooor-ft strong { color: rgba(255,255,255, 0.45); font-weight: 600; }
+	.shipooor-x {
+		font-family: var(--font-sans);
+		font-size: 12px;
+		color: rgba(255,255,255, 0.2);
+		text-decoration: none;
+		transition: color 0.3s ease;
+	}
+	.shipooor-link:hover .shipooor-stamp-outer {
+		border-color: #fff;
+		box-shadow: 0 0 16px rgba(255,255,255, 0.25), 0 0 40px rgba(255,255,255, 0.08);
+		animation: shipooor-slam 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	.shipooor-link:hover .shipooor-stamp-inner::before { transform: translateY(0); }
+	.shipooor-link:hover .shipooor-stamp-inner { border-color: rgba(255,255,255, 0.7); color: #000; }
+	.shipooor-link:hover .shipooor-stamp-outer::after { animation: shipooor-ring 0.6s ease-out forwards; }
+	.shipooor-link:hover .shipooor-ft,
+	.shipooor-link:hover .shipooor-ft strong { color: rgba(255,255,255, 0.8); }
+	.shipooor-link:hover ~ .shipooor-x { color: rgba(255,255,255, 0.8); }
+	@keyframes shipooor-slam {
+		0% { transform: rotate(-5deg) scale(1); }
+		15% { transform: rotate(-5deg) scale(1.3) translateY(-6px); }
+		35% { transform: rotate(-3deg) scale(0.92) translateY(1px); }
+		55% { transform: rotate(-5deg) scale(1.05); }
+		100% { transform: rotate(-5deg) scale(1); }
+	}
+	@keyframes shipooor-ring {
+		0% { inset: -3px; border-color: rgba(255,255,255, 0.5); opacity: 1; }
+		100% { inset: -16px; border-color: rgba(255,255,255, 0); opacity: 0; }
+	}
 
 	@media (max-width: 768px) {
 		.navbar { padding: 0 1rem; }
