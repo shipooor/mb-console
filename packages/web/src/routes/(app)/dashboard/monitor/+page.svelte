@@ -330,8 +330,8 @@
 	}
 
 	.health-dot.online {
-		background: #06B6D4;
-		box-shadow: 0 0 4px rgba(6, 182, 212, 0.4);
+		background: var(--color-primary);
+		box-shadow: 0 0 4px rgba(139, 92, 246, 0.4);
 	}
 
 	.health-dot.offline {

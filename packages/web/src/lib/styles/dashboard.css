@@ -82,7 +82,7 @@
 
 .form-input:focus {
 	border-color: var(--color-primary);
-	box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+	box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
 }
 
 /* Buttons */
@@ -221,7 +221,7 @@
 }
 
 .feature-badge.enabled {
-	background: rgba(6, 182, 212, 0.12);
+	background: rgba(139, 92, 246, 0.12);
 	color: var(--color-primary);
 }
 
@@ -268,8 +268,8 @@
 }
 
 .source-live {
-	background: rgba(6, 182, 212, 0.12);
-	color: #06B6D4;
+	background: rgba(139, 92, 246, 0.12);
+	color: var(--color-primary);
 }
 
 .source-simulated {

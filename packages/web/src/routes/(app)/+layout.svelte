@@ -163,12 +163,12 @@
 	}
 
 	.nav-item:hover {
-		background: rgba(6, 182, 212, 0.06);
+		background: rgba(139, 92, 246, 0.06);
 		color: var(--color-text);
 	}
 
 	.nav-item.active {
-		background: rgba(6, 182, 212, 0.12);
+		background: rgba(139, 92, 246, 0.12);
 		color: var(--color-primary);
 	}
 
@@ -186,7 +186,7 @@
 	}
 
 	.nav-item.active .nav-icon {
-		background: rgba(6, 182, 212, 0.2);
+		background: rgba(139, 92, 246, 0.2);
 		color: var(--color-primary);
 	}
 
@@ -222,7 +222,7 @@
 		align-items: center;
 		padding: 0.25rem 0.625rem;
 		border-radius: 9999px;
-		background: rgba(6, 182, 212, 0.15);
+		background: rgba(139, 92, 246, 0.15);
 		color: var(--color-primary);
 		font-size: 0.75rem;
 		font-weight: 600;
@@ -283,7 +283,7 @@
 	}
 
 	.wallet-connected {
-		border-color: rgba(6, 182, 212, 0.3);
+		border-color: rgba(139, 92, 246, 0.3);
 	}
 
 	.wallet-dot {

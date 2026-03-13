@@ -148,12 +148,12 @@
 	}
 
 	.sidebar-link:hover {
-		background: rgba(6, 182, 212, 0.06);
+		background: rgba(139, 92, 246, 0.06);
 		color: var(--color-heading);
 	}
 
 	.sidebar-link.active {
-		background: rgba(6, 182, 212, 0.12);
+		background: rgba(139, 92, 246, 0.12);
 		color: var(--color-primary);
 		font-weight: 600;
 		border-left-color: var(--color-primary);

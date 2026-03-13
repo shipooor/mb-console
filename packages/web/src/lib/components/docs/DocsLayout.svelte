@@ -212,7 +212,7 @@
 	}
 
 	.docs-content :global(.copy-btn:hover) {
-		background: rgba(6, 182, 212, 0.15);
+		background: rgba(139, 92, 246, 0.15);
 		color: var(--color-primary);
 	}
 

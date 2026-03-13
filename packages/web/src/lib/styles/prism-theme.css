@@ -99,5 +99,5 @@
 /* Selection highlight inside code blocks */
 pre[class*="language-"] ::selection,
 code[class*="language-"] ::selection {
-	background: rgba(6, 182, 212, 0.2);
+	background: rgba(139, 92, 246, 0.2);
 }

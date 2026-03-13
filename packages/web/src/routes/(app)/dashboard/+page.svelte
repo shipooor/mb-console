@@ -256,7 +256,7 @@
 		width: 48px;
 		height: 48px;
 		border-radius: 12px;
-		background: rgba(6, 182, 212, 0.12);
+		background: rgba(139, 92, 246, 0.12);
 		color: var(--color-primary);
 		font-size: 1.25rem;
 		font-weight: 700;
@@ -360,8 +360,8 @@
 		align-items: center;
 		padding: 0.125rem 0.5rem;
 		border-radius: 9999px;
-		background: rgba(59, 130, 246, 0.1);
-		color: #3b82f6;
+		background: rgba(139, 92, 246, 0.1);
+		color: var(--color-primary);
 		font-size: 0.6875rem;
 		font-weight: 700;
 		letter-spacing: 0.05em;
